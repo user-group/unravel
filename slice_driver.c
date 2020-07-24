@@ -1,4 +1,6 @@
 # include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
 # include "sets.h"
 # include "slice.h"
 
@@ -8,12 +10,102 @@ static	bit_set	*slices,active;
 extern	int		c_opt;
 extern	int		v_opt;
 	int			n_opt;
+
+
+extern int read_k_file(char *name);
+extern int read_link_file(char *name);
+extern void verify_input(int i);
+
+int make_criterion (char *file_name, int line_number, char *var_spec,
+			int *file, int *stmt, int *proc, int *var);
+	
+	
 void trace (proc,stmt)
 	int		proc,stmt;
 {
 	printf ("at stmt %d (line %d) in %s\n",
 		stmt,0,procs[proc].proc_name);
 }
+
+
+
+void
+verify_criterion(file,stmt,proc,var)
+	int	file,stmt,proc,var;
+{
+	if ((file < 0) || (file >= n_files)){
+		fprintf (stderr,"file %d is out of range [0..%d]",file,
+			n_files-1);
+		exit(1);
+	}
+	if ((proc < 0) || (proc > n_procs)){
+		fprintf (stderr,"proc %d is out of range [1..%d]",proc,
+			n_procs);
+		exit(1);
+	}
+	if (proc){
+		if ((var <= 0) || (var > procs[proc].n_locals)){
+			fprintf (stderr,"var %d is out of range [1..%d]",var,
+				procs[proc].n_locals);
+			exit(1);
+		}
+	}
+	else {
+		if ((var <= 0) || (var > n_globals)){
+			fprintf (stderr,"var %d is out of range [1..%d]",var,
+				n_globals);
+			exit(1);
+		}
+	}
+	if ((stmt < 0) || (stmt > files[file].n_stmts)){
+		fprintf (stderr,"stmt %d is out of range [1..%d]",stmt,
+			files[file].n_stmts);
+		exit(1);
+	}
+}
+
+void
+do_slice(file,stmt,proc,var)
+	int	file,stmt,proc,var;
+{
+	int		i,status;
+	int		stmt_proc;
+
+	clear_active();
+	for (i = 1; i <= n_procs; i++){
+		if (procs[i].file_id == file)
+			if ((stmt >= procs[i].entry) &&
+				(stmt <= procs[i].exit)){
+					stmt_proc = i;
+					break;
+				}
+	}
+	if ((stmt_proc < 1) || (stmt_proc > n_procs)){
+		printf ("stmt %d not found for file %s\n",
+		stmt,files[file].name);
+		return;
+	}
+	printf ("%s%s@%d %s'%s:\n",files[file].name,
+		procs[stmt_proc].proc_name,stmt,
+		proc?procs[proc].proc_name:"global",
+		proc? procs[proc].locals[var].name:
+		globals[var].name);
+	slice (file,stmt_proc,stmt,proc,var,slices,active);
+	print_slices1 (n_opt,slices,active);
+	/*
+	printf ("file %d stmt %d proc %d var %d\n",file,stmt,proc,var);
+	status = 1;
+	clear_bit_set (slices[file]);
+	slice_tree (slices,proc,active);
+	while (status){
+		status = slice_pass (slices[file],proc,0);
+		printf ("status %d\n",status);
+	}
+	*/
+	if(v_opt)print_all_active (slices,active);
+}
+
+int
 main(np,p)
 	int		np;
 	char	*p[];
@@ -72,76 +164,3 @@ main(np,p)
 	}
 }
 
-verify_criterion(file,stmt,proc,var)
-	int	file,stmt,proc,var;
-{
-	if ((file < 0) || (file >= n_files)){
-		fprintf (stderr,"file %d is out of range [0..%d]",file,
-			n_files-1);
-		exit(1);
-	}
-	if ((proc < 0) || (proc > n_procs)){
-		fprintf (stderr,"proc %d is out of range [1..%d]",proc,
-			n_procs);
-		exit(1);
-	}
-	if (proc){
-		if ((var <= 0) || (var > procs[proc].n_locals)){
-			fprintf (stderr,"var %d is out of range [1..%d]",var,
-				procs[proc].n_locals);
-			exit(1);
-		}
-	}
-	else {
-		if ((var <= 0) || (var > n_globals)){
-			fprintf (stderr,"var %d is out of range [1..%d]",var,
-				n_globals);
-			exit(1);
-		}
-	}
-	if ((stmt < 0) || (stmt > files[file].n_stmts)){
-		fprintf (stderr,"stmt %d is out of range [1..%d]",stmt,
-			files[file].n_stmts);
-		exit(1);
-	}
-}
-
-do_slice(file,stmt,proc,var)
-	int	file,stmt,proc,var;
-{
-	int		i,status;
-	int		stmt_proc;
-
-	clear_active();
-	for (i = 1; i <= n_procs; i++){
-		if (procs[i].file_id == file)
-			if ((stmt >= procs[i].entry) &&
-				(stmt <= procs[i].exit)){
-					stmt_proc = i;
-					break;
-				}
-	}
-	if ((stmt_proc < 1) || (stmt_proc > n_procs)){
-		printf ("stmt %d not found for file %s\n",
-		stmt,files[file].name);
-		return;
-	}
-	printf ("%s%s@%d %s'%s:\n",files[file].name,
-		procs[stmt_proc].proc_name,stmt,
-		proc?procs[proc].proc_name:"global",
-		proc? procs[proc].locals[var].name:
-		globals[var].name);
-	slice (file,stmt_proc,stmt,proc,var,slices,active);
-	print_slices1 (n_opt,slices,active);
-	/*
-	printf ("file %d stmt %d proc %d var %d\n",file,stmt,proc,var);
-	status = 1;
-	clear_bit_set (slices[file]);
-	slice_tree (slices,proc,active);
-	while (status){
-		status = slice_pass (slices[file],proc,0);
-		printf ("status %d\n",status);
-	}
-	*/
-	if(v_opt)print_all_active (slices,active);
-}
