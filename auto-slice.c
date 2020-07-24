@@ -4,7 +4,8 @@
 # include "slice.h"
 # include <signal.h>
 # include <stdlib.h>
-
+# include <string.h>
+# include <time.h>
 
 
 static  char    sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
@@ -47,7 +48,7 @@ main(np,p)
 	int		status;
 	int		i,fx;
 	int		file,stmt,proc,var;
-	char	message[1015],cmd[1015];
+	char	message[1000],cmd[2000];
 	int		line_number;
 	int		is_err;
 	int		t_locals = 0;
