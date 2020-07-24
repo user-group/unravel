@@ -97,7 +97,7 @@ clear_active_proc(proc)
 }
 
 void
-clear_active()
+clear_active(void)
 {
 	int	file,stmt;
 
