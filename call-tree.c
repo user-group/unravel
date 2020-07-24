@@ -56,8 +56,8 @@ tree_out (level,callers,calls)
 		called = calls->pid;
 		if (!on_list(n_list,list,called)){
 			if ((procs[called].entry != -1) || lib_opt){
-				printf(tabs);
-				printf ("%s\n",procs[called].proc_name);
+				printf("%s", tabs);
+				printf("%s\n",procs[called].proc_name);
 			}
 			if (!is_recursive_call (level,callers,called)){
 				callers[level] = called;
