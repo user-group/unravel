@@ -109,7 +109,8 @@ print_ptr_map()
 	if (lx) printf ("\n");
 }
 
-count_vars()
+void
+count_vars(void)
 {
 	int		ptr_id,i,proc,var;
 
@@ -201,6 +202,7 @@ char *addr_to_scope(addr)
 	else return "global";
 }
 
+void
 print_ptr_set (ptr,s)
 	set_ptr	s;
 	int	ptr;
@@ -291,6 +293,7 @@ int pointer_assign (dix,rix)
 	else return 1;
 }
 
+void
 resolve_chain (in,out,f)
 	bit_set	in,out;
 	field_ptr f;

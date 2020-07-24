@@ -5,6 +5,8 @@
 # include <signal.h>
 # include <stdlib.h>
 
+
+
 static  char    sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
 static	bit_set	*slices,active;
 
@@ -163,7 +165,7 @@ do_slice(file,stmt,proc,var)
 	int		size = 0;
 	time_t	start,finish;
 	int		elapsed;
-	int		cmd[1000];
+	char		cmd[1000];
 	float	pcent;
 
 	clear_active();

@@ -2,13 +2,16 @@
 # include <malloc.h>
 # include <string.h>
 # include <fcntl.h>
+# include <stdlib.h>
 # include "slice.h"
 # include "lif.h"
 
 static  char    sccsid[] = "@(#)slice-load.c	1.6  8/16/95";
 
 int v_opt;
-int	c_opt = 0;
+int c_opt = 0;
+
+extern void count_vars(void);
 
 /*
 *********************************************************************
@@ -39,14 +42,16 @@ id_ptr		globals;
 *                                                                   *
 *********************************************************************
 */
-int is_lib_proc(pid)
+int 
+is_lib_proc(pid)
 	int		pid;
 {
 	return procs[pid].entry == -1;
 }
 
 
-char *var_name(pid,id)
+char *
+var_name(pid,id)
 	int		pid,id;
 {
 	if (id <= 0) return "<no name: id is zero>";
@@ -64,7 +69,8 @@ char *var_name(pid,id)
 }
 
 
-set_ptr var_points_to (pid,id)
+set_ptr 
+var_points_to (pid,id)
 	int		pid,id;
 {
 	int		ptr_id;
@@ -79,7 +85,8 @@ set_ptr var_points_to (pid,id)
 *  malloc n bytes, print fail message if not enough space           *
 *********************************************************************
 */
-char *call_malloc(n,fail)
+char *
+call_malloc(n,fail)
 	int		n;
 	char	*fail;
 {
@@ -97,6 +104,8 @@ char *call_malloc(n,fail)
 	fprintf (stderr,"Slice file load out of memory: %s\n",fail);
 	exit(1);
 }
+
+void
 get_visit_order(dir,file)
 	char		*dir;
 	file_ptr	file;
@@ -136,12 +145,14 @@ get_visit_order(dir,file)
 *                                                                   *
 *********************************************************************
 */
-	char	mess[2000],dir[2000],*at,*start;
+char	mess[2000],dir[2000],*at,*start;
+
+void
 get_source (dir_main,file)
 	char		*dir_main;
 	file_ptr	file;
 {
-	char	mess[2000],dir[2000],*at,*start;
+	char	mess[4000],dir[2000],*at,*start;
 	int		fd,i;
 
 	sprintf (mess,"allocating %s source",file->name);
@@ -183,6 +194,7 @@ get_source (dir_main,file)
 *                                                                   *
 *********************************************************************
 */
+void
 create_stmts (file)
 	file_ptr	file;
 {
@@ -214,13 +226,14 @@ create_stmts (file)
 *                                                                   *
 *********************************************************************
 */
-int read_k_file (name)
+int 
+read_k_file (name)
 	char	*name;
 {
 	char	k_file_name[2000];
 	FILE	*k_file;
 	int		i,j,ix,nx,ok;
-	char	buff[2000],mess[2000];
+	char	buff[2000],mess[4000];
 
 	sprintf (k_file_name,"%sK",name);
 	k_file = fopen (k_file_name,"r");
@@ -421,6 +434,7 @@ generate_call_contexts()
 *  build a list of calling procs for each proc                      *
 *********************************************************************
 */
+void
 set_called_by()
 {
 	int		i;
@@ -460,6 +474,7 @@ set_called_by()
 *  mark_sub_structs finds structures declared within other structs  *
 *********************************************************************
 */
+void
 mark_sub_structs (vars,n_vars,id,offset)
 	int		id,offset,n_vars;
 	id_ptr	vars;
@@ -532,6 +547,7 @@ pr_structs()
 }
 */
 
+void
 close_gdefs()
 {
 	int	more,result,proc;
@@ -704,6 +720,7 @@ close_gdefs()
 * structures declared within other structures                       *
 *********************************************************************
 */
+void
 scan_structs()
 {
 	int		i;
@@ -736,7 +753,8 @@ scan_structs()
 *                                                                   *
 *********************************************************************
 */
-int read_link_file (name)
+int 
+read_link_file (name)
 	char	*name;
 {
 	char	l_file_name[2000];
@@ -974,6 +992,7 @@ int read_link_file (name)
 	return 0;
 }
 
+void
 print_var_set(p,s)
 	proc_ptr	p;
 	var_ptr		s;
@@ -1030,6 +1049,7 @@ print_var_set(p,s)
 	}
 }
 
+void
 print_set (s)
 	set_ptr	s;
 {
@@ -1039,6 +1059,7 @@ print_set (s)
 	}
 }
 
+void
 print_proc_defs (nc,proc)
 	int nc,proc;
 {
@@ -1098,6 +1119,7 @@ print_proc_defs (nc,proc)
 		}
 }
 
+void
 verify_input(l_opt)
 	int	l_opt;
 {
@@ -1254,7 +1276,8 @@ verify_input(l_opt)
 * procs declared static could be a problem?????                     *
 *********************************************************************
 */
-int find_proc(name)
+int 
+find_proc(name)
 	char	*name;
 {
 	int		ix;
@@ -1272,7 +1295,8 @@ int find_proc(name)
 * Translate a file name to a file_id                                *
 *********************************************************************
 */
-int find_file(name)
+int 
+find_file(name)
 	char	*name;
 {
 	int		ix;
@@ -1294,7 +1318,8 @@ int find_file(name)
 *                                                                   *
 *********************************************************************
 */
-int find_var(pid,name)
+int 
+find_var(pid,name)
 	int		pid;
 	char	*name;
 {
@@ -1317,7 +1342,8 @@ int find_var(pid,name)
 	return -1;
 }
 
-int make_criterion (file_name,line_number,var_spec,
+int 
+make_criterion (file_name,line_number,var_spec,
 			file,stmt,proc,var)
 	char *file_name,*var_spec;
 	int		line_number,*file,*stmt,*proc,*var;
@@ -1374,7 +1400,8 @@ int make_criterion (file_name,line_number,var_spec,
 *  If the line has no stmt (e.g., is blank) find a close stmt.      *
 *********************************************************************
 */
-int line_to_stmt(file,line)
+int 
+line_to_stmt(file,line)
 	int		file,line;
 {
 	int		i;

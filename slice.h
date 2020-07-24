@@ -136,4 +136,5 @@ void	(*slice_hook)();
 void	(*slice_pass_hook)();
 char	**get_slice_list ();
 int find_slice ();
+extern void print_slices1(bit_set print_nodes, bit_set slices, int active);
 #endif /* _slice_h */

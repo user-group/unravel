@@ -1,5 +1,7 @@
 # include <stdio.h>
 # include <sys/time.h>
+# include <string.h>
+# include <stdlib.h>
 # include "sets.h"
 # include "slice.h"
 
@@ -9,11 +11,17 @@ static  char    sccsid[] = "%W%  %G%";
 static	bit_set	*slices,active;
 int		lib_opt = 0;
 
-extern	int		v_opt;
-	int			n_opt;
-	int			l_opt,g_opt,s_opt;
+extern	int v_opt;
+	int n_opt;
+	int l_opt;
+	int g_opt;
+	int s_opt;
 
-int on_list (level,callers,called)
+extern int read_k_file(char *name);
+extern int read_link_file (char *name);
+
+int 
+on_list (level,callers,called)
 	int	level,callers[],called;
 {
 	int	i;
@@ -22,12 +30,15 @@ int on_list (level,callers,called)
 		if (callers[i] == called) return 1;
 	return 0;
 }
-int is_recursive_call (level,callers,called)
+
+int 
+is_recursive_call (level,callers,called)
 	int	level,callers[],called;
 {
 	return on_list(level,callers,called);
 }
 
+void
 tree_out (level,callers,calls)
 	int	level,callers[];
 	call_ptr	calls;
@@ -58,6 +69,7 @@ tree_out (level,callers,calls)
 	}
 }
 
+int
 main(np,p)
 	int		np;
 	char	*p[];

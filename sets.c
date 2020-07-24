@@ -97,7 +97,8 @@ set_ptr add_to_set (s,v)
 	return new;
 }
 
-bit_set	create_bit_set (size)
+bit_set	
+create_bit_set (size)
 	int		size;
 {
 	bit_set			b;
