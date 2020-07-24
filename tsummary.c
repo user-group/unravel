@@ -1,6 +1,8 @@
 # include <stdio.h>
 # include <string.h>
 # include <malloc.h>
+# include <stdlib.h>
+
 # include "lif.h"
 	static  char    sccsid[] = "@(#)tsummary.c	1.3  8/16/95";
 int		v_opt = 0;
@@ -90,6 +92,7 @@ struct proc_struct {
 
 int		n_globals,n_procs,n_addrs,n_chains;
 
+void
 get_t_files (sys)
 	char	 *sys;
 {
@@ -179,6 +182,7 @@ get_t_files (sys)
 	}
 }
 
+int
 main(np,p)
 	int		np;
 	char	*p[];
