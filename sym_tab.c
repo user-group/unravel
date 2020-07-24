@@ -12,6 +12,7 @@ static	in_typedef = 0;
 static symbol_table_entries	closed_symbol_tables[MAX_ST];
 static int	n_st = 0;
 
+void
 declared(var)
 	char	*var;
 {
@@ -92,6 +93,7 @@ struct hh {			 STE for variable
 };
 */
 
+void
 is_decl_array_or_pointer(t,is_array,is_pointer)
 	type_ste_ptr	t;
 	int			*is_array,*is_pointer;
@@ -140,6 +142,7 @@ int is_var_array(v)
 *                                                                   *
 *********************************************************************
 */
+void
 do_ids()
 {
 	var_ste_ptr	v;
@@ -194,6 +197,7 @@ do_ids()
 *                                                                   *
 *********************************************************************
 */
+void
 do_formals()
 {
 	var_ste_ptr	v;
@@ -240,6 +244,7 @@ do_formals()
 *                                                                   *
 *********************************************************************
 */
+void
 start_local_decls()
 {
 	max_local_id = 1;
@@ -292,6 +297,7 @@ int	alloc_id()
 *                                                                   *
 *********************************************************************
 */
+void
 make_decl (token,flag)
 	token_ptr	token;
 	unsigned int flag;
@@ -313,6 +319,7 @@ make_decl (token,flag)
 *                                                                   *
 *********************************************************************
 */
+void
 modify_type (token,flag,style,formals)
 	token_ptr	token,formals;
 	unsigned int flag;
@@ -347,6 +354,7 @@ type_ptr make_abstract_type (flag,style,formals)
 	return new;
 }
 
+void
 merge_abstract_type (old,new)
 	type_ptr    new,old;
 {
@@ -363,6 +371,7 @@ merge_abstract_type (old,new)
 *                                                                   *
 *********************************************************************
 */
+void
 open_scope()
 {
 	scope_level++;
@@ -380,6 +389,7 @@ open_scope()
 *                                                                   *
 *********************************************************************
 */
+void
 close_scope()
 {
 	type_ste_ptr	types;
@@ -493,7 +503,9 @@ type_ste_ptr find_type (type_name)
 *                                                                   *
 *********************************************************************
 */
-static tag_decl (type_desc,var_list,tag_entry_ptr,
+static 
+void
+tag_decl (type_desc,var_list,tag_entry_ptr,
 					detail_ptr,with_members)
 	token_ptr		type_desc,var_list;
 	tag_ste_ptr		*tag_entry_ptr;
@@ -690,6 +702,7 @@ var_ste_ptr	struct_decl (type_desc,off)
 	return st;
 }
 
+void
 insert_ptr_var(scope,var)
 	int	scope;
 	var_ste_ptr	var;
@@ -707,6 +720,7 @@ insert_ptr_var(scope,var)
 *********************************************************************
 */
 
+void
 insert_var_decl (var)
 	token_ptr	var;
 {
@@ -728,6 +742,7 @@ insert_var_decl (var)
 		(declared as int)							*/
 }
 
+void
 insert_struct_members (base,members,st,off_set)
 	char	*base;
 	var_ste_ptr	members,*st;
@@ -766,6 +781,7 @@ insert_struct_members (base,members,st,off_set)
 	}
 }
 
+void
 insert_members (base,members)
 	char	*base;
 	var_ste_ptr	members;
@@ -823,6 +839,7 @@ insert_members (base,members)
 *                                                                   *
 *********************************************************************
 */
+void
 decl (type_desc,var_list,with_members)
 	token_ptr	type_desc,var_list;
 	int			with_members;
@@ -1050,11 +1067,13 @@ var_ste_ptr look_up_id (table,name,scope)
 *                                                                   *
 *********************************************************************
 */
+void
 start_typedef()
 {
 	in_typedef = True;
 }
 
+void
 end_typedef()
 {
 	in_typedef = False;
@@ -1069,7 +1088,9 @@ int top_scope() { return scope_level == 1;}
 *                                                                   *
 *********************************************************************
 */
-static print_memb(prefix,v)
+static 
+void
+print_memb(prefix,v)
 	var_ste_ptr		v;
 	char			*prefix;
 {
@@ -1115,7 +1136,9 @@ static print_memb(prefix,v)
 *                                                                   *
 *********************************************************************
 */
-static print_types (t)
+static 
+void
+print_types (t)
 	type_ste_ptr	t;
 {
 	if (t->detail == STE_TYPEDEF){
@@ -1137,6 +1160,7 @@ static print_types (t)
 *                                                                   *
 *********************************************************************
 */
+void
 print_st()
 {
 	type_ste_ptr	types;
@@ -1357,3 +1381,4 @@ token_ptr fake_var_decl(t)
 	scope_level = save_scope;
 	return var_token;
 }
+

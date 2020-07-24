@@ -1,6 +1,8 @@
 # include <stdio.h>
 # include <string.h>
 # include <malloc.h>
+# include <stdlib.h>
+
 # include "lif.h"
 	static  char    sccsid[] = "@(#)slink.c	1.4  4/26/95";
 int		v_opt = 0;
@@ -90,6 +92,7 @@ struct proc_struct {
 
 int		last_global,last_proc,last_addr,last_chain;
 
+void
 print_procs(p)
 	proc_ptr	p[];
 {
@@ -105,6 +108,7 @@ print_procs(p)
 	}
 }
 
+void
 print_globals(g)
 	global_rec	g[];
 {
@@ -118,7 +122,8 @@ print_globals(g)
 	}
 }
 
-int chains_are_equal(a,b)
+int 
+chains_are_equal(a,b)
 	chain_ptr	a,b;
 {
 	field_ptr	af,bf;
@@ -140,6 +145,7 @@ int chains_are_equal(a,b)
 	return 1;
 }
 
+void
 get_lif_files (n,f,dir)
 	int		 n;
 	file_rec f[];
@@ -282,6 +288,7 @@ get_lif_files (n,f,dir)
 	}
 }
 
+void
 get_t_files (sys,n,f,dir)
 	FILE	 *sys;
 	int		 n;
@@ -393,6 +400,7 @@ int scan_system(sys,target)
 	return 0;
 }
 
+void
 print_files(n,f)
 	int		 n;
 	file_rec f[];
@@ -805,6 +813,7 @@ global_ptr assign_globals(n_files,f)
 	return globals;
 }
 
+void
 merge_lif (n,f,dir,globals,procs,addrs,chains)
 	int			n;
 	chain_ptr	*chains;
@@ -995,6 +1004,7 @@ h_ptr find_h (list,name)
 	return NULL;
 }
 
+void
 merge_head (n,f,dir,procs,g)
 	int			n;
 	file_rec	f[];
@@ -1090,6 +1100,7 @@ merge_head (n,f,dir,procs,g)
 	fclose(k_file);
 }
 
+int
 main(np,p)
 	int		np;
 	char	*p[];

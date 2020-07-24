@@ -8,6 +8,9 @@
 
 extern int v_opt,n_ptrs;
 
+extern int read_k_file(char *name);
+extern int read_link_file(char *name);
+
 int
 main(np,p)
 	int		np;
