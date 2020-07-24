@@ -3,6 +3,7 @@
 # include "sets.h"
 # include "slice.h"
 # include <signal.h>
+# include <stdlib.h>
 
 static  char    sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
 static	bit_set	*slices,active;
@@ -11,7 +12,8 @@ extern	int		v_opt;
 	int			n_opt;
 	int			l_opt,g_opt,s_opt;
 
-void time_out(sig, code, scp, addr)
+void 
+time_out(sig, code, scp, addr)
 	int sig, code;
 	struct sigcontext *scp;
 	char *addr;
@@ -20,7 +22,8 @@ void time_out(sig, code, scp, addr)
 }
 
 
-int find_main()
+int 
+find_main()
 {
 	int		p;
 	for (p = 1; p <= n_procs; p++){
@@ -29,9 +32,12 @@ int find_main()
 	}
 	return 0;
 }
+
 float	f_stmts = 0.0;
 int		hours = 0,mins = 0;
 unsigned int max_time;
+
+int
 main(np,p)
 	int		np;
 	char	*p[];
@@ -39,7 +45,7 @@ main(np,p)
 	int		status;
 	int		i,fx;
 	int		file,stmt,proc,var;
-	char	message[1000],cmd[1000];
+	char	message[1015],cmd[1015];
 	int		line_number;
 	int		is_err;
 	int		t_locals = 0;
@@ -113,6 +119,7 @@ main(np,p)
 	system ("date >>AUTO");
 }
 
+void
 verify_criterion(file,stmt,proc,var)
 	int	file,stmt,proc,var;
 {
@@ -147,6 +154,7 @@ verify_criterion(file,stmt,proc,var)
 	}
 }
 
+void
 do_slice(file,stmt,proc,var)
 	int	file,stmt,proc,var;
 {

@@ -14,6 +14,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/time.h>
+# include <stdlib.h>
 # include <malloc.h>
 # include <string.h>
 	static  char    sccsid[] = "@(#)map.c	1.6  8/11/95";
@@ -75,7 +76,8 @@ proc_list proc_entry(proc)
 	return new;
 }
 
-file_list file_entry(file)
+file_list 
+file_entry(file)
 	file_ptr	file;
 {
 	file_list new;
@@ -86,7 +88,8 @@ file_list file_entry(file)
 	return new;
 }
 
-file_ptr find_file (list,file)
+file_ptr 
+find_file (list,file)
 	file_ptr	list,file;
 {
 	file_ptr	at;
@@ -100,7 +103,8 @@ file_ptr find_file (list,file)
 }
 
 
-file_list find_file_list (list,file)
+file_list 
+find_file_list (list,file)
 	file_ptr	file;
 	file_list	list;
 {
@@ -114,7 +118,9 @@ file_list find_file_list (list,file)
 	return NULL;
 }
 
-proc_ptr find_proc_list (list,proc)
+
+proc_ptr 
+find_proc_list (list,proc)
 	proc_ptr	proc;
 	proc_list	list;
 {
@@ -129,7 +135,8 @@ proc_ptr find_proc_list (list,proc)
 }
 
 
-proc_ptr find_proc (list,proc)
+proc_ptr 
+find_proc (list,proc)
 	proc_ptr	list,proc;
 {
 	proc_ptr	at;
@@ -142,6 +149,7 @@ proc_ptr find_proc (list,proc)
 	return NULL;
 }
 
+void
 match_procs_to_files (mp,fp,pp)
 	main_ptr	mp;
 	file_ptr	fp;
@@ -252,6 +260,7 @@ match_procs_to_files (mp,fp,pp)
 	}
 }
 
+void
 print_match_results (mp)
 	main_ptr	mp;
 {
@@ -306,7 +315,7 @@ print_match_results (mp)
 	fclose(sys);
 }
 
-
+void
 output_match_results (dir_name,mp)
 	main_ptr	mp;
 	char		*dir_name;
@@ -421,13 +430,16 @@ int file_selector (entry)
 	return 0;
 }
 
-int compare(a,b)
+int 
+compare(a,b)
 	struct dirent **a,**b;
 {
 	if (strcmp((*a)->d_name,(*b)->d_name) > 0) return 1;
 	return 0;
 }
-int myscandir (dir_name,list,select,compare)
+
+int 
+myscandir (dir_name,list,select,compare)
 	char	*dir_name;
 	struct dirent ***list;
 	int (*select)();
@@ -474,7 +486,8 @@ int myscandir (dir_name,list,select,compare)
 	return n_match;
 }
 
-int scan_dir(dir,f)
+int 
+scan_dir(dir,f)
 	struct dirent ***f;
 	char	*dir;
 {
@@ -494,6 +507,7 @@ int scan_dir(dir,f)
 	return count;
 }
 
+int
 main (np,p)
 	int		np;
 	char	*p[];
