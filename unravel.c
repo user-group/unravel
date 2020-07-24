@@ -26,6 +26,8 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/time.h>
+# include <stdlib.h>
+# include <unistd.h>
 # define WAIT 500
 # include "config.h"
 # define XtNlinkOnly "linkOnly"
@@ -42,6 +44,7 @@ typedef struct {
 
 Widget	help_label;
 
+void
 button_help (w,mess,e,ok)
 	Widget	w;
 	char	*mess;
@@ -53,6 +56,7 @@ button_help (w,mess,e,ok)
 		NULL);
 }
 
+void
 set_button_help (w,mess)
 	Widget	w;
 	char	*mess;
@@ -144,6 +148,7 @@ int scan_dir(f)
 	return count;
 }
 
+void
 count_lif(n,f,n_ana,n_not,n_out)
 	int		n,*n_ana,*n_not,*n_out;
 	char	**f;
@@ -179,6 +184,7 @@ count_lif(n,f,n_ana,n_not,n_out)
 	*n_out = out;
 }
 
+void
 count_system(n_prog,n_dup,n_link)
 	int		*n_prog,*n_dup,*n_link;
 {
@@ -230,6 +236,7 @@ count_system(n_prog,n_dup,n_link)
 	*n_dup = dup;
 }
 
+void
 update (w,n,mess)
 	Widget	w;
 	int		n;
@@ -241,6 +248,7 @@ update (w,n,mess)
 	XtVaSetValues (w,XtNlabel,buff,NULL);
 }
 
+void
 update_src_info(label)
 	label_ptr	label;
 {
@@ -282,7 +290,7 @@ update_src_info(label)
 			"%3d duplicate procedures found");
 }
 
-
+void
 ana_done  (w,labels,e,ok)
 	Widget	w;
 	XEvent	*e;
@@ -292,6 +300,7 @@ ana_done  (w,labels,e,ok)
 	update_src_info(labels);
 }
 
+void
 push_analysis(w,labels,w_data)
 	Widget	w;
 	label_ptr	labels;
@@ -304,16 +313,15 @@ push_analysis(w,labels,w_data)
 		set = 1;
 		XtAddEventHandler (w, NoEventMask,True,ana_done,labels);
 	}
-	sprintf (buff,"PATH=%s:$PATH ; ./analyzer %d &",HOME,XtWindow(w));
+	sprintf (buff,"PATH=%s:$PATH ; ./analyzer %ld &",HOME,XtWindow(w));
 	fprintf(stderr, "executing [%s]\n", buff);
 	system (buff);
 	update_src_info(labels);
 }
 
-push_review(w,hist,w_data)
-	Widget	w;
-	int			hist;
-	XtPointer	w_data;
+void
+push_review(Widget w, int hist, XtPointer w_data)
+	
 {
 	char	buff[2000];
 	static 	char *title[] = {
@@ -334,6 +342,7 @@ push_review(w,hist,w_data)
 	system(buff);
 }
 
+void
 push_slice(w,u_data,w_data)
 	Widget	w;
 	XtPointer	u_data;
@@ -345,6 +354,7 @@ push_slice(w,u_data,w_data)
 	system (buff);
 }
 
+void
 push_dir(w,labels,w_data)
 	Widget	w;
 	XtPointer	w_data;
@@ -382,6 +392,7 @@ push_dir(w,labels,w_data)
 	}
 }
 
+void
 push_help(w,u_data,w_data)
 	Widget	w;
 	XtPointer	u_data;
@@ -394,6 +405,7 @@ push_help(w,u_data,w_data)
 	system (buff);
 }
 
+void
 done(w,u_data,w_data)
 	Widget	w;
 	XtPointer	u_data;
@@ -403,6 +415,7 @@ done(w,u_data,w_data)
 	exit (0);
 }
 
+void
 strech (goal,w)
 	Widget	goal,w;
 {
@@ -424,6 +437,7 @@ strech (goal,w)
 	XtManageChild(w);
 }
 
+void
 make_windows(top)
 	Widget	top;
 {
@@ -756,6 +770,7 @@ char *fall[] = {
 
 	static XrmOptionDescRec opt[] = {
 		{"-noslice", "*linkOnly", XrmoptionNoArg,"1"}};
+int 
 main (np,p)
 	int		np;
 	char	*p[];
@@ -774,7 +789,7 @@ main (np,p)
 
 	top = XtAppInitialize (&ac,"Unravel",opt,XtNumber(opt),&np,p,
 		fall,NULL,0);
-	fprintf(stderr, "top: %d\n", top);
+	fprintf(stderr, "top: %ld\n", ((long int)top));
 	XtGetApplicationResources (top,&link_only,res,XtNumber(res),NULL,0);
 	fprintf(stderr, "back from xtgetappres()\n");
 	if (np == 2){
@@ -812,4 +827,5 @@ main (np,p)
 	system ("echo \"No analysis done this session\" >HISTORY-A");
 	make_windows(top);
 	XtAppMainLoop(ac);
+	return 0;
 }
