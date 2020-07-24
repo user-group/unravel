@@ -27,4 +27,9 @@
 #define SWITCH_CTRL			6
 
 FILE	*ctrl_file;
+
+void control (int code, int ctrl_entry, int ctrl_exit, int stmt_entry, int stmt_exit, int else_entry,
+	int else_exit);
+
+
 #endif /* _control_h */
