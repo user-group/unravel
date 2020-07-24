@@ -1,5 +1,6 @@
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include "slice.h"
 # include "lif.h"
 
@@ -52,6 +53,7 @@ int is_id_valid (pid,id)
 	
 }
 
+void
 set_criteria (file,stmt_proc,stmt,var_proc,var)
 	int		file,stmt,stmt_proc,var_proc,var;
 {
@@ -79,6 +81,7 @@ set_criteria (file,stmt_proc,stmt,var_proc,var)
 	}
 }
 
+void
 clear_active_proc(proc)
 	int		proc;
 {
@@ -93,6 +96,7 @@ clear_active_proc(proc)
 	}
 }
 
+void
 clear_active()
 {
 	int	file,stmt;
@@ -106,7 +110,8 @@ clear_active()
 		}
 }
 
-int lib_defs (stmt,id,is_local)
+int 
+lib_defs (stmt,id,is_local)
 	int		id;
 	stmt_ptr stmt;
 {
@@ -138,7 +143,8 @@ int lib_defs (stmt,id,is_local)
 	return 0;
 }
 
-int is_var_defed (stmt,id,is_local)
+int 
+is_var_defed (stmt,id,is_local)
 	int		id,is_local;
 	stmt_ptr stmt;
 {
@@ -185,7 +191,9 @@ static int base_id,base_pid,base_ptr,base_level,base_done = 1;;
 static var_ptr	base;
 static set_ptr	base_addrs[200];
 static int		base_off[200];
-int offset_check(pid,id,off)
+
+int 
+offset_check(pid,id,off)
     int pid,id,off;
 {
     id_ptr  ids;
@@ -217,7 +225,7 @@ int offset_check(pid,id,off)
 }
  
 
-
+void
 print_field_resolve(ptr,f)
 	int		ptr;
 	field_ptr f;
@@ -242,6 +250,7 @@ print_field_resolve(ptr,f)
 	}
 }
 
+void
 chain_resolve_set (def,proc)
 	int		proc;
 	int		def;
@@ -292,7 +301,8 @@ chain_resolve_set (def,proc)
 	}
 }
 
-int chain_resolve_get (id,pid)
+int 
+chain_resolve_get (id,pid)
 	int		*id,*pid;
 {
 	int		level,addr;
@@ -390,6 +400,7 @@ int chain_resolve_get (id,pid)
 	return 0;
 }
 
+void
 var_resolve_set (def,proc)
 	int		proc;
 	var_ptr	def;
@@ -1567,6 +1578,8 @@ slice_proc (final_slice_sets,slice_sets,proc,active)
 *                                                                   *
 *********************************************************************
 */
+
+void
 slice (file,proc,stmt,var_proc,var,final_slice_sets,active)
 	int file,proc,stmt,var_proc,var;
 	bit_set	final_slice_sets[],active;
@@ -1614,6 +1627,7 @@ slice (file,proc,stmt,var_proc,var,final_slice_sets,active)
 }
 
 # define LINE_LENGTH 67
+void
 print_slices (print_nodes,slices,active)
 	bit_set	slices[],active;
 	int		print_nodes;
@@ -1644,6 +1658,8 @@ print_slices (print_nodes,slices,active)
 		}
 	}
 }
+
+void
 print_slices1 (print_nodes,slices,active)
 	bit_set	slices[],active;
 	int		print_nodes;
