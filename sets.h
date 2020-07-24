@@ -62,5 +62,6 @@ var_ptr add_to_var_set ();
 set_ptr add_to_set ();
 int cunion_bit_set ();
 int is_subset();
+void clear_bit_set(bit_set set);
 
 #endif /* _sets_h */

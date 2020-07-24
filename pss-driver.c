@@ -4,8 +4,11 @@
 # include "lif.h"
 # include <malloc.h>
 # include <string.h>
+# include <stdlib.h>
 
 extern int v_opt,n_ptrs;
+
+int
 main(np,p)
 	int		np;
 	char	*p[];
@@ -28,3 +31,4 @@ main(np,p)
 	status = read_link_file(p[fx]);
 	printf ("%s: LINK file status %d\n",p[fx],status);
 }
+
