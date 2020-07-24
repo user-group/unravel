@@ -6,11 +6,13 @@
 # include <X11/Xaw/Box.h>
 # include <X11/Xaw/AsciiText.h>
 # include <fcntl.h>
+# include <stdlib.h>
 # include "config.h"
 
 	static  char    sccsid[] = "@(#)helpu.c	1.1  10/14/94";
 
-void quitB (w,x,y)
+void 
+quitB (w,x,y)
 	Widget	w;
 	Widget	x;
 	caddr_t	y;
@@ -18,6 +20,7 @@ void quitB (w,x,y)
 	exit(0);
 }
 
+int
 main(argc, argv)
     int argc;
     char **argv;

@@ -22,6 +22,7 @@ int is_malloc(name)
 	return 0;
 }
 
+void
 print_malloc()
 {
 	int		i;
@@ -29,13 +30,16 @@ print_malloc()
 		printf ("\t%s\n",malloc_funs[i]);
 }
 
+void
 add_malloc(name)
 	char	*name;
 {
 	malloc_funs[n_malloc++] = name;
 }
 
-addr_tab_ptr addr_of (t)
+
+addr_tab_ptr 
+addr_of (t)
 	token_ptr	t;
 {
 	var_ste_ptr	var;
@@ -67,6 +71,7 @@ addr_tab_ptr addr_of (t)
 
 }
 
+void
 make_malloc(node_id,t)
 	int		node_id;
 	tree_ptr t;
@@ -88,7 +93,8 @@ make_malloc(node_id,t)
 	}
 }
 
-tree_ptr make_leaf(code,token)
+tree_ptr 
+make_leaf(code,token)
 	token_ptr	token;
 	int			code;
 {
@@ -102,7 +108,8 @@ tree_ptr make_leaf(code,token)
 	return new;
 }
 
-tree_ptr make_tree (code,left,right)
+tree_ptr 
+make_tree (code,left,right)
 	tree_ptr	left,right;
 	int			code;
 {
@@ -116,6 +123,7 @@ tree_ptr make_tree (code,left,right)
 	return new;
 }
 
+void
 print_tree (t)
 	tree_ptr	t;
 {
@@ -126,6 +134,7 @@ print_tree (t)
 }
 
 /*static*/ 
+void
 print_trees (t)
 	tree_ptr	t;
 {
@@ -197,6 +206,8 @@ print_trees (t)
 }
 # define REF 0
 # define DEF 1
+
+void
 cref_def (is_def,node,chain)
 	int		is_def,node,chain;
 {
@@ -213,6 +224,7 @@ cref_def (is_def,node,chain)
 	fprintf (outfile,"\n");
 }
 
+void
 ref_def_id  (is_def,node,id,scope)
 	int		is_def,node,id,scope;
 {
@@ -239,6 +251,7 @@ ref_def_id  (is_def,node,id,scope)
 	fprintf (outfile,"\n");
 }
 
+void
 ref_def_var (is_def,node,t,used_as_array)
 	int		is_def,node,used_as_array;
 	token_ptr	t;
@@ -294,7 +307,8 @@ ref_def_var (is_def,node,t,used_as_array)
 	}
 }
 
-token_ptr leftmost (t)
+token_ptr 
+leftmost (t)
 	tree_ptr	t;
 {
 	token_ptr	left,right;
@@ -327,7 +341,9 @@ token_ptr leftmost (t)
 	return NULL;
 }
 
-static token_ptr rightmost (t)
+static 
+token_ptr 
+rightmost (t)
 	tree_ptr	t;
 {
 	token_ptr	left,right;
@@ -362,7 +378,9 @@ static token_ptr rightmost (t)
 
 # define ID_LVALUE 1
 # define PTR_LVALUE 2
-static int get_lvalue (t,tk,chain_id,array_seen)
+static 
+int 
+get_lvalue (t,tk,chain_id,array_seen)
 	tree_ptr	t;
 	token_ptr	*tk;
 	int			*chain_id;
@@ -459,7 +477,9 @@ static int get_lvalue (t,tk,chain_id,array_seen)
 }
 
 
-static scan_tree (t,node_id,from_node,upto_node,to_node)
+static 
+void
+scan_tree (t,node_id,from_node,upto_node,to_node)
 	tree_ptr	t;
 	int			node_id;
 	int			*from_node,*to_node,*upto_node;
@@ -715,6 +735,7 @@ static scan_tree (t,node_id,from_node,upto_node,to_node)
 	return;
 }
 
+void
 make_arg(t,node_id,from,upto,to)
 	tree_ptr	t;
 	int			node_id;
@@ -731,6 +752,7 @@ make_arg(t,node_id,from,upto,to)
 	scan_tree (t,node_id,from,upto,to);
 }
 
+void
 assemble_actuals (t,node_id,from,upto,to)
 	tree_ptr	t;
 	int			node_id;
@@ -746,7 +768,8 @@ assemble_actuals (t,node_id,from,upto,to)
 	else make_arg (t,node_id,from,upto,to);
 }
 
-int	xpr_gen (t,from,to)
+int	
+xpr_gen (t,from,to)
 	tree_ptr	t;
 	int			*from,*to;
 {
