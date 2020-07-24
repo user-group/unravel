@@ -1,0 +1,46 @@
+#!/bin/csh -f
+
+#                   	 "@(#)visit-prep	1.2  8/17/95"
+#
+#****************************************************************
+#                                                               *
+#  Unravel Project: Develop a program slicer for ANSI C         *
+#                                                               *
+#  Developed at N.I.S.T. Computer Systems Lab by:               *
+#                                                               *
+#      D. Wallace     Project Leader                            *
+#                                                               *
+#      J. Lyle, J. Graham, K. Gallagher, D. Binkley & J. Poole  *
+#                                                               *
+#****************************************************************
+#  This is visit-prep  used to create vprep                     *
+#  vprep  setup visit order of nodes                            *
+#                                                               *
+#                                                               *
+#                                                               *
+#****************************************************************
+set path = (HOME $path)
+foreach v ($argv)
+#	cat $v:r.LIF | grep "^16" |\
+#		sed -e "s/16(//" -e "s/,/ /" -e 's/).*$//' | vsort >& $v:r.V
+	set procs = `visit-ctrl $v:r.T`
+#	/bin/rm -f V Va Vb V1
+	/bin/rm -f $v:r.V
+	while ($#procs)
+		set from = $procs[1]
+		set to = $procs[2]
+		shift procs
+		shift procs
+#		echo "======= $from $to ==========" >>Va
+		cat $v:r.LIF | grep "^16" |\
+			sed -e "s/16(//" -e "s/,/ /" -e 's/).*$//' |\
+			visit-filter $from $to | \
+			vsort | nl | sort -n -r |\
+			sed -e 's/^ *[0-9]*[ 	]*//' |\
+			visit-post $from $to >> $v:r.V
+#			sed -e "s/16(//" -e "s/,/ /" -e 's/).*$//' | tee V1 |\
+#			visit-filter $from $to | tee -a V |\
+#			vsort | cat -n |tee -a Va | sort -n -r | tee -a Vb |\
+#			vsort |& tee -a V | visit-post $from $to >> $v:r.V
+	end
+end
