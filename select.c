@@ -17,13 +17,15 @@
 # include <sys/time.h>
 # include <malloc.h>
 # include <errno.h>
+# include <stdlib.h>
+# include <unistd.h>
 # include "config.h"
 # define WAIT 500
 
-	static  char    sccsid[] = "@(#)select.c	1.6  8/16/95";
+static  char    sccsid[] = "@(#)select.c	1.6  8/16/95";
 
 int	no_slice = 0;
-int sys_nerr;
+int 	sys_nerr;
 extern __const char *__const sys_errlist[];
 
 char	*slicer = "u";
@@ -36,7 +38,8 @@ struct id_struct {
 	char	**progs;
 };
 
-int	rescan_system(main_file_name,progs)
+int	
+rescan_system(main_file_name,progs)
 	char	*main_file_name;
 	char	*progs[];
 {
@@ -70,7 +73,8 @@ int	rescan_system(main_file_name,progs)
 	return 0;
 }
 
-int clear_y(file)
+int 
+clear_y(file)
 	char	*file;
 {
 	char	file_name[2000];
@@ -83,6 +87,7 @@ int clear_y(file)
 	return 1;
 }
 
+void
 cannot_link (main,file,fmt)
 	char	*main,*file,*fmt;
 {
@@ -92,7 +97,8 @@ cannot_link (main,file,fmt)
 	exit(1);
 }
 
-int need_to_link (main_file_name)
+int 
+need_to_link (main_file_name)
 	char	*main_file_name;
 {
 /*
@@ -167,6 +173,7 @@ int need_to_link (main_file_name)
 
 }
 
+void
 only_one(file_name)
 	char	*file_name;
 {
@@ -192,13 +199,15 @@ only_one(file_name)
 	exit(0);
 }
 
-int cmp(a,b)
+int 
+cmp(a,b)
 	char	**a,**b;
 {
 	return strcmp (*a,*b);
 }
 
-char	**scan_system()
+char **
+scan_system()
 {
 	int		n = 0,k,j;
 	int		dup = 0;
@@ -258,6 +267,7 @@ DESCRIPTION
 *************/
 }
 
+void
 button_help (w,mess,e,ok)
 	Widget	w;
 	char	*mess;
@@ -269,6 +279,7 @@ button_help (w,mess,e,ok)
 		NULL);
 }
 
+void 
 set_button_help (w,mess)
 	Widget	w;
 	char	*mess;
@@ -279,6 +290,7 @@ set_button_help (w,mess)
 	XtAddEventHandler (w,LeaveWindowMask,False,button_help,buff);
 }
 
+void
 do_slice (id,tt)
 	id_ptr			id;
 	XtIntervalId	*tt;
@@ -316,6 +328,7 @@ do_slice (id,tt)
 
 }
 
+void
 do_link (id,tt)
 	id_ptr			id;
 	XtIntervalId	*tt;
@@ -346,6 +359,7 @@ do_link (id,tt)
 	return;
 }
 
+void
 strech_to (frame,w,goal)
 	Widget	goal,w,frame;
 {
@@ -376,6 +390,7 @@ strech_to (frame,w,goal)
 	XtManageChild(w);
 }
 
+void
 strech (goal,w)
 	Widget	goal,w;
 {
@@ -397,6 +412,7 @@ strech (goal,w)
 	XtManageChild(w);
 }
 
+void
 call_slice (w,id,list)
 	Widget	w;
 	id_ptr					id;
@@ -413,6 +429,7 @@ call_slice (w,id,list)
 	do_link(id,NULL);
 }
 
+void
 push_quit(w,u_data,w_data)
 	Widget	w;
 	XtPointer	u_data;
@@ -422,6 +439,7 @@ push_quit(w,u_data,w_data)
 	exit(0);
 }
 
+void
 push_help(w,u_data,w_data)
 	Widget	w;
 	XtPointer	u_data;
@@ -435,6 +453,7 @@ push_help(w,u_data,w_data)
 	system (buff);
 }
 
+void
 v_wrap (p,lw)
 	Widget	p,lw;
 {
@@ -523,6 +542,7 @@ Widget make_list_box (parent,help,status,prefix,title,id)
 	return frame;
 }
 
+void
 make_windows(top,ac)
 	Widget	top;
 	XtAppContext	ac;
@@ -637,6 +657,7 @@ char *fall[] = {
 			<KeyPress>?: set() highlight() notify() unset()",
 	NULL};
 
+int 
 main (np,p)
 	int		np;
 	char	*p[1000];

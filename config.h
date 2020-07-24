@@ -1,3 +1,3 @@
-#define HOME "/Users/alan/Downloads/unravel_r2.2+"
-#define CC   "gcc"
+#define HOME "/Users/alan/Documents/unravel"
+#define CC "gcc"
 #include "fix.h"
