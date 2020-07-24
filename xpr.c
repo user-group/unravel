@@ -3,6 +3,7 @@
 # include "lif.h"
 # include <string.h>
 # include <malloc.h>
+
 	static  char    sccsid[] = "@(#)xpr.c	1.4  4/26/95";
 
 # define MAX_MALLOC 100
@@ -10,6 +11,14 @@ static int	max_addr = 0;
 addr_tab_ptr	addr_tab = NULL;
 int		n_malloc = 0;
 char	*malloc_funs[MAX_MALLOC];
+
+
+void print_trees (tree_ptr t);
+int  get_chain(tree_ptr t);
+void assemble_dot (char *buff, tree_ptr t, chain_ptr c);
+void source_map (int n, token_ptr from, token_ptr to);
+void assemble_actuals (tree_ptr t, int node_id, int *from, int *upto, int *to);
+void connect_nodes (int from, int to);
 
 int current_addr(){ return max_addr;}
 
@@ -409,7 +418,7 @@ get_lvalue (t,tk,chain_id,array_seen)
 			if (lvalue == ID_LVALUE) (*tk)->deref_level++;
 			return lvalue;
 		case COMMA_OP:
-			return NULL;
+			return 0;
 		case UN_OP:
 		case LEFTP_OP:
 		case RIGHTP_OP:
@@ -428,7 +437,7 @@ get_lvalue (t,tk,chain_id,array_seen)
 				}
 				var = look_up_id (c.fields,name,&scope);
 				if (!var) printf ("%s not member at %d\n",name,lineno);
-				if (!var) return NULL;
+				if (!var) return 0;
 				++c.current_seq;
 				fprintf (outfile,"%d(%d,%d,%d,%s)",
 					LIF_FIELD,c.chain_id,c.current_seq,
@@ -439,7 +448,7 @@ get_lvalue (t,tk,chain_id,array_seen)
 				fprintf (outfile,"\n");
 				*chain_id = c.chain_id;
 				if (*chain_id) return PTR_LVALUE;
-				return NULL;
+				return 0;
 			}
 			/*
 			printf ("DOT found: (%s)\n",name);
@@ -457,7 +466,7 @@ get_lvalue (t,tk,chain_id,array_seen)
 		case POINTER_OP:
 			*chain_id = get_chain(t);
 			if (*chain_id) return PTR_LVALUE;
-			return NULL;
+			return 0;
 		case ARRAY_OP:
 			*array_seen += 1;
 			return get_lvalue(t->left,tk,chain_id,array_seen);
@@ -473,7 +482,7 @@ get_lvalue (t,tk,chain_id,array_seen)
 		default:
 			break;
 	} }
-	return NULL;
+	return 0;
 }
 
 

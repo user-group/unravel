@@ -10,7 +10,8 @@ static	int			pid = 0;
 
 label_ptr	labels = NULL;
 
-label_ptr find_label(label)
+label_ptr 
+find_label(label)
 	char   *label;
 {
 	label_ptr	at;
@@ -23,6 +24,7 @@ label_ptr find_label(label)
 	return NULL;
 }
 
+void
 label_def (label_token,node)
 	token_ptr	label_token;
 	int			node;
@@ -186,6 +188,7 @@ int	get_stmt_no (){
 	return ++stmtno;
 }
 
+void
 connect_nodes (from,to)
 	int		from,to;
 {
@@ -194,6 +197,7 @@ connect_nodes (from,to)
 	fprintf (outfile,"\n");
 }
 
+void
 source_map (n,from,to)
 	int		n;
 	token_ptr	from,to;

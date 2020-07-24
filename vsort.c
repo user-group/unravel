@@ -1,18 +1,24 @@
 # include <stdio.h>
+# include <stdlib.h>
+
 typedef struct ll_struct ll_node,*ll;
+
 struct ll_struct {
 	int value;
 	ll	next;
 	};
+
 typedef struct {
 	int		is_branch;
 	int		is_join;
 	int		visit;
 	ll		branches_to,joins_from;
 	} node, *node_ptr;
+
 node	nodes[10000];
 int		n_nodes = 0;
 
+void
 output(k)
 	int		k;
 {
@@ -28,6 +34,7 @@ output(k)
 	printf ("%d\n",k);
 }
 
+void
 output1(k)
 	int		k;
 {
@@ -53,7 +60,8 @@ output1(k)
 	}
 }
 
-int go_deep (k)
+int 
+go_deep (k)
 	int		k;
 {
 	int	at;
@@ -64,7 +72,7 @@ int go_deep (k)
 	}
 }
 
-main()
+int main(int argc, char **argv)
 {
 	int		i;
 	int		from,to;
@@ -158,4 +166,5 @@ main()
 		}
 	}
 	*/
+	return 0;
 }
