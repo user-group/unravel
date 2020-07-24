@@ -19,6 +19,7 @@
 # include <X11/Xaw/Box.h>
 # include <X11/Xaw/Form.h>
 # include <X11/Xaw/Viewport.h>
+# include <stdlib.h>
 # include "sets.h"
 # include "MultiSlice.h"
 # include "slice.h"
@@ -75,7 +76,8 @@ int		*line_map;
 
 	bit_set	active;
 
-int update_progress (old)
+int 
+update_progress (old)
 	int	old;
 {
 	int		n,at,f;
@@ -93,6 +95,8 @@ int update_progress (old)
 	}
 	return n;
 }
+
+void
 button_help (w,mess,e,ok)
 	Widget	w;
 	char	*mess;
@@ -105,6 +109,7 @@ button_help (w,mess,e,ok)
 		NULL);
 }
 
+void
 set_button_help (w,mess)
 	Widget	w;
 	char	*mess;
@@ -114,6 +119,7 @@ set_button_help (w,mess)
 	XtAddEventHandler (w,LeaveWindowMask,False,button_help,buff);
 }
 
+void
 update_label(state)
 	proc_state_ptr		state;
 {
@@ -160,6 +166,7 @@ update_label(state)
 	*/
 }
 
+void
 make_line_map()
 {
 	int		i,sum;
@@ -176,6 +183,7 @@ make_line_map()
 	}
 }
 
+void
 disp_to_file_and_line (disp_line,filex,line)
 	int		disp_line,*filex,*line;
 {
@@ -196,6 +204,7 @@ disp_to_file_and_line (disp_line,filex,line)
 	*line = 0;
 }
 
+void
 make_head_list()
 {
 	int		k,i,n;
@@ -293,6 +302,7 @@ char *get_file(np,p)
 	return p[fx];
 }
 
+void
 do_slice(x,file,stmt,proc,var,line)
 	int	file,stmt,proc,var,line;
 	Widget  x;
@@ -347,7 +357,7 @@ do_slice(x,file,stmt,proc,var,line)
 	SliceRedraw (x);
 }
 
-
+void
 adjust_popup_list (list)
 	Widget	list;
 {
@@ -379,7 +389,8 @@ adjust_popup_list (list)
 		XtNheight,&list_h,NULL);
 }
 
-void stop_slicing (w,x,y)
+void 
+stop_slicing (w,x,y)
 	Widget	w;
 	Widget	x;
 	caddr_t	y;
@@ -387,7 +398,8 @@ void stop_slicing (w,x,y)
 	abandon_slice = 1;
 }
 
-void helpB (w,x,y)
+void 
+helpB (w,x,y)
 	Widget	w;
 	Widget	x;
 	caddr_t	y;
@@ -397,7 +409,8 @@ void helpB (w,x,y)
 	system (cmd);
 }
 
-void quitB (w,x,y)
+void 
+quitB (w,x,y)
 	Widget	w;
 	Widget	x;
 	caddr_t	y;
@@ -408,7 +421,8 @@ void quitB (w,x,y)
 	exit(0);
 }
 
-void slicecall (x,state,r)
+void 
+slicecall (x,state,r)
 	proc_state_ptr state;
 	Widget	x;
 	MultiSliceReturn *r;
@@ -476,7 +490,8 @@ void slicecall (x,state,r)
 	update_progress (-1);
 }
 
-void dodicecall (x,state,primary_set,secondary_set)
+void 
+dodicecall (x,state,primary_set,secondary_set)
 	proc_state_ptr state;
 	bit_set	*primary_set,*secondary_set;
 	Widget	x;
@@ -501,7 +516,8 @@ void dodicecall (x,state,primary_set,secondary_set)
 	SliceRedraw (state->slicewin);
 }
 
-void dicecallsp (x,state,r)
+void 
+dicecallsp (x,state,r)
 	proc_state_ptr state;
 	Widget	x;
 	XtPointer	r;
@@ -529,7 +545,8 @@ void dicecall (x,state,r)
 	dodicecall (x,state,primary_set,secondary_set);
 }
 
-void bbcall (x,state,r)
+void 
+bbcall (x,state,r)
 	proc_state_ptr state;
 	Widget	x;
 	XtPointer	r;
@@ -559,7 +576,8 @@ void bbcall (x,state,r)
 
 }
 
-void unioncall (x,state,r)
+void 
+unioncall (x,state,r)
 	proc_state_ptr state;
 	Widget	x;
 	XtPointer	r;
@@ -605,7 +623,8 @@ void clear_sliceB (w,state,y)
 	system (buff);
 }
 
-void clearB (w,state,y)
+void 
+clearB (w,state,y)
 	Widget	w;
 	proc_state_ptr state;
 	caddr_t	y;
@@ -618,6 +637,7 @@ void clearB (w,state,y)
 	SliceClearAll(state->slicewin);
 }
 
+void
 popup_selection(a,state,c)
 	Widget		a;
 	proc_state_ptr      state;
@@ -647,6 +667,7 @@ popup_selection(a,state,c)
 }
 
 
+void
 proc_pop(a,p,c)
 	Widget		a,p;
 	XtPointer	c;
@@ -666,6 +687,7 @@ proc_pop(a,p,c)
 	XtPopup (p,XtGrabExclusive);
 }
 
+void
 tree_pop (w,state,p)
 	Widget	w;
 	XtPointer	p;
@@ -676,6 +698,7 @@ tree_pop (w,state,p)
 	proc_pop (w,state->proc_popup,NULL);
 }
 
+void
 show_pop (w,state,p)
 	Widget	w;
 	XtPointer	p;
@@ -686,6 +709,7 @@ show_pop (w,state,p)
 	proc_pop (w,state->proc_popup,NULL);
 }
 
+void
 var_select(a,state,list)
 	Widget		a;
 	proc_state_ptr		state;
@@ -713,6 +737,7 @@ var_select(a,state,list)
 
 }
 
+void
 slice_select(a,state,list)
 	Widget		a;
 	proc_state_ptr		state;
@@ -739,6 +764,8 @@ slice_select(a,state,list)
 
 }
 
+
+void
 head_select(a,state,list)
 	Widget		a;
 	proc_state_ptr		state;
@@ -764,6 +791,7 @@ head_select(a,state,list)
 	proc_pop (NULL,state->var_popup,NULL);
 }
 
+void
 mark_call_tree (w,proc)
 	Widget	w;
 	int	proc;
@@ -791,6 +819,7 @@ mark_call_tree (w,proc)
 	SliceRedraw (w);
 }
 
+void
 proc_select(a,state,list)
 	Widget		a;
 	proc_state_ptr		state;
@@ -886,7 +915,8 @@ proc_select(a,state,list)
 			<KeyPress>?: set() highlight() notify() unset()",
 		NULL};
 	XtAppContext	ac;
-void continue_events(proc,change)
+void 
+continue_events(proc,change)
 	int		proc,change;
 {
 	XEvent	e;
@@ -903,6 +933,8 @@ void continue_events(proc,change)
 	}
 }
 void active_hook();
+
+int
 main(argc, argv)
     int argc;
     char **argv;
@@ -950,6 +982,7 @@ main(argc, argv)
 	XtAppMainLoop(ac);
 }
 
+void
 strech (goal,w)
 	Widget	goal,w;
 {
@@ -971,7 +1004,8 @@ strech (goal,w)
 	XtManageChild(w);
 }
 
-Widget create_widgets (top,file_name)
+Widget 
+create_widgets (top,file_name)
 	Widget	top;
 	char	*file_name;
 {

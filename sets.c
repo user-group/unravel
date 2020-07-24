@@ -8,6 +8,7 @@
 static char *sccs_h_id = SETS_SCCS_ID;
 static char *sccs_id = "@(#)sets.c	1.2  8/16/95";
 
+void
 clear_id_set (head)
 	id_set_ptr  head;
 {
@@ -63,7 +64,8 @@ int add_to_id_set (head,pid,id)
 	return 1;
 }
 
-var_ptr add_to_var_set (s,id,level,code)
+var_ptr 
+add_to_var_set (s,id,level,code)
 	var_ptr		s;
 	int			id,level,code;
 {
@@ -81,7 +83,8 @@ var_ptr add_to_var_set (s,id,level,code)
 	return new;
 }
 
-set_ptr add_to_set (s,v)
+set_ptr 
+add_to_set (s,v)
 	set_ptr		s;
 	int			v;
 {
@@ -125,6 +128,7 @@ create_bit_set (size)
 	return b;
 }
 
+void
 clear_bit_set (set)
 	bit_set		set;
 {
@@ -147,6 +151,7 @@ clear_bit_set (set)
 }
 
 
+void
 bit_on (b,at)
 	bit_set		b;
 	int			at;
@@ -155,6 +160,7 @@ bit_on (b,at)
 	b->bits[at/WORD_SIZE] |= 1<<(at%WORD_SIZE);
 }
 
+void
 bit_off (b,at)
 	bit_set		b;
 	int			at;
@@ -172,6 +178,7 @@ int	is_bit_on (b,at)
 	return 0;
 }
 
+void
 copy_bit_set (to,from)
 	bit_set		to,from;
 {
@@ -185,7 +192,8 @@ copy_bit_set (to,from)
 		to->bits[i] = from->bits[i];
 }
 
-int	bit_set_equal (a,b)
+int	
+bit_set_equal (a,b)
 	bit_set		a,b;
 {
 	int			i;
@@ -200,6 +208,7 @@ int	bit_set_equal (a,b)
 }
 	
 
+void
 union_bit_set (to,from)
 	bit_set		to,from;
 {
@@ -215,7 +224,8 @@ union_bit_set (to,from)
 }
 
 
-int cunion_bit_set (to,from)
+int 
+cunion_bit_set (to,from)
 	bit_set		to,from;
 {
 	int			i;
@@ -234,7 +244,8 @@ int cunion_bit_set (to,from)
 	return change;
 }
 
-int is_subset (sub,set)
+int 
+is_subset (sub,set)
 	bit_set		sub,set;
 {
 	int			i;
@@ -256,6 +267,7 @@ int is_subset (sub,set)
 	return proper;
 }
 
+void
 not_bit_set (to)
 	bit_set		to;
 {
@@ -269,6 +281,7 @@ not_bit_set (to)
 		to->bits[i] = ~to->bits[i];
 }
 
+void
 and_bit_set (to,from)
 	bit_set		to,from;
 {
@@ -283,7 +296,8 @@ and_bit_set (to,from)
 }
 
 
-int	get_prev_member (set,at)
+int	
+get_prev_member (set,at)
 	bit_set		set;
 	int			at;
 {
@@ -302,7 +316,8 @@ int	get_prev_member (set,at)
 	return -1;
 }
 
-int	get_next_member (set,last)
+int	
+get_next_member (set,last)
 	bit_set		set;
 	int			last;
 {

@@ -69,13 +69,15 @@ type_ptr alloc_type()
 	return (type_ptr) malloc (sizeof(type_rec));
 }
 
-decl_ptr alloc_decl()
+decl_ptr 
+alloc_decl()
 {
 	n_decls++;
 	return (decl_ptr) malloc (sizeof(decl_rec));
 }
 
-token_ptr alloc_token()
+token_ptr 
+alloc_token()
 {
 	token_ptr  t;
 
@@ -88,36 +90,42 @@ token_ptr alloc_token()
 	return t;
 }
 
-type_ste_ptr alloc_type_ste()
+type_ste_ptr 
+alloc_type_ste()
 {
 	n_type_ste++;
 	return (type_ste_ptr) malloc (sizeof(type_ste_rec));
 }
 
-var_ste_ptr alloc_var_ste()
+var_ste_ptr 
+alloc_var_ste()
 {
 	n_var_ste++;
 	return (var_ste_ptr) malloc (sizeof(var_ste_rec));
 }
 
-tag_ste_ptr alloc_tag_ste()
+tag_ste_ptr 
+alloc_tag_ste()
 {
 	n_tag_ste++;
 	return (tag_ste_ptr) malloc (sizeof(tag_ste_rec));
 }
 
-addr_tab_ptr alloc_addr_tab()
+addr_tab_ptr 
+alloc_addr_tab()
 {
 	n_addr_tab++;
 	return (addr_tab_ptr) malloc (sizeof(addr_tab_rec));
 }
 
-label_ptr alloc_label()
+label_ptr 
+alloc_label()
 {
 	n_labels++;
 	return (label_ptr) malloc (sizeof(label_rec));
 }
 
+void
 alloc_summary()
 {
 	printf ("Memory allocation summary\n");
@@ -125,43 +133,47 @@ alloc_summary()
 	/*       123456   123  123456  abc... */
 	printf ("%6d %5d %7d  %s\n",
 		n_text,1,n_text,"Bytes in names");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_strings,sizeof(string_node),n_strings*sizeof(string_node),
 		"String Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_tokens,sizeof(token_rec),n_tokens*sizeof(token_rec),
 		"Token Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_decls,sizeof(decl_rec),n_decls*sizeof(decl_rec),
 		"Decl Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_stmts,sizeof(stmt_rec),n_stmts*sizeof(stmt_rec),
 		"Stmt Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_lists,sizeof(list_rec),n_lists*sizeof(list_rec),
 		"List Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_procs,sizeof(proc_rec),n_procs*sizeof(proc_rec),
 		"Proc Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_trees,sizeof(tree_rec),n_trees*sizeof(tree_rec),
 		"Tree Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_types,sizeof(type_rec),n_types*sizeof(type_rec),
 		"Type Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_type_ste,sizeof(type_ste_rec),n_type_ste*sizeof(type_ste_rec),
 		"Type_ste Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_var_ste,sizeof(var_ste_rec),n_var_ste*sizeof(var_ste_rec),
 		"Var_ste Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_tag_ste,sizeof(tag_ste_rec),n_tag_ste*sizeof(tag_ste_rec),
 		"Tag_ste Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_addr_tab,sizeof(addr_tab_rec),n_addr_tab*sizeof(addr_tab_rec),
 		"Addr_tab Records");
-	printf ("%6d %5d %7d  %s\n",
+	printf ("%6d %5ld %7ld  %s\n",
 		n_labels,sizeof(label_rec),n_labels*sizeof(label_rec),
 		"Label Records");
 }
+
+
+
+
