@@ -5,12 +5,17 @@
 	static  char    sccsid[] = "@(#)sym_tab.c	1.4  4/26/95";
 static int scope_level = 1;
 static symbol_table_entries	symbol_table[MAX_NEST];
-static	max_local_id = 1;
-static	max_global_id = 1;
-static	in_typedef = 0;
+static	int max_local_id = 1;
+static	int max_global_id = 1;
+static	int in_typedef = 0;
 # define MAX_ST 10000
 static symbol_table_entries	closed_symbol_tables[MAX_ST];
 static int	n_st = 0;
+
+
+void insert_struct_members (char * base, var_ste_ptr members, var_ste_ptr *st, int *off_set);
+void list_procs(void);
+void print_flags(int flags);
 
 void
 declared(var)
