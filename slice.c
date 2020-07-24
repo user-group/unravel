@@ -12,6 +12,9 @@ void	(*slice_hook)() = NULL;
 void	(*slice_pass_hook)() = NULL;
 void  *QQQ;
 
+
+void slice_proc (bit_set final_slice_sets[], bit_set slice_sets[], int proc, bit_set active);
+
 int 
 stmt_to_proc (file,stmt)
 	int	file,stmt;
@@ -864,7 +867,8 @@ pass_criteria (f,stmt,succ)
 # define LINE 60
 void
 print_active_stmt (f,proc,stmt,mark)
-	int		f,stmt,mark;
+	int	f,stmt,mark;
+	int     proc;
 {
 	stmt_ptr s;
 	int		k,var,n;

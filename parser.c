@@ -2,10 +2,24 @@
 # include "ansi_parse.h"
 # include "lif.h"
 # include <string.h>
+# include <stdlib.h>
+# include <unistd.h>
 # include "control.h"
 	static  char    sccsid[] = "@(#)parser.c	1.9  8/16/95";
 
-	int	yydebug;
+int	yydebug;
+extern int yyparse(void);
+
+extern int top_scope();
+extern void close_scope();
+extern void add_malloc(char *name);
+extern void print_malloc();
+extern void alloc_summary();
+extern void print_st();
+extern void output_proc_list();
+extern void open_control(char *name);
+
+void
 print_options(program_name)
 	char	*program_name;
 {
@@ -24,7 +38,8 @@ print_options(program_name)
 	printf ("-z       LIF details\n");
 }
 
-int main (np,parm)
+int 
+main (np,parm)
 	int	np;
 	char	*parm[];
 {
