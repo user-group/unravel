@@ -1,12 +1,19 @@
 # include <stdio.h>
+# include <string.h>
+
 # include "ansi_parse.h"
 # include "lif.h"
+
 	int				max_chain = 0;
 	static  char    sccsid[] = "@(#)chain.c	1.3  5/5/94";
 
 int current_chain() {return max_chain;}
 
-var_ste_ptr type_member (t)
+int find_ptr(tree_ptr t, chain_ptr c);
+void assemble_dot (char *buff, tree_ptr t, chain_ptr c);	
+	
+var_ste_ptr 
+type_member (t)
 	type_ste_ptr	t;
 {
 	if (!t) return NULL;
@@ -19,7 +26,8 @@ var_ste_ptr type_member (t)
 	return NULL;
 }
 
-var_ste_ptr find_members (var)
+var_ste_ptr 
+find_members (var)
 	var_ste_ptr	var;
 {
 	if (!var) return NULL;
@@ -37,50 +45,8 @@ var_ste_ptr find_members (var)
 }
 
 
-int find_ptr(t,c)
-	tree_ptr	t;
-	chain_ptr	c;
-{
-	int		left,right;
-	chain_rec	c_left,c_right;
-
-	if (!t) return 1;
-	switch (t->op_code){
-		case BIN_OP:
-		case UN_OP:
-		case PRE_OP:
-		case POST_OP:
-		case RELASGN_OP:
-		case ASGN_OP:
-			c_left = *c;
-			c_right = *c;
-			c_left.no_output = 1;
-			c_right.no_output = 1;
-			left = find_ptr (t->left,&c_left);
-			right= find_ptr (t->right,&c_right);
-			/*
-			printf ("line %d, chain %d left %d right %d\n",lineno,
-				c->chain_id,left,right);
-			printf ("l mem %d r mem %d\n",c_left.fields,
-				c_right.fields);
-				*/
-			c_left.no_output = c -> no_output;
-			c_right.no_output = c -> no_output;
-			if (c_left.fields && c_right.fields) return 1;
-			if (c_right.fields)
-				{ *c = c_right; return find_ptr(t->right,c);}
-			*c = c_left;
-			if (c_left.fields) return find_ptr (t->left,c);;
-			return 1;
-		case DOT_OP:
-		case POINTER_OP:
-			return assemble_chain(t,c);
-		default:
-			return assemble_chain(t,c);
-	}
-}
-
-int assemble_chain(t,c)
+int 
+assemble_chain(t,c)
 	tree_ptr	t;
 	chain_ptr	c;
 {
@@ -202,8 +168,54 @@ int assemble_chain(t,c)
 	}
 	return 2;
 }
+int 
+find_ptr(t,c)
+	tree_ptr	t;
+	chain_ptr	c;
+{
+	int		left,right;
+	chain_rec	c_left,c_right;
 
-int get_chain(t)
+	if (!t) return 1;
+	switch (t->op_code){
+		case BIN_OP:
+		case UN_OP:
+		case PRE_OP:
+		case POST_OP:
+		case RELASGN_OP:
+		case ASGN_OP:
+			c_left = *c;
+			c_right = *c;
+			c_left.no_output = 1;
+			c_right.no_output = 1;
+			left = find_ptr (t->left,&c_left);
+			right= find_ptr (t->right,&c_right);
+			/*
+			printf ("line %d, chain %d left %d right %d\n",lineno,
+				c->chain_id,left,right);
+			printf ("l mem %d r mem %d\n",c_left.fields,
+				c_right.fields);
+				*/
+			c_left.no_output = c -> no_output;
+			c_right.no_output = c -> no_output;
+			if (c_left.fields && c_right.fields) return 1;
+			if (c_right.fields)
+				{ *c = c_right; return find_ptr(t->right,c);}
+			*c = c_left;
+			if (c_left.fields) return find_ptr (t->left,c);;
+			return 1;
+		case DOT_OP:
+		case POINTER_OP:
+			return assemble_chain(t,c);
+		default:
+			return assemble_chain(t,c);
+	}
+}
+
+
+
+int 
+get_chain(t)
 	tree_ptr	t;
 {
 	chain_rec	c;
@@ -220,16 +232,19 @@ int get_chain(t)
 	return c.chain_id;
 }
 
+void
 print_local_ptr_tab()
 {
 	printf ("\nLocal Pointer Table\n");
 }
 
+void
 print_global_ptr_tab()
 {
 	printf ("\nGlobal Pointer Table\n");
 }
 
+void
 dot_really_ptr (buff,t,c)
 	char	*buff;
 	tree_ptr t;
@@ -262,6 +277,7 @@ dot_really_ptr (buff,t,c)
 	}
 }
 
+void
 assemble_dot (buff,t,c)
 	char	*buff;
 	tree_ptr t;
