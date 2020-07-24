@@ -27,6 +27,9 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/time.h>
+# include <time.h>
+# include <unistd.h>
+# include <stdlib.h>
 # define WAIT 500
 # include "config.h"
 
@@ -74,7 +77,7 @@ struct nf_struct {
 	Pixel			run_fg,run_bg,save_fg,save_bg;
 };
 
-
+void
 button_help (w,mess,e,ok)
 	Widget	w;
 	char	*mess;
@@ -86,6 +89,7 @@ button_help (w,mess,e,ok)
 		NULL);
 }
 
+void
 set_button_help (w,mess)
 	Widget	w;
 	char	*mess;
@@ -96,14 +100,16 @@ set_button_help (w,mess)
 	XtAddEventHandler (w,LeaveWindowMask,False,button_help,buff);
 }
 
-int compare(a,b)
+int 
+compare(a,b)
 	struct dirent **a,**b;
 {
 	if (strcmp((*a)->d_name,(*b)->d_name) > 0) return 1;
 	return 0;
 }
 
-static int select_c_file(entry)
+static int 
+select_c_file(entry)
 	struct dirent *entry;
 {
 	int	len;
@@ -116,7 +122,8 @@ static int select_c_file(entry)
 	return 1;
 }
 
-int myscandir (dir_name,list,select,compare)
+int 
+myscandir (dir_name,list,select,compare)
 	char	*dir_name;
 	struct dirent ***list;
 	int (*select)();
@@ -166,7 +173,8 @@ int myscandir (dir_name,list,select,compare)
 	return n_match;
 }
 
-int scan_dir(f)
+int 
+scan_dir(f)
 	struct dirent ***f;
 {
 	struct dirent **files;
@@ -180,6 +188,7 @@ int scan_dir(f)
 	return count;
 }
 
+void
 count_lif(n,f,n_ana,n_not,n_out)
 	int		n,*n_ana,*n_not,*n_out;
 	char	**f;
@@ -215,6 +224,7 @@ count_lif(n,f,n_ana,n_not,n_out)
 	*n_out = out;
 }
 
+void
 count_system(n_prog,n_dup)
 	int		*n_prog,*n_dup;
 {
@@ -253,7 +263,7 @@ count_system(n_prog,n_dup)
 }
 
 
-
+void
 notify_unravel (w)
 	Widget	w;
 {
@@ -267,11 +277,12 @@ notify_unravel (w)
 	e.format = 8;
 	e.message_type = (Atom) 1;
 	if (unravel_win_id){
-		status = XSendEvent (e.display,e.window,True,0L,&e);
+		status = XSendEvent (e.display,e.window,True,0L,(XEvent *)(&e));
 		XFlush(e.display);
 	}
 }
 
+void
 do_final_analysis (nf,tt)
 	nf_ptr		nf;
 	XtIntervalId	*tt;
@@ -299,11 +310,12 @@ do_final_analysis (nf,tt)
 	return;
 }
 
+void
 do_analysis (nf,tt)
 	nf_ptr		nf;
 	XtIntervalId	*tt;
 {
-	char	buff[2000],file[1000],mess[3000];
+	char	buff[4000],file[1000],mess[2000];
 	int		i,k,cpp_status,parse_status,status,c_status,t_status;
 	int		n,result;
 	int		len;
@@ -360,7 +372,7 @@ do_analysis (nf,tt)
 		}
 		else {
 			/* no errors */
-			sprintf (buff,"wc %s.c >>%s.T",file,file);
+			snprintf (buff, 4000, "wc %s.c >>%s.T",file,file);
 			system(buff);
 			sprintf (buff,"%s/tsummary %s.c >>HISTORY-A",
 				HOME,file);
@@ -371,7 +383,7 @@ do_analysis (nf,tt)
 			if (finish-start)rate = c_stat.st_size / (elapsed);
 			else rate = c_stat.st_size;
 			sprintf (mess,
-			"%s (%d chars) analysis complete %d secs  %d chars/sec",
+			"%s (%ld chars) analysis complete %ld secs  %d chars/sec",
 					nf->n->use[i],
 					c_stat.st_size,elapsed,rate);
 		}
@@ -400,6 +412,7 @@ do_analysis (nf,tt)
 	return;
 }
 
+void
 run_a (w,nf,c)
 	Widget		w;
 	nf_ptr		nf;
@@ -448,6 +461,7 @@ run_a (w,nf,c)
 	}
 }
 
+void
 push_help(w,u_data,w_data)
 	Widget	w;
 	XtPointer	u_data;
@@ -461,6 +475,7 @@ push_help(w,u_data,w_data)
 	system (buff);
 }
 
+void
 done(w,u_data,w_data)
 	Widget	w;
 	XtPointer	u_data;
@@ -471,7 +486,7 @@ done(w,u_data,w_data)
 	exit (0);
 }
 
-
+void
 move_list (ix,from,to)
 	char	*from[],*to[];
 	int		ix;
@@ -501,6 +516,7 @@ plist (w,nf,list)
 }
 */
 
+void
 alist (w,names,list)
 	Widget		w;
 	name_ptr	names;
@@ -550,6 +566,7 @@ count_lif(n,f,n_ana,n_not,n_out)
 }
 */
 
+void
 line_cat (line,file)
 	char	*line,*file;
 {
@@ -570,6 +587,7 @@ line_cat (line,file)
 	}
 }
 
+void
 clear_files (w,names,w_data)
 	Widget      w;
 	name_ptr    names;
@@ -618,6 +636,7 @@ clear_files (w,names,w_data)
 	notify_unravel (w);
 }
 
+void
 analyze_skipped (w,names,list)
 	Widget      w;
 	name_ptr    names;
@@ -656,6 +675,7 @@ analyze_skipped (w,names,list)
 	XawListChange(names->ignore,names->skip,0,0,True);
 }
 
+void
 select_analyzed (w,names,w_data)
 	Widget      w;
 	name_ptr    names;
@@ -672,6 +692,7 @@ select_analyzed (w,names,w_data)
 	XawListChange(names->ignore,names->skip,0,0,True);
 }
 
+void
 analyze_most (w,names,list)
 	Widget      w;
 	name_ptr    names;
@@ -687,6 +708,7 @@ analyze_most (w,names,list)
 	XawListChange(names->ignore,names->skip,0,0,True);
 }
 
+void
 analyze_some (w,names,list)
 	Widget      w;
 	name_ptr    names;
@@ -702,6 +724,7 @@ analyze_some (w,names,list)
 	XawListChange(names->ignore,names->skip,0,0,True);
 }
 
+void
 ilist (w,names,list)
 	Widget		w;
 	name_ptr	names;
@@ -715,6 +738,7 @@ ilist (w,names,list)
 	XawListChange(names->ignore,names->skip,0,0,True);
 }
 
+void
 adjust_lists (frame,left,right)
 	Widget	frame,right,left;
 {
@@ -753,6 +777,7 @@ adjust_lists (frame,left,right)
 
 }
 
+void
 rj_button (goal,left,w)
 	Widget	goal,w,left;
 {
@@ -789,6 +814,7 @@ rj_button (goal,left,w)
 	XtManageChild(w);
 }
 
+void
 strech (goal,w)
 	Widget	goal,w;
 {
@@ -810,6 +836,7 @@ strech (goal,w)
 	XtManageChild(w);
 }
 
+void
 align(label1,text1,label2,text2)
 	Widget	label1,text1,label2,text2;
 {
@@ -844,7 +871,8 @@ align(label1,text1,label2,text2)
 	
 }
 
-Widget make_list_box (parent,prefix,title)
+Widget 
+make_list_box (parent,prefix,title)
 	char	*prefix,*title;
 	Widget	parent;
 {
@@ -892,6 +920,7 @@ Widget make_list_box (parent,prefix,title)
 	return frame;
 }
 
+void
 make_windows(top,ac)
 	Widget	top;
 	XtAppContext	ac;
@@ -1263,6 +1292,7 @@ char *fall[] = {
 			<KeyPress>?: set() highlight() notify() unset()",
 	NULL};
 
+int
 main (np,p)
 	int		np;
 	char	*p[];
