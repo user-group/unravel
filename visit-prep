@@ -1,4 +1,4 @@
-#!/bin/csh -f
+#!/bin/sh -f
 
 #                   	 "@(#)visit-prep	1.2  8/17/95"
 #

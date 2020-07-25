@@ -1,3 +1,3 @@
 # define HOME "/home/alan/Documents/unravel"
-# define CC   "gcc"
+# define  CC "gcc"
 # include "fix.h"

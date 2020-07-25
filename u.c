@@ -60,9 +60,10 @@ long		addr,start_addr;
 int		current_proc;
 static char	home[] = HOME;
 
-	Widget		slicewin;
+Widget		slicewin;
 
-	static		char srcfile[1000] = " ";
+static		char srcfile[1000] = " ";
+
 int SliceTrace;
 	int			slice_on_var = 0;
 	int			dice_on_var = 0;
@@ -74,7 +75,12 @@ int		*proc_ids,n_proc_list,**global_ids;
 int		*line_map;
 
 
-	bit_set	active;
+
+bit_set	active;
+
+void BuildSliceSrc (MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines);
+void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n);
+
 
 int 
 update_progress (old)
@@ -228,6 +234,7 @@ make_head_list()
 	file_name_list[n_heads+1] = NULL;
 }
 
+void
 make_proc_list()
 {
 	int		k,i,n;
@@ -349,7 +356,7 @@ do_slice(x,file,stmt,proc,var,line)
 	min = elapsed/60;
 	sec = elapsed%60;
 	sprintf (label,
-		"slice on %s (in %s) at line %d in %sc (%d stmts in %d:%d)",
+		"slice on %s (in %s) at line %d in %sc (%d stmts in %ld:%ld)",
 		var_name(proc,var),proc?procs[proc].proc_name:"global",
 		line,files[file].name,n,min,sec);
 	sprintf (cmd,"echo \"%s\" >> HISTORY-S",label);

@@ -31,8 +31,9 @@ path.out :
 config.h : path.out
 #	echo -n "# define HOME \"" >config.h
 	cat path.out |sed 's/^/# define HOME \"/' | sed -e 's/$$/\"/' >config.h
-	echo "# include \"fix.h\"" >>config.h
-	find_cc >>config.h
+	echo "# define  CC \"gcc\"" >>config.h
+	echo "# include \"fix.h\""  >>config.h
+#	find_cc >>config.h
 vprep : config.h visit-prep
 	sed s=HOME=`grep HOME config.h | sed 's/^.*E "/"/' | tr -d \"`= <visit-prep >vprep
 	chmod +x vprep

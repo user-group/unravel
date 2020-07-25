@@ -17,11 +17,14 @@ struct history_struct {
 };
 
 static history_ptr	history = NULL;
-static char history_file[1000];
-static char	*list[LIST_MAX];
+static char  history_file[1000];
+static char *list[LIST_MAX];
 
 extern void bit_on(bit_set s, int id);
-
+extern void SliceSet();
+extern void SliceRedraw();
+extern void SliceClearAll();
+extern int is_id_valid(int var_pid, int var_id);
 
 void
 clear_history ()

@@ -677,11 +677,8 @@ find_line_and_file (w,line,fid,line_in_file)
 	return;
 }
 
-static void MultiSliceHook( w,event,parm,n)
-	MultiSliceWidget	w;
-	XEvent* event;
-	String* parm;
-	Cardinal* n;
+//static 
+void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n)
 {
 	static	int	line = 0;
 	int		y;
@@ -809,11 +806,7 @@ MultiSliceClassRec multisliceClassRec = {
 WidgetClass multisliceWidgetClass = (WidgetClass)&multisliceClassRec;
 
 void
-BuildSliceSrc (w,n,f,nlines)
-	MultiSliceWidget	w;
-	MultiSliceFilesPtr	f;
-	int					n;
-	int			nlines;
+BuildSliceSrc (MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines)
 {
 	char		*string;
 	int			at_line = 1;
