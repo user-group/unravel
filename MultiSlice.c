@@ -7,10 +7,16 @@
 # include <X11/Xaw/Form.h>
 # include <X11/Xaw/Command.h>
 # include <X11/Xaw/Scrollbar.h>
+# include <stdlib.h>
+
 static  char    sccsid[] = "@(#)MultiSlice.c	1.5  8/14/95";
 static char *sccs_h_id = MSLICE_H_SCCS_ID;
 static char *sccs_ph_id = MSLICE_PH_SCCS_ID;
 
+
+void SliceSetTop (MultiSliceWidget w, float pc);
+
+	
 static XtResource resources[] = {
 #define offset(field) XtOffset(MultiSliceWidget, slicetext.field)
     /* {name, class, type, size, offset, default_type, default_addr}, */
@@ -57,7 +63,9 @@ void dojump (w,x,y)
 	*/
 }
 
-static	fakeexpose (w)
+static	
+void
+fakeexpose (w)
 	MultiSliceWidget	w;
 {
 	XAnyEvent	e;
@@ -67,7 +75,8 @@ static	fakeexpose (w)
 	doexpose (w,&e,NULL);
 }
 
-void doscroll (x,w,y)
+void 
+doscroll (x,w,y)
 	MultiSliceWidget	w;
 	XtPointer	x,y;
 {
@@ -91,14 +100,18 @@ void doscroll (x,w,y)
 	fakeexpose(w);
 }
 
-static SliceSetThumb (w,sb)
+static 
+void
+SliceSetThumb (w,sb)
 	MultiSliceWidget	w;
 	Widget			sb;
 {
 	w->slicetext.scrollbar = sb;
 }
 
-static reset_top_line (w,delta)
+static 
+void
+reset_top_line (w,delta)
 	MultiSliceWidget    w;
 	int					delta;
 {
@@ -118,7 +131,8 @@ static reset_top_line (w,delta)
 }
 
 static 
-void up_a_line (x,w,y)
+void 
+up_a_line (x,w,y)
 	MultiSliceWidget	w;
 	XtPointer	x,y;
 {
@@ -126,7 +140,8 @@ void up_a_line (x,w,y)
 }
 
 static 
-void down_a_line (x,w,y)
+void 
+down_a_line (x,w,y)
 	MultiSliceWidget	w;
 	XtPointer	x,y;
 {
@@ -135,7 +150,8 @@ void down_a_line (x,w,y)
 
 # include "down.xbm"
 # include "up.xbm"
-Widget CreateSliceBox(name,parent)
+Widget 
+CreateSliceBox(name,parent)
 	char	*name;
 	Widget	parent;
 {
@@ -252,10 +268,10 @@ static void doinit(r,nw,a,n)
 	/*
 	printf ("    FG %d  ",nw->core.border_pixel);
 	*/
-	if(DEBUG) printf ("    FG %d  ",nw->slicetext.foreground);
-	if(DEBUG) printf ("    BG %d\n",nw->core.background_pixel);
-	if(DEBUG) printf ("Alt FG %d  ",nw->slicetext.alt_foreground);
-	if(DEBUG) printf ("Alt BG %d\n",nw->slicetext.alt_background);
+	if(DEBUG) printf ("    FG %lu  ",nw->slicetext.foreground);
+	if(DEBUG) printf ("    BG %lu\n",nw->core.background_pixel);
+	if(DEBUG) printf ("Alt FG %lu  ",nw->slicetext.alt_foreground);
+	if(DEBUG) printf ("Alt BG %lu\n",nw->slicetext.alt_background);
 	if (DEBUG)fflush(stdout);
 	if (nw->core.height == 0)
 		nw->core.height = 600;
@@ -315,7 +331,7 @@ static void buildline (buff,line,n,tabstop,linemap)
 
 	if(DEBUG)printf ("buildline:\n");
 	if(DEBUG)for (i = 0; i < n; i++) printf ("%c",line[i]);
-	if(DEBUG)printf ("[%d,%d]\n",n,strlen(line));
+	if(DEBUG)printf ("[%d,%lu]\n",n,strlen(line));
 	out_at = 0;
 	for (in_at = 0; in_at < n; in_at++){
 		linemap[in_at] = out_at;
@@ -328,7 +344,7 @@ static void buildline (buff,line,n,tabstop,linemap)
 	}
 	buff[out_at] = '\0';
 	linemap[n] = out_at;
-	if(DEBUG)printf ("%s[%d,%d]\n",buff,out_at,strlen(buff));
+	if(DEBUG)printf ("%s[%d,%lu]\n",buff,out_at,strlen(buff));
 	for (i = 0; i <= n; i++)
 		if(DEBUG)printf ("%3d",linemap[i]);
 	if(DEBUG)printf ("\n");
@@ -375,7 +391,7 @@ static void drawline (d,win,w,buff,offset,base,at,linemap)
 			to++;
 		gc_to_use = highlight[pos] ? w->slicetext.alt_gc :
 			w->slicetext.gc;
-		if (DEBUG)printf ("gc (%d,%d,%d)\n",gc_to_use,gc,gcx);
+		if (DEBUG)printf ("gc (%p,%p,%p)\n",gc_to_use,gc,gcx);
 		if (DEBUG)printf ("pos %d\n",pos); fflush(stdout);
 		if(DEBUG)printf ("line %d (%d,%d) -> (%d,%d)\n",at,pos,to,
 			linemap[pos-1],linemap[to-1]);
@@ -495,6 +511,7 @@ static void buildline (buff,line,n,tabstop)
 		w->core.width-w->slicetext.side_width,0);
 }
 
+void
 side_set (w,line_from)
 	int		line_from;
 	MultiSliceWidget	w;
@@ -541,7 +558,7 @@ static void SliceResize (w)
 			side_set (w,line);
 }
 
-
+void
 SliceSetTop (w,pc)
 	float		pc;
 	MultiSliceWidget	w;
@@ -559,12 +576,14 @@ SliceSetTop (w,pc)
 	}
 }
 
+void
 SliceRedraw (w)
 	MultiSliceWidget	w;
 {
 	fakeexpose (w);
 }
 
+void
 SliceSet (w,line_from,col_from,line_to,col_to,redraw)
 	int		line_from,col_from,line_to,col_to,redraw;
 	MultiSliceWidget	w;
@@ -610,6 +629,7 @@ SliceSet (w,line_from,col_from,line_to,col_to,redraw)
 	if(redraw)fakeexpose (w);
 }
 
+void
 SliceClearAll(w)
 	MultiSliceWidget	w;
 {
@@ -635,6 +655,7 @@ void MultiSliceSetHook(w,h)
 	w->slicetext.hook = h;
 }
 
+void
 find_line_and_file (w,line,fid,line_in_file)
 	int	line,*fid,*line_in_file;
 	MultiSliceWidget w;
@@ -787,6 +808,7 @@ MultiSliceClassRec multisliceClassRec = {
 
 WidgetClass multisliceWidgetClass = (WidgetClass)&multisliceClassRec;
 
+void
 BuildSliceSrc (w,n,f,nlines)
 	MultiSliceWidget	w;
 	MultiSliceFilesPtr	f;
@@ -849,6 +871,7 @@ BuildSliceSrc (w,n,f,nlines)
 	}
 }
 
+void
 PrintSliceSrc (w)
 	MultiSliceWidget	w;
 {
@@ -866,3 +889,4 @@ PrintSliceSrc (w)
 		if(DEBUG)printf ("\n");
 	}
 }
+
