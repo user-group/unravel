@@ -2,10 +2,36 @@
 # include <stdio.h>
 # include "ansi_parse.h"
 # include "lif.h"
-	static	set_typedef = 0;
-	static  char    sccsid[] = "@(#)kgram.y	1.7  10/26/94";
+	static	int     set_typedef = 0;
+	//static  char    sccsid[] = "@(#)kgram.y	1.7  10/26/94";
 	static	char	*parse_h_sccs_id = PARSE_H_SCCS_ID;
 	static	char	*lif_h_sccs_id = LIF_H_SCCS_ID;
+	
+extern int yyerror(char *msg);
+
+extern void connect_nodes (int from, int to);
+extern void close_scope(void);
+extern void open_scope(void);
+extern void end_local_decl(void);
+extern void start_local_decl(void);
+extern void clear_type_flag(void);
+extern void do_returns (int end_stmt);
+extern void source_map (int n, token_ptr from, token_ptr to);
+extern int yylex(void);
+extern void merge_abstract_type (type_ptr old, type_ptr new);
+extern void start_local_decls(void);
+extern void end_locaal_decls(void);
+extern void start_typedef(void);
+extern void end_typedef(void);
+extern void end_init(void);
+extern void gen_require (int node_required, int from, int to);
+extern void make_decl (token_ptr token, unsigned int flag);
+void print_decl (token_ptr type_spec, token_ptr var_specs);
+extern void insert_var_decl (token_ptr var);
+extern void merge_abstract_type (type_ptr old, type_ptr new);
+extern void decl (token_ptr type_desc, token_ptr var_list, int with_members);
+extern void modify_type (token_ptr token, unsigned int flag, int style, token_ptr formals);
+
 %}
 
 %token <token> IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
@@ -268,25 +294,25 @@ assignment_operator
 	: '='
 		{ $$ = 1;}
 	| MUL_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| DIV_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| MOD_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| ADD_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| SUB_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| LEFT_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| RIGHT_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| AND_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| XOR_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	| OR_ASSIGN
-		{ $$ = NULL;}
+		{ $$ = 0;}
 	;
 
 expr
@@ -920,7 +946,7 @@ file
 external_definition
 	: function_definition
 	| declaration
-	| ";"
+	| ';'
 	/*
 	| IDENTIFIER "(" ")" ";"
 	*/
@@ -958,7 +984,7 @@ function_start
 	;
 
 function_definition
-	: declarator { } function_start ";"
+	: declarator { } function_start ';'
 	| declarator { } function_start function_body
 			{
 				int			end_stmt;
@@ -1024,7 +1050,7 @@ function_body
 			int			pn,level;
 			var_ste_ptr	v;
 
-			$$ = NULL;
+			$<token>$ = NULL;
 			fun = $<token>-2;
 			/*
 			printf ("\tOld Fundtion body %s: ",$<token>-1->text); 
@@ -1067,6 +1093,8 @@ identifier
 	: IDENTIFIER
 	;
 %%
+
+void
 print_flags (flags)
 	int		flags;
 {
@@ -1085,6 +1113,7 @@ print_flags (flags)
 	}
 }
 
+void
 print_decl (type_spec,var_specs)
 	token_ptr	type_spec,var_specs;
 {
@@ -1133,12 +1162,13 @@ print_decl (type_spec,var_specs)
 	printf ("\n");
 }
 
+void
 print_token(t)
 	token_ptr	t;
 {
 	printf ("TOKEN:");
 	if (t){
-		printf (" addr %d",t);
+		printf (" addr %p",t);
 		if (t->text) printf (" (%s)",t->text);
 		printf (" at %d(%d)-%d(%d)",
 			t->at.line_start,
@@ -1149,3 +1179,4 @@ print_token(t)
 	else printf (" is null");
 	printf ("\n");
 }
+

@@ -303,9 +303,7 @@ int	alloc_id()
 *********************************************************************
 */
 void
-make_decl (token,flag)
-	token_ptr	token;
-	unsigned int flag;
+make_decl (token_ptr token, unsigned int flag)
 {
 	token->desc.decl = alloc_decl();
 	token->desc.decl->decl_flags = flag;
@@ -325,10 +323,7 @@ make_decl (token,flag)
 *********************************************************************
 */
 void
-modify_type (token,flag,style,formals)
-	token_ptr	token,formals;
-	unsigned int flag;
-	int			style;
+modify_type (token_ptr token, unsigned int flag, int style, token_ptr formals)
 {
 	type_ptr	new,old;
 
@@ -360,8 +355,7 @@ type_ptr make_abstract_type (flag,style,formals)
 }
 
 void
-merge_abstract_type (old,new)
-	type_ptr    new,old;
+merge_abstract_type (type_ptr old, type_ptr new)
 {
 	if (old){
 		while (old->next) old = old->next;
@@ -527,7 +521,7 @@ tag_decl (type_desc,var_list,tag_entry_ptr,
 			type_desc->desc.decl->tag->text,&is_local_tag);
 		else /* this structure has no tag => anon struct */
 			{tag_entry = NULL; no_tag = 1;}
-		if(c_opt)printf ("entry %d  no_tag (%d): ",tag_entry,no_tag);
+		if(c_opt)printf ("entry %p  no_tag (%d): ",tag_entry,no_tag);
 		if (!tag_entry && !no_tag){ /* tag not found anywhere */
 			tag_entry = new_tag = alloc_tag_ste();
 			new_tag -> next = symbol_table[scope_level].tag;
@@ -535,7 +529,7 @@ tag_decl (type_desc,var_list,tag_entry_ptr,
 			new_tag ->vars= type_desc->desc.decl->member_ste;
 			symbol_table[scope_level].tag = new_tag;
 			if(c_opt)
-				printf ("declare new %s tag (%d) at scope level %d ",
+				printf ("declare new %s tag (%p) at scope level %d ",
 					is_local_tag?"local":"non-local",tag_entry,
 					scope_level);
 		}
@@ -563,7 +557,7 @@ tag_decl (type_desc,var_list,tag_entry_ptr,
 				new_tag ->vars= type_desc->desc.decl->member_ste;
 				symbol_table[scope_level].tag = new_tag;
 				if(c_opt)printf (
-					"declare new masking tag (%d) at scope level %d ",
+					"declare new masking tag (%p) at scope level %d ",
 					tag_entry,scope_level);
 			}
 		}
@@ -579,7 +573,7 @@ tag_decl (type_desc,var_list,tag_entry_ptr,
 	}
 	*tag_entry_ptr = tag_entry;
 	*detail_ptr = no_tag;
-	if(c_opt)printf ("tag decl returns tag_entry %d and no tag %d\n",
+	if(c_opt)printf ("tag decl returns tag_entry %p and no tag %d\n",
 		tag_entry,no_tag);
 }
 
@@ -726,8 +720,7 @@ insert_ptr_var(scope,var)
 */
 
 void
-insert_var_decl (var)
-	token_ptr	var;
+insert_var_decl (token_ptr var)
 {
 	var_ste_ptr		new_var;
 
@@ -845,9 +838,7 @@ insert_members (base,members)
 *********************************************************************
 */
 void
-decl (type_desc,var_list,with_members)
-	token_ptr	type_desc,var_list;
-	int			with_members;
+decl (token_ptr type_desc, token_ptr var_list, int with_members)
 {
 	token_ptr		var,enum_const;
 	type_ste_ptr	new_type,type_entry;
@@ -1335,7 +1326,7 @@ token_ptr fake_var_decl(t)
 	decl_ptr	ty;
 	token_ptr	var_token;
 	token_ptr	new_token,type_token;
-	char		buff[1000],name[1000],*at;
+	char		buff[2000],name[1000],*at;
 	static int	ix = 0;
 	int			save_scope;
 	int			nx,np;

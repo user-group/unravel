@@ -15,7 +15,7 @@ IS			(u|U|l|L)*
 # define R in_enum=1;
 # define S in_init=1;
 
-static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
+//static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
 
 void eat_string();
 void count();
@@ -394,3 +394,5 @@ void reset_line (void)	/* adjust line and column after # include */
 	if(k_opt)printf ("reset to line %d in [%s] (%s)\n",lineno,
 		the_current_file,at);
 }
+
+

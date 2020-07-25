@@ -10,7 +10,7 @@ LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm
 #LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm -ldl
 
 LDFLAGS = -L$(WINHOME)/lib
-CFLAGS = -g -Wall -I$(WINHOME)/include
+CFLAGS = -g  -I$(WINHOME)/include
 
 CC = gcc 
 I_PROGS = unravel select analyzer helpu

@@ -535,7 +535,7 @@ make_windows(top)
 
 	strcpy (buff,"Current directory: ");
 
-	strcat (buff,"/home/alan/unravel_r2.2+"); //getcwd(NULL,1000));
+	strcat (buff,"/home/alan/Documents/unravel"); //getcwd(NULL,1000));
 	dir = XtVaCreateManagedWidget ("dir",labelWidgetClass,
 		frame,
 		XtNlabel,			buff,
@@ -816,7 +816,7 @@ main (np,p)
 	}
 	fprintf(stderr, "calling getcwd()\n");
 	char buff[2000];
-	char *cwd = "/home/alan/unravel_r2.2+/"; //getcwd(buff, 2000);
+	char *cwd = "/home/alan/Documents/unravel/"; //getcwd(buff, 2000);
 	fprintf(stderr, "creating cmd...[%s]\n", cwd);
 	
 	sprintf (cmd,"echo -n UNRAVEL \" %s \" >> HISTORY ; date >>HISTORY",

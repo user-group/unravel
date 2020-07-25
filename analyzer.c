@@ -378,7 +378,7 @@ do_analysis (nf,tt)
 				HOME,file);
 			system(buff);
 			sprintf (buff,
-				"PATH=%s:$PATH ; export PATH ; vprep %s.c",HOME,file);
+				"PATH=%s:$PATH ; export PATH ; ./vprep %s.c",HOME,file);
 			system(buff);
 			if (finish-start)rate = c_stat.st_size / (elapsed);
 			else rate = c_stat.st_size;

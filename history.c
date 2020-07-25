@@ -20,10 +20,16 @@ static history_ptr	history = NULL;
 static char history_file[1000];
 static char	*list[LIST_MAX];
 
+extern void bit_on(bit_set s, int id);
+
+
+void
 clear_history ()
 {
 	history = NULL;
 }
+
+void 
 setup_history (file)
 	char	*file;
 {
@@ -99,6 +105,8 @@ int find_slice (var_pid,var_id,file_id,stmt_id)
 }
 
 typedef void *Widget;
+
+void
 load_slice (w,index,n_files,slices,line_map)
 	Widget	w;
 	int	index,n_files,line_map[];
@@ -140,6 +148,7 @@ load_slice (w,index,n_files,slices,line_map)
 	SliceRedraw (w);
 }
 
+void
 save_slice (var_pid,var_id,file_id,stmt_id,is_partial,
 			n_files,slices)
 	int	var_pid,var_id,file_id,stmt_id,n_files,is_partial;
@@ -225,3 +234,5 @@ char	**get_slice_list ()
 	list[i] = NULL;
 	return list;
 }
+
+

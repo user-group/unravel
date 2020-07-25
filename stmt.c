@@ -208,9 +208,7 @@ connect_nodes (from,to)
 }
 
 void
-source_map (n,from,to)
-	int		n;
-	token_ptr	from,to;
+source_map (int n, token_ptr from, token_ptr to)	
 {
 	/* printf ("source map %d %d \n",from,to); */
 	if (from && to){
@@ -879,8 +877,7 @@ stmt_ptr return_stmt (return_token,xpr_tree,semi_token)
 }
 
 void
-do_returns (end_stmt)
-	int		end_stmt;
+do_returns (int end_stmt)
 {
 	while (returns){
 		connect_nodes (returns->node,end_stmt);
