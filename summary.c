@@ -1,6 +1,7 @@
 # include <stdio.h>
 # include <malloc.h>
 # include <string.h>
+# include <stdlib.h>
 # include "lif.h"
 	static  char    sccsid[] = "@(#)summary.c	1.3  4/26/95";
 
@@ -20,6 +21,7 @@ typedef struct p_struct {
 	char	*name;
 } proc_rec,*proc_ptr;
 
+int
 main(np,p)
 	int		np;
 	char	*p[];
@@ -182,4 +184,6 @@ main(np,p)
 			procs[id].name
 			);
 	}
+	return 0;
 }
+
