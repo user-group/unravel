@@ -1,6 +1,9 @@
 # include <stdio.h>
+# include <stdlib.h>
+
 static  char    sccsid[] = "@(#)visit-ctrl.c	1.1  10/6/94";
-main(np,p)
+
+int main(np,p)
 	int	np;
 	char	*p[];
 {
@@ -36,4 +39,5 @@ main(np,p)
 		}
 	}
 	fclose (t_file);
+	return 0;
 }
