@@ -128,7 +128,7 @@ assemble_chain(t,c)
 			if (status) return status;
 			var = look_up_id (c->fields,t->right->token->text,
 				&scope);
-			if(x_opt)printf ("line %d, add field, %s var %d\n",lineno,
+			if(x_opt)printf ("line %d, add field, %s var %p\n",lineno,
 				t->right->token->text,var);
 			if (var == NULL) return 3;
 			++c->current_seq;

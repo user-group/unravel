@@ -14,7 +14,14 @@ void  *QQQ;
 
 
 void slice_proc (bit_set final_slice_sets[], bit_set slice_sets[], int proc, bit_set active);
-
+void union_bit_set (bit_set to, bit_set from);
+void bit_on(bit_set b, int at);
+void clear_id_set (id_set_ptr head);
+int add_to_id_set (id_set_ptr *head, int pid, int id);
+int bit_set_equal (bit_set a, bit_set b);
+void bit_off (bit_set b, int at);
+void print_proc_defs(int nc, int proc);			
+				
 int 
 stmt_to_proc (file,stmt)
 	int	file,stmt;
@@ -118,6 +125,7 @@ clear_active(void)
 int 
 lib_defs (stmt,id,is_local)
 	int		id;
+	int 		is_local; /* KS guessing type */
 	stmt_ptr stmt;
 {
 	call_ptr	calls;
@@ -172,7 +180,7 @@ is_var_defed (stmt,id,is_local)
 		defs = defs->next;
 	}
 	result = lib_defs (stmt,id,is_local);
-	if(v_opt) printf ("is %d defed %d\n",result);
+	if(v_opt) printf ("is %d defed %d\n",result); /* KS Missing variable */
 	return result;
 /*
 	if (is_local) return is_bit_on (stmt->active_local,id);

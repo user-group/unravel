@@ -3,6 +3,7 @@
 # include <string.h>
 # include <fcntl.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include "slice.h"
 # include "lif.h"
 
@@ -12,7 +13,12 @@ int v_opt;
 int c_opt = 0;
 
 extern void count_vars(void);
-
+extern int chain_resolve_get(int *id, int *pid);
+extern void chain_resolve_set (int def, int proc);
+extern void bit_on(bit_set s, int id);
+extern int offset_check(int pid, int id, int off);
+extern int add_to_id_set(id_set_ptr *head, int pid, int id);
+extern void flow(void);
 /*
 *********************************************************************
 *                                                                   *

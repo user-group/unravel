@@ -20,6 +20,10 @@ ptr_ptr	ptrs;
 bit_set	ptrs_in,ptrs_out,ptrs_refed;
 set_ptr	*proc_ret_ptrs;
 
+void bit_on (bit_set b, int at);
+int offset_check(int pid, int id, int off);
+int is_lib_proc(int id);
+	
 set_ptr ptr_points_to(base_ptr)
 	int		base_ptr;
 {
@@ -28,6 +32,8 @@ set_ptr ptr_points_to(base_ptr)
 }
 
 # define LINE 70
+
+void
 print_pvs()
 {
 	int		i,idx;
@@ -71,6 +77,7 @@ print_pvs()
 	}
 }
 
+void
 print_ptr_map()
 {
 	int		ptr,lx,i,id,z;
@@ -173,7 +180,7 @@ count_vars(void)
 	if(v_opt)print_ptr_map();
 }
 
-char *ptr_to_name(ptr)
+char *ptr_to_name(int ptr)
 {
 	int		var_ix;
 
@@ -351,6 +358,7 @@ resolve_chain (in,out,f)
 	}
 }
 
+void
 get_cdefs(chain)
 	int		chain;
 {
@@ -393,6 +401,7 @@ get_cdefs(chain)
 	}
 }
 
+void
 get_crefs(chain)
 	int		chain;
 {
@@ -855,7 +864,8 @@ int do_calls()
 	return change;
 }
 
-flow()
+void
+flow(void)
 {
 	int		change;
 
@@ -872,3 +882,4 @@ flow()
 	}
 	if(v_opt)print_pvs();
 }
+
