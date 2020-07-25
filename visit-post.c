@@ -23,7 +23,7 @@ int main(np,p)
 	first = atoi(p[1]);
 	last = atoi(p[2]);
 	i = 0;
-	while (gets(buff)){
+	while (fgets(buff, 2000, stdin)){
 		k = sscanf(buff,"%d",&nodes[i]);
 		if (k == 1) i++;
 	}
@@ -47,3 +47,4 @@ int main(np,p)
 	printf ("%d\n",last);
 	return 0;
 }
+
