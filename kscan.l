@@ -14,8 +14,17 @@ IS			(u|U|l|L)*
 # define T type_seen=0;
 # define R in_enum=1;
 # define S in_init=1;
-	static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
-void eat_string(),count();
+
+static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
+
+void eat_string();
+void count();
+void comment();
+int reserved_word(int tok);
+int check_type(char *t);
+void reset_line(void);
+int is_type_name (char *t, int *i);
+
 /*static*/	
 int	in_struct = 0,recent_comma = 0;
 int	in_typedef = 0, braces = 0,
@@ -23,6 +32,7 @@ int	in_typedef = 0, braces = 0,
 		type_seen = 0, in_local = 0, in_enum = 0;
 int	want_id = 0;
 int	last_was_dot = 0;
+
 %}
 
 %%
@@ -77,11 +87,11 @@ __extension__	{count(); /* eat gcc extension keyword */}
 					}
 
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
-0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
+
 0{D}+{IS}?		{ count(); return(CONSTANT); }
-0{D}+{IS}?		{ count(); return(CONSTANT); }
+
 {D}+{IS}?		{ count(); return(CONSTANT); }
-{D}+{IS}?		{ count(); return(CONSTANT); }
+
 L?'(\\.|[^\\'])+'		{ count(); return(CONSTANT); }
 
 {D}+{E}{FS}?		{ count(); return(CONSTANT); }
@@ -186,12 +196,12 @@ L?\"			{eat_string(); return(STRING_LITERAL);
 
 %%
 
-yywrap()
+int yywrap()
 {
 	return(1);
 }
 
-comment()
+void comment()
 {
 	char c, c1;
 
@@ -352,20 +362,24 @@ int reserved_word(t)
    return t ;
 }
 
-start_local_decl() {
-	in_local = 1;}
+void start_local_decl() {
+	in_local = 1;
+}
 
-end_init() {
-	in_init = 0;}
-	
-clear_type_flag() {
-	type_seen = 0;}
-
-end_local_decl() {
+void end_init() {
 	in_init = 0;
-	in_local = 0;}
+}
+	
+void clear_type_flag() {
+	type_seen = 0;
+}
 
-reset_line ()	/* adjust line and column after # include */
+void end_local_decl() {
+	in_init = 0;
+	in_local = 0;
+}
+
+void reset_line (void)	/* adjust line and column after # include */
 {
 	char	*at;
 
