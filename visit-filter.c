@@ -1,6 +1,9 @@
 # include <stdio.h>
+# include <stdlib.h>
+
 static  char    sccsid[] = "@(#)visit-filter.c	1.1  10/6/94";
-main(np,p)
+
+int main(np,p)
 	int		np;
 	char	*p[];
 {
@@ -15,4 +18,6 @@ main(np,p)
 			(to >= low) &&
 			(to <= high)) printf("%d %d\n",from,to);
 	}
+	return 0;
 }
+
