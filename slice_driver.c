@@ -15,6 +15,7 @@ extern	int		v_opt;
 extern int read_k_file(char *name);
 extern int read_link_file(char *name);
 extern void verify_input(int i);
+extern void print_all_active(bit_set slices[], bit_set active);
 
 int make_criterion (char *file_name, int line_number, char *var_spec,
 			int *file, int *stmt, int *proc, int *var);

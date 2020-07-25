@@ -1,10 +1,13 @@
 # include <stdio.h>
+# include <stdlib.h>
+
 	static  char    sccsid[] = "@(#)visit-post.c	1.2  8/16/95";
 	/*
 		force proc entry and exit to be first and last
 	*/
 	int		first,last,nodes[1000000],i,entry_at,exit_at;
-main(np,p)
+
+int main(np,p)
 	int		np;
 	char	*p[];
 {
@@ -42,4 +45,5 @@ main(np,p)
 		if (nodes[i] != last)printf ("%d\n",nodes[i]);
 	}
 	printf ("%d\n",last);
+	return 0;
 }
