@@ -23,11 +23,11 @@ static char *list[LIST_MAX];
 extern void bit_on(bit_set s, int id);
 extern void SliceSet();
 extern void SliceRedraw();
-extern void SliceClearAll();
+//extern void SliceClearAll(MultiSliceWidget w);
 extern int is_id_valid(int var_pid, int var_id);
 
 void
-clear_history ()
+clear_history (void)
 {
 	history = NULL;
 }

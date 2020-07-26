@@ -577,8 +577,7 @@ SliceSetTop (w,pc)
 }
 
 void
-SliceRedraw (w)
-	MultiSliceWidget	w;
+SliceRedraw (MultiSliceWidget w)
 {
 	fakeexpose (w);
 }
@@ -630,8 +629,7 @@ SliceSet (w,line_from,col_from,line_to,col_to,redraw)
 }
 
 void
-SliceClearAll(w)
-	MultiSliceWidget	w;
+SliceClearAll(MultiSliceWidget w)
 {
 	int		line;
 
@@ -648,9 +646,9 @@ SliceClearAll(w)
 	fakeexpose (w);
 }
 
-void MultiSliceSetHook(w,h)
-	void (*h)();
-	MultiSliceWidget	w;
+void MultiSliceSetHook(MultiSliceWidget w, void (*h)())
+	//void (*h)();
+	//MultiSliceWidget	w;
 {
 	w->slicetext.hook = h;
 }

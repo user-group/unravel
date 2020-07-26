@@ -20,12 +20,13 @@
 # include <X11/Xaw/Form.h>
 # include <X11/Xaw/Viewport.h>
 # include <stdlib.h>
+# include <time.h>
 # include "sets.h"
 # include "MultiSlice.h"
 # include "slice.h"
 # include "config.h"
 
-	static  char    sccsid[] = "@(#)u.c	1.12  7/26/96";
+//static  char    sccsid[] = "@(#)u.c	1.12  7/26/96";
 
 # define WIDTH 450
 
@@ -81,10 +82,29 @@ bit_set	active;
 void BuildSliceSrc (MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines);
 void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n);
 
+void SliceRedraw (MultiSliceWidget w);
+void SliceClearAll(MultiSliceWidget w);
+void clear_history(void);
+void save_slice (int var_pid, int var_id, int file_id, int stmt_id, int is_partial,
+			int n_files, bit_set slices[]);
+	
+void SliceSet (MultiSliceWidget w, int line_from, int col_from, int line_to, int col_to, int redraw);
+
+void load_slice (Widget w, int index, int n_files, bit_set slices[],int line_map[]);
+
+void MultiSliceSetHook(MultiSliceWidget w, void (*h)());
+	
+extern void SliceClearAll(MultiSliceWidget w);
+extern void verify_input(int i);
+void setup_history(char *name);
+void slice_tree();
+
+int update_progress(int old);
+int read_k_file(char *name);
+int read_link_file(char *name);
 
 int 
-update_progress (old)
-	int	old;
+update_progress (int old)
 {
 	int		n,at,f;
 	char	label[1000];
@@ -927,8 +947,8 @@ continue_events(proc,change)
 	int		proc,change;
 {
 	XEvent	e;
-	static	pass = 0;
-	static int		n = 0;
+	static int pass = 0;
+	static int n    = 0;
 
 	if (pass%100 == 0){
 		n = update_progress (n);
