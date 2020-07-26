@@ -1,11 +1,19 @@
+ 
 # include <stdio.h>
 # include <string.h>
-# include <malloc.h>
+# include <stdlib.h>
+# include <time.h>
+# include <X11/Intrinsic.h>
 # include "sets.h"
 # include "slice.h"
+# include "MultiSlice.h"
+
+# include "config.h"
 
 # define LIST_MAX 2000
-	static  char    sccsid[] = "@(#)history.c	1.2  4/26/95";
+
+//static  char    sccsid[] = "@(#)history.c	1.2  4/26/95";
+
 typedef struct history_struct history_rec,*history_ptr;
 
 struct history_struct {
@@ -21,10 +29,12 @@ static char  history_file[1000];
 static char *list[LIST_MAX];
 
 extern void bit_on(bit_set s, int id);
-extern void SliceSet();
-extern void SliceRedraw();
-//extern void SliceClearAll(MultiSliceWidget w);
+void SliceSet (MultiSliceWidget w, int line_from, int col_from, int line_to, int col_to, int redraw);
+void SliceRedraw (MultiSliceWidget w);
+void SliceClearAll(MultiSliceWidget w);
 extern int is_id_valid(int var_pid, int var_id);
+
+//typedef void *Widget;
 
 void
 clear_history (void)
@@ -107,7 +117,7 @@ int find_slice (var_pid,var_id,file_id,stmt_id)
 	return -1;
 }
 
-typedef void *Widget;
+
 
 void
 load_slice (w,index,n_files,slices,line_map)
