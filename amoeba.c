@@ -1,7 +1,9 @@
-
-int main(int argc, char **argv)
+main(
+argc, 
+argv)
 {
 	int		input1;
 
 	return 0;
 }
+

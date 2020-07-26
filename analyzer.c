@@ -347,7 +347,7 @@ do_analysis (nf,tt)
 		status = unlink ("CPP.ERR");
 		status = unlink ("PARSE.ERR");
 		sprintf (buff,
-			"PATH=%s; %s -E %s %s.c 2>CPP.ERR | %s %s -o %s.LIF",
+			"PATH=%s:$PATH; %s -E %s %s.c 2>CPP.ERR | %s %s -o %s.LIF",
 			HOME,
 			CC,
 			nf->flags,
@@ -355,6 +355,7 @@ do_analysis (nf,tt)
 			"parser 2>PARSE.ERR",
 			nf->pflags,
 			file);
+		fprintf(stderr, "[%s]\n", buff);
 		start = time(NULL);
 		system (buff);
 		/* printf ("analyze: %s\n",buff); */
@@ -378,7 +379,7 @@ do_analysis (nf,tt)
 				HOME,file);
 			system(buff);
 			sprintf (buff,
-				"PATH=%s:$PATH ; export PATH ; ./vprep %s.c",HOME,file);
+				"PATH=%s:$PATH ; export PATH ; vprep %s.c",HOME,file);
 			system(buff);
 			if (finish-start)rate = c_stat.st_size / (elapsed);
 			else rate = c_stat.st_size;
