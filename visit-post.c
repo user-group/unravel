@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char sccsid[] = "@(#)visit-post.c	1.2  8/16/95";
+//static char sccsid[] = "@(#)visit-post.c	1.2  8/16/95";
 /*
         force proc entry and exit to be first and last
 */
+
 int first, last, nodes[1000000], i, entry_at, exit_at;
 
-int main(np, p) int np;
-char *p[];
+int main(int np, char **p) 
 {
     int k, n, entry_seen;
     char buff[2000];

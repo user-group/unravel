@@ -16,7 +16,8 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
-static char sccsid[] = "@(#)map.c	1.6  8/11/95";
+
+//static char sccsid[] = "@(#)map.c	1.6  8/11/95";
 
 int v_opt = 0;
 
@@ -245,10 +246,9 @@ void print_match_results(mp) main_ptr mp;
 {
     file_list need_files;
     proc_list p;
-    proc_ptr ps, same;
+    proc_ptr same;
     FILE *sys;
     int n;
-    char buff[2000];
     int col;
 
     sys = stdout;
@@ -300,7 +300,7 @@ char *dir_name;
 {
     file_list need_files;
     proc_list p;
-    proc_ptr ps, same;
+    proc_ptr  same;
     FILE *sys;
     int n;
     char buff[2000];
@@ -428,7 +428,6 @@ int (*compare)();
 
     int i, n_match = 0;
     ll new_ll;
-    struct dirent *new_de;
     ll nodes, node_list = NULL;
 
     dir = opendir(dir_name);
@@ -462,7 +461,6 @@ char *dir;
     struct dirent **files;
     int count;
     int alphasort();
-    int i;
 
     count = myscandir(dir, &files, file_selector, compare);
     if (count == -1) {
@@ -475,8 +473,7 @@ char *dir;
     return count;
 }
 
-int main(np, p) int np;
-char *p[];
+int main(int np, char **p)
 {
     /* struct direct 	**files; */
     struct dirent **files;
@@ -492,7 +489,7 @@ char *p[];
     proc_list new_proc_list;
     proc_ptr new_proc;
 
-    int n_procs = 0, n_mains = 0;
+    int n_procs = 0;
     int fx;
 
     if (np > 3) {

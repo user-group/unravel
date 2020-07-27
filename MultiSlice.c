@@ -8,9 +8,9 @@
 #include <X11/Xaw/Scrollbar.h>
 #include <stdlib.h>
 
-static char sccsid[]    = "@(#)MultiSlice.c	1.5  8/14/95";
-static char *sccs_h_id  = MSLICE_H_SCCS_ID;
-static char *sccs_ph_id = MSLICE_PH_SCCS_ID;
+//static char sccsid[]    = "@(#)MultiSlice.c	1.5  8/14/95";
+//static char *sccs_h_id  = MSLICE_H_SCCS_ID;
+//static char *sccs_ph_id = MSLICE_PH_SCCS_ID;
 
 void SliceSetTop(MultiSliceWidget w, float pc);
 
@@ -81,7 +81,6 @@ void dojump(w, x, y) Widget w;
 XtPointer x, y;
 {
     float *p;
-    int at_line;
 
     p = (float *)y;
     if (DEBUG)
@@ -171,8 +170,7 @@ Widget parent;
     Widget slicewin;
     Widget up, dn;
     Arg args[9];
-    int na;
-    int box_height;
+    int na;   
     int sb_left = 0;
     Pixmap up_bitmap, dn_bitmap;
     Display *d;
@@ -410,7 +408,6 @@ int offset, base, at, *linemap;
     int highlight[Max_line_length];
     int i, chunk, from, to, pos, last;
     GC gc, gcx, gc_to_use;
-    XFontStruct font, fontx;
 
     for (i = 0; i <= strlen(buff); i++)
         highlight[i] = 0;
@@ -627,7 +624,6 @@ static void SliceResize(w) MultiSliceWidget w;
 void SliceSetTop(w, pc) float pc;
 MultiSliceWidget w;
 {
-    int line;
     int old_top;
 
     old_top = w->slicetext.top;
@@ -648,7 +644,7 @@ void SliceSet(w, line_from, col_from, line_to, col_to, redraw) int line_from, co
     col_to, redraw;
 MultiSliceWidget w;
 {
-    int line, ix, at, h;
+    int line, ix;
 
     ix = w->slicetext.slicesrc.line[line_from].n_highlight;
     if (ix + 5 > MAXHL)
@@ -750,7 +746,7 @@ MultiSliceWidget w;
 void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n) {
     static int line = 0;
     int y;
-    int fid, f_line, nf;
+    int fid, f_line;
 
     if (DEBUG)
         printf("event %d buttonrelease (%d) kdn/up(%d %d)\n",
@@ -880,7 +876,6 @@ MultiSliceClassRec multisliceClassRec = {{/* core fields */
 WidgetClass multisliceWidgetClass = (WidgetClass)&multisliceClassRec;
 
 void BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines) {
-    char *string;
     int at_line = 1;
     char *old, *at;
     int longest_line = 0, lines;

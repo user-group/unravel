@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char sccsid[] = "@(#)visit-filter.c	1.1  10/6/94";
+//static char sccsid[] = "@(#)visit-filter.c	1.1  10/6/94";
 
-int main(np, p) int np;
-char *p[];
+int main(int np, char **p)
 {
     int low, high, from, to;
 
@@ -18,3 +17,4 @@ char *p[];
     }
     return 0;
 }
+

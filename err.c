@@ -1,8 +1,9 @@
 #include "ansi_parse.h"
 #include <stdio.h>
-static char sccsid[] = "@(#)err.c	1.1  1/27/94";
 
-void warning(s, t) char *s, *t;
+//static char sccsid[] = "@(#)err.c	1.1  1/27/94";
+
+void warning(char *s, char *t)
 {
     /*
     extern	int	lineno;
@@ -16,5 +17,8 @@ void warning(s, t) char *s, *t;
     fprintf(stderr, " near line %d in file %s\n", lineno, the_current_file);
 }
 
-void yyerror(s) char *s;
-{ warning(s, (char *)0); }
+void yyerror(char *s) 
+{ 
+    warning(s, (char *)0); 
+}
+
