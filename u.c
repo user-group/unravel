@@ -1,3 +1,35 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
+
+
 #include "MultiSlice.h"
 #include "config.h"
 #include "sets.h"
@@ -31,11 +63,14 @@
 
 #define XtNrunningFG "runningFG"
 #define XtNrunningBG "runningBG"
+
 typedef enum { select_action, show, tree } proc_action;
+
 Widget QQQ;
 Widget top;
 Widget help_label;
 Widget progress;
+
 typedef struct {
     char *proc;
     char *var;
@@ -102,6 +137,8 @@ int update_progress(int old);
 int read_k_file(char *name);
 int read_link_file(char *name);
 
+
+
 int update_progress(int old) {
     int n, at, f;
     char label[1000];
@@ -119,10 +156,7 @@ int update_progress(int old) {
     return n;
 }
 
-void button_help(w, mess, e, ok) Widget w;
-char *mess;
-XEvent *e;
-Boolean *ok;
+void button_help(Widget w, char *mess, XEvent *e, Boolean *ok) 
 {
     /* printf ("%s\n",mess); */
     XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL);
@@ -136,7 +170,7 @@ char *mess;
     XtAddEventHandler(w, LeaveWindowMask, False, button_help, buff);
 }
 
-void update_label(state) proc_state_ptr state;
+void update_label(proc_state_ptr state) 
 {
     char buff[1000];
     char *at, *name;
@@ -184,7 +218,7 @@ void update_label(state) proc_state_ptr state;
     */
 }
 
-void make_line_map() {
+void make_line_map(void) {
     int i, sum;
 
     line_map = (int *)malloc(n_files * sizeof(int));
@@ -199,7 +233,7 @@ void make_line_map() {
     }
 }
 
-void disp_to_file_and_line(disp_line, filex, line) int disp_line, *filex, *line;
+void disp_to_file_and_line(int disp_line, int *filex, int *line) 
 {
     int f, lx;
 
@@ -217,7 +251,7 @@ void disp_to_file_and_line(disp_line, filex, line) int disp_line, *filex, *line;
     *line  = 0;
 }
 
-void make_head_list() {
+void make_head_list(void) {
     int k, i, n;
 
     n                 = n_heads;
@@ -238,7 +272,7 @@ void make_head_list() {
     file_name_list[n_heads + 1] = NULL;
 }
 
-void make_proc_list() {
+void make_proc_list(void) {
     int k, i, n;
 
     n = 0;
@@ -265,8 +299,7 @@ void make_proc_list() {
     proc_name_list[n] = NULL;
 }
 
-char *get_file(np, p) int np;
-char *p[];
+char *get_file(int np, char *p[]) 
 {
     int status;
     int v_opt = 0;
@@ -312,8 +345,7 @@ char *p[];
     return p[fx];
 }
 
-void do_slice(x, file, stmt, proc, var, line) int file, stmt, proc, var, line;
-Widget x;
+void do_slice(Widget x, int file, int stmt, int proc, int var, int line) 
 {
     int f, i;
     int file_proc;
@@ -371,7 +403,7 @@ Widget x;
     SliceRedraw(x);
 }
 
-void adjust_popup_list(list) Widget list;
+void adjust_popup_list(Widget list)
 {
     Widget port, shell, bar;
     Dimension bar_w, list_w, list_h;
@@ -401,23 +433,19 @@ void adjust_popup_list(list) Widget list;
     XtVaGetValues(shell, XtNwidth, &list_w, XtNheight, &list_h, NULL);
 }
 
-void stop_slicing(w, x, y) Widget w;
-Widget x;
-caddr_t y;
-{ abandon_slice = 1; }
+void stop_slicing(Widget w, Widget  x, caddr_t y) 
+{ 
+    abandon_slice = 1; 
+}
 
-void helpB(w, x, y) Widget w;
-Widget x;
-caddr_t y;
+void helpB(Widget w, Widget x, caddr_t y) 
 {
     char cmd[2000];
     sprintf(cmd, "%s/helpu %s/u.help &", home, home);
     system(cmd);
 }
 
-void quitB(w, x, y) Widget w;
-Widget x;
-caddr_t y;
+void quitB(Widget w, Widget x, caddr_t y)
 {
     char cmd[2000];
     sprintf(cmd, "cat HISTORY-S >> HISTORY");
@@ -425,9 +453,7 @@ caddr_t y;
     exit(0);
 }
 
-void slicecall(x, state, r) proc_state_ptr state;
-Widget x;
-MultiSliceReturn *r;
+void slicecall(Widget x, proc_state_ptr state, MultiSliceReturn *r) 
 {
     int line, file, stmt;
     char *var_name;
@@ -508,9 +534,7 @@ MultiSliceReturn *r;
     update_progress(-1);
 }
 
-void dodicecall(x, state, primary_set, secondary_set) proc_state_ptr state;
-bit_set *primary_set, *secondary_set;
-Widget x;
+void dodicecall(Widget x, proc_state_ptr state, bit_set *primary_set, bit_set *secondary_set)
 {
     int i;
     int f;
@@ -532,9 +556,7 @@ Widget x;
     SliceRedraw(state->slicewin);
 }
 
-void dicecallsp(x, state, r) proc_state_ptr state;
-Widget x;
-XtPointer r;
+void dicecallsp(Widget x, proc_state_ptr state, XtPointer r)
 {
     char buff[400];
 
@@ -543,9 +565,7 @@ XtPointer r;
     dodicecall(x, state, secondary_set, primary_set);
 }
 
-void dicecall(x, state, r) proc_state_ptr state;
-Widget x;
-XtPointer r;
+void dicecall(Widget x, proc_state_ptr state, XtPointer r) 
 {
     char buff[400];
 
@@ -554,9 +574,7 @@ XtPointer r;
     dodicecall(x, state, primary_set, secondary_set);
 }
 
-void bbcall(x, state, r) proc_state_ptr state;
-Widget x;
-XtPointer r;
+void bbcall(Widget x, proc_state_ptr state, XtPointer r)
 {
     int i;
     int f;
@@ -581,9 +599,7 @@ XtPointer r;
     SliceRedraw(state->slicewin);
 }
 
-void unioncall(x, state, r) proc_state_ptr state;
-Widget x;
-XtPointer r;
+void unioncall(Widget x, proc_state_ptr state, XtPointer r)
 {
     int i;
     int f;
@@ -615,9 +631,7 @@ XtPointer r;
     SliceRedraw(state->slicewin);
 }
 
-void clear_sliceB(w, state, y) Widget w;
-proc_state_ptr state;
-caddr_t y;
+void clear_sliceB(Widget w, proc_state_ptr state, caddr_t y)
 {
     char buff[2000];
     sprintf(buff, "/usr/bin/rm -f %sY", state->root_file);
@@ -625,9 +639,7 @@ caddr_t y;
     system(buff);
 }
 
-void clearB(w, state, y) Widget w;
-proc_state_ptr state;
-caddr_t y;
+void clearB(Widget w, proc_state_ptr state, caddr_t y)
 {
     char buff[2000];
     if (SliceTrace)
@@ -638,14 +650,10 @@ caddr_t y;
     SliceClearAll(state->slicewin);
 }
 
-void popup_selection(a, state, c) Widget a;
-proc_state_ptr state;
-XtPointer c;
+void popup_selection(Widget a, proc_state_ptr state, XtPointer c)
 {
-   
-    Widget p;
-    char **list;
-   
+    Widget   p;
+    char   **list;  
 
     p = XtParent(XtParent(state->history_list));
     /*
@@ -665,8 +673,7 @@ XtPointer c;
     XtPopup(p, XtGrabExclusive);
 }
 
-void proc_pop(a, p, c) Widget a, p;
-XtPointer c;
+void proc_pop(Widget a, Widget p, XtPointer c)
 {
     Position x, y;
 
@@ -680,27 +687,21 @@ XtPointer c;
     XtPopup(p, XtGrabExclusive);
 }
 
-void tree_pop(w, state, p) Widget w;
-XtPointer p;
-proc_state_ptr state;
+void tree_pop(Widget w, proc_state_ptr state, XtPointer p)
 {
 
     state->reason = tree;
     proc_pop(w, state->proc_popup, NULL);
 }
 
-void show_pop(w, state, p) Widget w;
-XtPointer p;
-proc_state_ptr state;
+void show_pop(Widget w, proc_state_ptr state, XtPointer p) 
 {
 
     state->reason = show;
     proc_pop(w, state->proc_popup, NULL);
 }
 
-void var_select(a, state, list) Widget a;
-proc_state_ptr state;
-XawListReturnStruct *list;
+void var_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
 {
     Widget parent;
     int  ix;
@@ -721,23 +722,25 @@ XawListReturnStruct *list;
     update_label(state);
 }
 
-void slice_select(a, state, list) Widget a;
-proc_state_ptr state;
-XawListReturnStruct *list;
+void slice_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
 {
     Widget parent;
-    char label[2000];
+    char   label[2000];
 
     parent = XtParent(a);
+    
     while (!XtIsTransientShell(parent))
         parent = XtParent(parent);
+    
     XtPopdown(parent);
+    
     if (list->list_index == 0)
         return;
     if (state->is_primary)
         slice_set = primary_set;
     else
         slice_set = secondary_set;
+        
     load_slice(state->slicewin, list->list_index - 1, n_files, slice_set, line_map);
     XtVaSetValues(state->display_label, XtNlabel, list->string, NULL);
     strcpy(state->is_primary ? state->ptext : state->stext, list->string);
@@ -746,9 +749,7 @@ XawListReturnStruct *list;
     update_progress(-1);
 }
 
-void head_select(a, state, list) Widget a;
-proc_state_ptr state;
-XawListReturnStruct *list;
+void head_select(Widget a, proc_state_ptr state, XawListReturnStruct *list) 
 {
     Widget parent;
 
@@ -769,8 +770,7 @@ XawListReturnStruct *list;
     proc_pop(NULL, state->var_popup, NULL);
 }
 
-void mark_call_tree(w, proc) Widget w;
-int proc;
+void mark_call_tree(Widget w, int proc) 
 {
     int i, p, f;
 
@@ -796,9 +796,7 @@ int proc;
     SliceRedraw(w);
 }
 
-void proc_select(a, state, list) Widget a;
-proc_state_ptr state;
-XawListReturnStruct *list;
+void proc_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
 {
     Widget parent;
     int i, f;
@@ -892,7 +890,8 @@ char *fall[] = {
 			<KeyPress>?: set() highlight() notify() unset()",
     NULL};
 XtAppContext ac;
-void continue_events(proc, change) int proc, change;
+
+void continue_events(int proc, int change) 
 {
     XEvent e;
     static int pass = 0;
@@ -907,17 +906,17 @@ void continue_events(proc, change) int proc, change;
         XtDispatchEvent(&e);
     }
 }
+
 void active_hook();
 
-int main(argc, argv) int argc;
-char **argv;
+int main(int argc, char **argv)
 {
     Widget create_widgets();
-    char icon_res[2000];
+    char   icon_res[2000];
     MultiSliceFiles f[100];
-    int i;
-    int t_lines = 0;
-    char *root;
+    int    i;
+    int    t_lines = 0;
+    char  *root;
     static XrmOptionDescRec opt[] = {{"-runningfg", "*runningFG", XrmoptionSepArg, NULL},
         {"-runningbg", "*runningBG", XrmoptionSepArg, NULL}};
 
@@ -949,13 +948,14 @@ char **argv;
     slice_pass_hook = continue_events;
     MultiSliceSetHook(slicewin, active_hook);
     XtAppMainLoop(ac);
+    return 0;
 }
 
-void strech(goal, w) Widget goal, w;
+void strech(Widget goal, Widget w) 
 {
     Dimension width, bw;
-    Position x;
-    int dist;
+    Position  x;
+    int       dist;
 
     XtUnmanageChild(w);
     XtVaGetValues(goal, XtNdefaultDistance, &dist, XtNwidth, &width, NULL);
@@ -964,8 +964,7 @@ void strech(goal, w) Widget goal, w;
     XtManageChild(w);
 }
 
-Widget create_widgets(top, file_name) Widget top;
-char *file_name;
+Widget create_widgets(Widget top, char *file_name)
 {
     static Widget frame, quit;
     static Widget content;
@@ -1420,3 +1419,4 @@ char *file_name;
     ps.is_primary = 1;
     return slicewin;
 }
+

@@ -30,14 +30,14 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 */
 
 #include <stdio.h>
-
+#include <stdlib.h>
 #include "MultiSliceP.h"
 #include <X11/IntrinsicP.h>
 #include <X11/StringDefs.h>
 #include <X11/Xaw/Command.h>
 #include <X11/Xaw/Form.h>
 #include <X11/Xaw/Scrollbar.h>
-#include <stdlib.h>
+
 
 //static char sccsid[]    = "@(#)MultiSlice.c	1.5  8/14/95";
 //static char *sccs_h_id  = MSLICE_H_SCCS_ID;

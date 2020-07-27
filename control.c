@@ -56,7 +56,7 @@ void control(int code, int ctrl_entry, int ctrl_exit, int stmt_entry, int stmt_e
         fprintf(ctrl_file, "%d(%d,%d,%d,%d)\n", code, ctrl_entry, ctrl_exit, stmt_entry, stmt_exit);
 }
 
-void open_control(base) char *base;
+void open_control(char *base) 
 {
     char name[2000];
 
