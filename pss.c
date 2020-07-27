@@ -1,7 +1,38 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
+
 #include "lif.h"
 #include "sets.h"
 #include "slice.h"
-#include <malloc.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -26,7 +57,7 @@ void bit_on(bit_set b, int at);
 int offset_check(int pid, int id, int off);
 int is_lib_proc(int id);
 
-set_ptr ptr_points_to(base_ptr) int base_ptr;
+set_ptr ptr_points_to(int base_ptr) 
 {
     if (base_ptr)
         return ptrs[base_ptr].addrs;
@@ -36,7 +67,8 @@ set_ptr ptr_points_to(base_ptr) int base_ptr;
 
 #define LINE 70
 
-void print_pvs() {
+void print_pvs(void) 
+{
     int i, idx;
     int a_ix, a_id, a_pid;
     set_ptr to;
@@ -78,7 +110,8 @@ void print_pvs() {
     }
 }
 
-void print_ptr_map() {
+void print_ptr_map(void) 
+{
     int ptr, lx, i, id, z;
     char buff[1000];
 
@@ -187,7 +220,7 @@ char *ptr_to_name(int ptr) {
     return ids[var_ix]->name;
 }
 
-char *addr_to_name(addr) int addr;
+char *addr_to_name(int addr)
 {
     int pid, id;
 
@@ -199,7 +232,7 @@ char *addr_to_name(addr) int addr;
         return globals[id].name;
 }
 
-char *addr_to_scope(addr) int addr;
+char *addr_to_scope(int addr)
 {
     int pid;
 
@@ -210,8 +243,7 @@ char *addr_to_scope(addr) int addr;
         return "global";
 }
 
-void print_ptr_set(ptr, s) set_ptr s;
-int ptr;
+void print_ptr_set(int ptr, set_ptr s) 
 {
     printf("#### Addr set %d (%s): ", ptr, ptr_to_name(ptr));
     while (s) {
@@ -222,8 +254,7 @@ int ptr;
     fflush(stdout);
 }
 
-int add_aref_to_var(r, id) int id;
-var_ptr r;
+int add_aref_to_var(var_ptr r, int id)
 {
     set_ptr old;
 
@@ -241,7 +272,7 @@ var_ptr r;
         return 1;
 }
 
-int call_assign(dix, pid) int pid, dix;
+int call_assign(int dix, int pid) 
 {
     set_ptr old;
     set_ptr addrs;
@@ -260,7 +291,7 @@ int call_assign(dix, pid) int pid, dix;
         return 1;
 }
 
-int ret_assign(pid, rix) int pid, rix;
+int ret_assign(int pid, int rix)
 {
     set_ptr old;
     set_ptr addrs;
@@ -279,7 +310,7 @@ int ret_assign(pid, rix) int pid, rix;
         return 1;
 }
 
-int pointer_assign(dix, rix) int dix, rix;
+int pointer_assign(int dix, int rix) 
 {
     set_ptr old;
     set_ptr addrs;
@@ -302,8 +333,7 @@ int pointer_assign(dix, rix) int dix, rix;
         return 1;
 }
 
-void resolve_chain(in, out, f) bit_set in, out;
-field_ptr f;
+void resolve_chain(bit_set in, bit_set out, field_ptr f) 
 {
     int new_id, a_id, ptr, new_ptr;
     set_ptr addr;
@@ -355,7 +385,7 @@ field_ptr f;
     }
 }
 
-void get_cdefs(chain) int chain;
+void get_cdefs(int chain) 
 {
     int ptr, id, pid;
     bit_set in, out, swap;
@@ -398,7 +428,7 @@ void get_cdefs(chain) int chain;
     }
 }
 
-void get_crefs(chain) int chain;
+void get_crefs(int chain)
 {
     bit_set swap;
 
@@ -409,7 +439,7 @@ void get_crefs(chain) int chain;
     ptrs_out   = swap;
 }
 
-int capture_assigns(pid, fid, sid) int pid, fid, sid;
+int capture_assigns(int pid, int fid, int sid) 
 {
     var_ptr r, d;
     int a_pid, a_id, var_defed, id;
@@ -496,7 +526,7 @@ int capture_assigns(pid, fid, sid) int pid, fid, sid;
     return count;
 }
 
-int prop_call(pid, fid, sid) int pid, fid, sid;
+int prop_call(int pid, int fid, int sid)
 {
     var_ptr d;
     int var_defed, id;
@@ -565,7 +595,7 @@ int prop_call(pid, fid, sid) int pid, fid, sid;
     return count;
 }
 
-int prop_stmt(pid, fid, sid) int pid, fid, sid;
+int prop_stmt(int pid, int fid, int sid) 
 {
     var_ptr r, d;
     int rp, var_refed, rix, var_defed, id;
@@ -705,8 +735,7 @@ int prop_stmt(pid, fid, sid) int pid, fid, sid;
     return count;
 }
 
-int do_a_call(pid, fid, call) int pid, fid;
-call_ptr call;
+int do_a_call(int pid, int fid, call_ptr call)
 {
     int change = 0, called_pid, fp;
     int rix, a_id, a_pid, fpx;
@@ -783,7 +812,8 @@ call_ptr call;
     return change;
 }
 
-int direct_assigns() {
+int direct_assigns(void) 
+{
     int pid, fid, sid;
     int change = 0;
 
@@ -801,7 +831,8 @@ int direct_assigns() {
     return change;
 }
 
-int propagate() {
+int propagate(void) 
+{
     int pid, fid, sid;
     int change = 0;
 
@@ -823,9 +854,10 @@ int propagate() {
     return change;
 }
 
-int do_calls() {
-    int pid, fid;
-    int change = 0;
+int do_calls(void) 
+{
+    int      pid, fid;
+    int      change = 0;
     call_ptr call_list;
 
     /*
@@ -844,7 +876,8 @@ int do_calls() {
     return change;
 }
 
-void flow(void) {
+void flow(void) 
+{
     int change;
 
     ptrs_in    = create_bit_set(n_ptrs + 1);
@@ -862,3 +895,4 @@ void flow(void) {
     if (v_opt)
         print_pvs();
 }
+

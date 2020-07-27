@@ -1,3 +1,33 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
 #include "stmt.h"
 #include "ansi_parse.h"
 #include "control.h"
@@ -15,7 +45,7 @@ void connect_nodes(int from, int to);
 
 label_ptr labels = NULL;
 
-label_ptr find_label(label) char *label;
+label_ptr find_label(char *label)
 {
     label_ptr at;
 
@@ -28,8 +58,7 @@ label_ptr find_label(label) char *label;
     return NULL;
 }
 
-void label_def(label_token, node) token_ptr label_token;
-int node;
+void label_def(token_ptr label_token, int node) 
 {
     label_ptr new;
     list_ptr list;
@@ -53,8 +82,7 @@ int node;
     }
 }
 
-void label_ref(label_token, goto_node) token_ptr label_token;
-int goto_node;
+void label_ref(token_ptr label_token, int goto_node) 
 {
     label_ptr new;
     list_ptr list;
@@ -81,9 +109,12 @@ int goto_node;
     }
 }
 
-int current_proc_id() { return pid; }
+int current_proc_id(void) 
+{ 
+    return pid; 
+}
 
-void output_proc_list(t_file) FILE *t_file;
+void output_proc_list(FILE *t_file)
 {
     int n_procs = 0;
     proc_ptr p;
@@ -108,7 +139,8 @@ void output_proc_list(t_file) FILE *t_file;
     }
 }
 
-void list_procs() {
+void list_procs(void) 
+{
     proc_ptr p;
 
     printf("\nProcedures\n");
@@ -119,7 +151,7 @@ void list_procs() {
     }
 }
 
-proc_ptr find_proc(t) token_ptr t;
+proc_ptr find_proc(token_ptr t) 
 {
     proc_ptr p;
 
@@ -134,8 +166,7 @@ proc_ptr find_proc(t) token_ptr t;
     }
     return NULL;
 }
-void add_proc(t, node, pid) token_ptr t;
-int node, pid;
+void add_proc(token_ptr t, int node, int pid) 
 {
     proc_ptr p, q;
 
@@ -172,7 +203,7 @@ int node, pid;
         current_proc = p;
 }
 
-int call_to(t) token_ptr t;
+int call_to(token_ptr t)
 {
     proc_ptr p;
 
@@ -186,9 +217,13 @@ int call_to(t) token_ptr t;
     return p->proc_id;
 }
 
-int get_stmt_no() { return ++stmtno; }
+int get_stmt_no(void) 
+{ 
+    return ++stmtno; 
+}
 
-void connect_nodes(int from, int to) {
+void connect_nodes(int from, int to) 
+{
     fprintf(outfile, "%d(%d,%d)", LIF_SUCC, from, to);
     if (z_opt)
         fprintf(outfile, "   connect from %d to %d", from, to);
@@ -227,7 +262,7 @@ void source_map(int n, token_ptr from, token_ptr to) {
     }
 }
 
-stmt_ptr make_stmt(from, to, entry_node, exit_node) int from, to, entry_node, exit_node;
+stmt_ptr make_stmt(int from, int to, int entry_node, int exit_node)
 {
     stmt_ptr new;
 
@@ -245,7 +280,7 @@ stmt_ptr make_stmt(from, to, entry_node, exit_node) int from, to, entry_node, ex
     ;
     return new;
 }
-static void merge_bc(from, to) stmt_ptr from, to;
+static void merge_bc(stmt_ptr from, stmt_ptr to)
 {
     list_ptr nodes;
 
@@ -274,7 +309,7 @@ static void merge_bc(from, to) stmt_ptr from, to;
         from->cases = to->cases;
 }
 
-stmt_ptr join_stmt(from, to) stmt_ptr from, to;
+stmt_ptr join_stmt(stmt_ptr from, stmt_ptr to) 
 {
     list_ptr c;
 
@@ -319,10 +354,11 @@ stmt_ptr join_stmt(from, to) stmt_ptr from, to;
     return from;
 }
 
-void gen_require(node_required, from, to) int node_required, from, to;
+void gen_require(int node_required, int from, int to) 
 {
     if ((node_required == from) && (node_required == to))
         return;
+        
     fprintf(outfile, "%d(%d,%d", LIF_REQUIRES, node_required, from);
     if (from != to)
         fprintf(outfile, ",%d", to);
@@ -332,12 +368,10 @@ void gen_require(node_required, from, to) int node_required, from, to;
     fprintf(outfile, "\n");
 }
 
-void require_stmt(node_required, stmt) int node_required;
-stmt_ptr stmt;
+void require_stmt(int node_required, stmt_ptr stmt) 
 {
     stmt_ptr at;
-    int start, end, try
-        ;
+    int start, end, try;
 
     if (!stmt)
         return;
@@ -359,8 +393,7 @@ stmt_ptr stmt;
     gen_require(node_required, start, end);
 }
 
-stmt_ptr stmt_label(label_token, stmt) token_ptr label_token;
-stmt_ptr stmt;
+stmt_ptr stmt_label(token_ptr label_token, stmt_ptr stmt) 
 {
     stmt_ptr new;
     int node;
@@ -375,8 +408,7 @@ stmt_ptr stmt;
     return stmt;
 }
 
-stmt_ptr goto_stmt(continue_token, label_token, semi_token) token_ptr continue_token, semi_token,
-    label_token;
+stmt_ptr goto_stmt(token_ptr continue_token, token_ptr label_token, token_ptr semi_token)
 {
     stmt_ptr new;
     int node;
@@ -394,7 +426,7 @@ stmt_ptr goto_stmt(continue_token, label_token, semi_token) token_ptr continue_t
     return new;
 }
 
-stmt_ptr continue_stmt(continue_token, semi_token) token_ptr continue_token, semi_token;
+stmt_ptr continue_stmt(token_ptr continue_token, token_ptr semi_token) 
 {
     stmt_ptr new;
     int node;
@@ -413,7 +445,7 @@ stmt_ptr continue_stmt(continue_token, semi_token) token_ptr continue_token, sem
     return new;
 }
 
-stmt_ptr break_stmt(break_token, semi_token) token_ptr break_token, semi_token;
+stmt_ptr break_stmt(token_ptr break_token, token_ptr semi_token)
 {
     stmt_ptr new;
     int node;
@@ -432,8 +464,7 @@ stmt_ptr break_stmt(break_token, semi_token) token_ptr break_token, semi_token;
     return new;
 }
 
-stmt_ptr brace_stmt(left_token, stmt, right_token) token_ptr left_token, right_token;
-stmt_ptr stmt;
+stmt_ptr brace_stmt(token_ptr left_token, stmt_ptr stmt, token_ptr right_token)
 {
     int left, right;
 
@@ -458,8 +489,7 @@ stmt_ptr stmt;
     return stmt;
 }
 
-void break_continue(stmt, break_node, continue_node) stmt_ptr stmt;
-int break_node, continue_node;
+void break_continue(stmt_ptr stmt, int break_node, int continue_node)
 {
     list_ptr nodes;
 
@@ -477,8 +507,7 @@ int break_node, continue_node;
     }
 }
 
-void break_cases(stmt, xpr_to_case, break_to_end) stmt_ptr stmt;
-int xpr_to_case, break_to_end;
+void break_cases(stmt_ptr stmt, int xpr_to_case, int break_to_end)
 {
     list_ptr nodes;
 
@@ -497,10 +526,12 @@ int xpr_to_case, break_to_end;
 }
 
 /* $$ = if_stmt ($1,$3,$4,$5,$6,$7) */
-stmt_ptr if_stmt(if_token, xpr_tree, rp_token, then_stmt, else_token, else_stmt) token_ptr if_token,
-    rp_token, else_token;
-tree_ptr xpr_tree;
-stmt_ptr then_stmt, else_stmt;
+stmt_ptr if_stmt(token_ptr if_token, 
+                 tree_ptr  xpr_tree, 
+                 token_ptr rp_token, 
+                 stmt_ptr  then_stmt, 
+                 token_ptr else_token, 
+                 stmt_ptr  else_stmt) 
 {
     stmt_ptr new;
     int if_part, else_part, join_part;
@@ -553,7 +584,7 @@ stmt_ptr then_stmt, else_stmt;
     new->is_jump   = 0;
     new->next      = NULL;
     new->last      = new;
-    ;
+    
     if (else_stmt)
         merge_bc(new, else_stmt);
     /*
@@ -575,9 +606,7 @@ stmt_ptr then_stmt, else_stmt;
 *                                                               *
 *****************************************************************
 */
-stmt_ptr while_stmt(while_token, xpr_tree, rp_token, stmt) token_ptr while_token, rp_token;
-tree_ptr xpr_tree;
-stmt_ptr stmt;
+stmt_ptr while_stmt(token_ptr while_token, tree_ptr xpr_tree, token_ptr rp_token, stmt_ptr stmt)
 {
     int while_node, rp_node;
     int xfrom, xto;
@@ -601,20 +630,20 @@ stmt_ptr stmt;
             */
     control(WHILE_CTRL, xfrom, rp_node, stmt->entry, stmt->exit, 0, 0);
 
-    new       = alloc_stmt();
-    new->from = while_node;
-    new->to   = rp_node;
-    ;
-    new->entry = xfrom;
-    new->exit  = rp_node;
-    ;
+    new            = alloc_stmt();
+    new->from      = while_node;
+    new->to        = rp_node;
+    
+    new->entry     = xfrom;
+    new->exit      = rp_node;
+    
     new->breaks    = NULL;
     new->cases     = NULL;
     new->continues = NULL;
     new->is_jump   = 0;
     new->next      = NULL;
     new->last      = new;
-    ;
+    
     return new;
 }
 
@@ -629,10 +658,7 @@ stmt_ptr stmt;
 *                                                               *
 *****************************************************************
 */
-stmt_ptr do_stmt(do_token, stmt, while_token, xpr_tree, rp_token) token_ptr do_token,
-    while_token, rp_token;
-tree_ptr xpr_tree;
-stmt_ptr stmt;
+stmt_ptr do_stmt(token_ptr do_token, stmt_ptr stmt, token_ptr while_token, tree_ptr xpr_tree, token_ptr rp_token) 
 {
     int do_node, while_node, rp_node;
     int xfrom, xto;
@@ -659,14 +685,14 @@ stmt_ptr stmt;
     new->to    = rp_node;
     new->entry = do_node;
     new->exit  = rp_node;
-    ;
+    
     new->breaks    = NULL;
     new->cases     = NULL;
     new->continues = NULL;
     new->is_jump   = 0;
     new->next      = NULL;
     new->last      = new;
-    ;
+    
     return new;
 }
 
@@ -675,12 +701,16 @@ stmt_ptr stmt;
                 {$$ = for_stmt ($1,$2,$3,$5,$7,$8,$9);}
 */
 
-stmt_ptr for_stmt(
-    for_token, lp_token, init_tree, semi1_token, cond_tree, semi2_token, delta_tree, rp_token, stmt)
-    token_ptr for_token,
-    lp_token, rp_token, semi1_token, semi2_token;
-tree_ptr init_tree, cond_tree, delta_tree;
-stmt_ptr stmt;
+stmt_ptr for_stmt(token_ptr for_token, 
+                  token_ptr lp_token, 
+                  tree_ptr init_tree, 
+                  token_ptr semi1_token, 
+                  tree_ptr cond_tree, 
+                  token_ptr semi2_token, 
+                  tree_ptr delta_tree, 
+                  token_ptr rp_token, 
+                  stmt_ptr stmt)
+    
 {
     int init_node, for_node, exit_node;
     int init_from, init_to, delta_node, delta_from, delta_to, cond_node, cond_from, cond_to;
@@ -750,14 +780,14 @@ stmt_ptr stmt;
     new->to    = exit_node;
     new->entry = for_node;
     new->exit  = exit_node;
-    ;
+    
     new->breaks    = NULL;
     new->cases     = NULL;
     new->continues = NULL;
     new->is_jump   = 0;
     new->next      = NULL;
     new->last      = new;
-    ;
+    
     return new;
 }
 
@@ -765,9 +795,7 @@ stmt_ptr stmt;
         | SWITCH '(' expr ')' statement
                 {$$ = switch_stmt ($1,$3,$4,$5);}
 */
-stmt_ptr switch_stmt(switch_token, xpr_tree, rp_token, stmt) token_ptr switch_token, rp_token;
-stmt_ptr stmt;
-tree_ptr xpr_tree;
+stmt_ptr switch_stmt(token_ptr switch_token, tree_ptr xpr_tree, token_ptr rp_token, stmt_ptr stmt)
 {
     int switch_node, sfrom, sto, rp_node;
     int has_default;
@@ -784,6 +812,7 @@ tree_ptr xpr_tree;
     gen_require(rp_node, stmt->to, stmt->to);
     c           = stmt->cases;
     has_default = 0;
+    
     while (c) {
         if (c->is_default_case) {
             has_default = 1;
@@ -791,9 +820,11 @@ tree_ptr xpr_tree;
         }
         c = c->next;
     }
+    
     if (!has_default) {
         connect_nodes(sto, rp_node);
     }
+    
     new            = alloc_stmt();
     new->from      = switch_node;
     new->to        = rp_node;
@@ -805,7 +836,7 @@ tree_ptr xpr_tree;
     new->is_jump   = 0;
     new->next      = NULL;
     new->last      = new;
-    ;
+    
     return new;
 }
 
@@ -815,10 +846,7 @@ tree_ptr xpr_tree;
         | DEFAULT ':' statement
                 {$$ = case_stmt ($1,$2,$3,True);}
 */
-stmt_ptr case_stmt(case_token, colon_token, stmt, is_default_case) token_ptr case_token,
-    colon_token;
-int is_default_case;
-stmt_ptr stmt;
+stmt_ptr case_stmt(token_ptr case_token, token_ptr colon_token, stmt_ptr stmt, int is_default_case) 
 {
     int node;
     list_ptr list;
@@ -839,8 +867,7 @@ stmt_ptr stmt;
     return stmt;
 }
 
-stmt_ptr return_stmt(return_token, xpr_tree, semi_token) token_ptr return_token, semi_token;
-tree_ptr xpr_tree;
+stmt_ptr return_stmt(token_ptr return_token, tree_ptr xpr_tree, token_ptr semi_token)
 {
     int return_node, rfrom, rto;
     stmt_ptr new;
@@ -868,14 +895,15 @@ tree_ptr xpr_tree;
     return new;
 }
 
-void do_returns(int end_stmt) {
+void do_returns(int end_stmt) 
+{
     while (returns) {
         connect_nodes(returns->node, end_stmt);
         returns = returns->next;
     }
 }
 
-stmt_ptr fun_stmt(t) token_ptr t;
+stmt_ptr fun_stmt(token_ptr t) 
 {
     int node;
     stmt_ptr new;
@@ -903,3 +931,4 @@ stmt_ptr fun_stmt(t) token_ptr t;
     labels = NULL;
     return new;
 }
+

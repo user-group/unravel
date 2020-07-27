@@ -1,12 +1,37 @@
-D			[0-9]
-L			[a-zA-Z_]
-H			[a-fA-F0-9]
-E			[Ee][+-]?{D}+
-FS			(f|F|l|L)
-IS			(u|U|l|L)*
+
 
 %{
 
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
 # include "tokens.h"
 # include "ansi_parse.h"
 # include "lif.h"
@@ -26,14 +51,26 @@ void reset_line(void);
 int is_type_name (char *t, int *i);
 
 /*static*/	
-int	in_struct = 0,recent_comma = 0;
-int	in_typedef = 0, braces = 0,
-		in_init = 0, need_brace = 0,
-		type_seen = 0, in_local = 0, in_enum = 0;
-int	want_id = 0;
-int	last_was_dot = 0;
+int in_struct    = 0,
+    recent_comma = 0;
+int in_typedef   = 0, 
+    braces       = 0,
+    in_init      = 0, 
+    need_brace   = 0,
+    type_seen    = 0, 
+    in_local     = 0, 
+    in_enum      = 0;
+int want_id      = 0;
+int last_was_dot = 0;
 
 %}
+
+D			[0-9]
+L			[a-zA-Z_]
+H			[a-fA-F0-9]
+E			[Ee][+-]?{D}+
+FS			(f|F|l|L)
+IS			(u|U|l|L)*
 
 %%
 "/*"			{ comment(); }
@@ -196,12 +233,12 @@ L?\"			{eat_string(); return(STRING_LITERAL);
 
 %%
 
-int yywrap()
+int yywrap(void)
 {
 	return(1);
 }
 
-void comment()
+void comment(void)
 {
 	char c, c1;
 
@@ -219,7 +256,7 @@ loop:
 	/*	putchar(c1) */;
 }
 
-void count()
+void count(void)
 {
 	int i;
 
@@ -246,7 +283,7 @@ printf ("count token (%s) dot(%d)\n",yytext,last_was_dot);
 last_was_dot = 0;
 }
 
-void eat_string()
+void eat_string(void)
 {
 	char	c;
 	int		more = 1,
@@ -274,8 +311,7 @@ void eat_string()
 **************************************************************
 */
 
-char	*find_string (s)
-	char	*s;
+char	*find_string (char *s)
 {
 	static string_ptr	strings = NULL;
 	string_ptr	at;
@@ -302,8 +338,7 @@ char	*find_string (s)
 *                                                            *
 **************************************************************
 */
-token_ptr create_token(s)
-	char	*s;
+token_ptr create_token(char *s)
 {
 	token_ptr	new;
 
@@ -328,10 +363,9 @@ token_ptr create_token(s)
 	return new;
 }
 
-int check_type(t)
-   char *t;
+int check_type(char *t)
 {
-   int		is_type,is_local;
+   int	is_type,is_local;
 
 	if (is_type_name(t,&is_local)) {
 		/*
@@ -354,34 +388,37 @@ int check_type(t)
 	return is_type ;
 }
 
-int reserved_word(t)
-   int	t;
+int reserved_word(int t)
 {
    yylval.token = create_token(NULL);
    count(); 
    return t ;
 }
 
-void start_local_decl() {
+void start_local_decl(void) 
+{
 	in_local = 1;
 }
 
-void end_init() {
+void end_init(void) 
+{
 	in_init = 0;
 }
 	
-void clear_type_flag() {
+void clear_type_flag(void) 
+{
 	type_seen = 0;
 }
 
-void end_local_decl() {
+void end_local_decl(void) 
+{
 	in_init = 0;
 	in_local = 0;
 }
 
 void reset_line (void)	/* adjust line and column after # include */
 {
-	char	*at;
+	char *at;
 
 	at = yytext;
 	/*
