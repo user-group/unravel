@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char sccsid[] = "@(#)visit-ctrl.c	1.1  10/6/94";
+//static char sccsid[] = "@(#)visit-ctrl.c	1.1  10/6/94";
 
-int main(np, p) int np;
-char *p[];
+int main(int np, char **p) 
 {
     int n_procs, n_nodes, start, stop;
-    int i, j, k;
+    int i;
     FILE *t_file;
 
     if (np != 2)

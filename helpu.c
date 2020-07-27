@@ -9,15 +9,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char sccsid[] = "@(#)helpu.c	1.1  10/14/94";
+//static char sccsid[] = "@(#)helpu.c	1.1  10/14/94";
 
-void quitB(w, x, y) Widget w;
-Widget x;
-caddr_t y;
-{ exit(0); }
+void quitB(Widget w, Widget x, caddr_t y) 
+{ 
+    exit(0); 
+}
 
-int main(argc, argv) int argc;
-char **argv;
+int main(int argc, char **argv)
 {
     Widget toplevel, panes, quit;
     Widget editwin, bbox;
@@ -37,18 +36,18 @@ char **argv;
         {XtNeditType, (XtArgVal)XawtextRead},
     };
     static char *fall[] = {
-        "*iconPixmap:				helpu.icon", /* don't move */
-        "*Command*shapeStyle:		oval",
-        "*Command*borderWidth:		4",
-        /*"*Command*font:				lucidasans-bolditalic-14",*/
-        "*Command*font:                                sans-serif",
-        "*font:						lucidasanstypewriter-bold-14",
-        "*background:				PeachPuff2",
-        "*foreground:				blue2",
-        "*Command.label:			Close Help",
-        "*geometry: 				+250+150",
-        "*quit.accelerators: <KeyPress>q: set() highlight() notify()",
-        NULL};
+        "*iconPixmap:		helpu.icon", /* don't move */
+        "*Command*shapeStyle:	oval",
+        "*Command*borderWidth: 4",
+        "*Command*font:        lucidasans-bolditalic-14",
+        "*font:		lucidasanstypewriter-bold-14",
+        "*background:		PeachPuff2",
+        "*foreground:		blue2",
+        "*Command.label:	Close Help",
+        "*geometry: 		+250+150",
+        "*quit.accelerators:   <KeyPress>q: set() highlight() notify()",
+        NULL
+    };
 
     sprintf(res, "*iconPixmap:  %s/helpu.icon", HOME);
     fall[0]  = res;
@@ -65,4 +64,6 @@ char **argv;
     XtRealizeWidget(toplevel);
 
     XtAppMainLoop(ac);
+    return 0;
 }
+

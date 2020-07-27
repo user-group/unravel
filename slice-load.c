@@ -7,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static char sccsid[] = "@(#)slice-load.c	1.6  8/16/95";
+//static char sccsid[] = "@(#)slice-load.c	1.6  8/16/95";
 
 int v_opt;
 int c_opt = 0;
@@ -536,7 +536,6 @@ pr_structs()
 void close_gdefs() {
     int more, result, proc;
     call_ptr call;
-    int pass = 0;
     int var, chain;
     set_ptr objs;
     id_set_ptr non_local_defs;
@@ -720,12 +719,12 @@ int read_link_file(name) char *name;
 {
     char l_file_name[2000];
     FILE *l_file;
-    int code, id, pid, fid, stmt, level, file_id, chain;
+    int code, id, pid, stmt, level, chain;
     int cur_proc = 0, cur_file = 0, i, n, addr;
     int fl, fc, tl, tc, field_seq, offset, from, to;
     char id_name[2000], buff[2000], flags[2000];
     id_ptr cur_id;
-    var_ptr var, *add_to;
+    var_ptr *add_to;
     field_ptr at_field, field;
     call_ptr call_stack[200], call;
     actual_ptr actual;
@@ -1011,7 +1010,7 @@ void print_set(s) set_ptr s;
 
 void print_proc_defs(nc, proc) int nc, proc;
 {
-    int i = proc, j, fid, c;
+    int i = proc;
     int at;
     id_set_ptr others;
 
@@ -1069,13 +1068,11 @@ void print_proc_defs(nc, proc) int nc, proc;
 
 void verify_input(l_opt) int l_opt;
 {
-    int nc, i, j, fid, c;
-    int at;
+    int nc, i, j, fid;
     char *line;
     call_ptr call, cp;
     actual_ptr actual;
     field_ptr f;
-    id_set_ptr others;
 
     printf("Files\n");
     for (i = 0; i < n_files; i++) {

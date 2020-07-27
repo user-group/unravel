@@ -62,8 +62,6 @@ static char home[] = HOME;
 
 Widget slicewin;
 
-static char srcfile[1000] = " ";
-
 int SliceTrace;
 int slice_on_var = 0;
 int dice_on_var  = 0;
@@ -273,7 +271,6 @@ char *p[];
     int status;
     int v_opt = 0;
     int i, fx;
-    int file, stmt, proc, var;
 
     if (np < 2)
         exit(1);
@@ -318,7 +315,7 @@ char *p[];
 void do_slice(x, file, stmt, proc, var, line) int file, stmt, proc, var, line;
 Widget x;
 {
-    int p, f, i, status;
+    int f, i;
     int file_proc;
     time_t start, finish, elapsed;
     char cmd[2000], label[1000];
@@ -517,7 +514,6 @@ Widget x;
 {
     int i;
     int f;
-    char buff[400];
 
     SliceClearAll(state->slicewin);
     for (f = 0; f < n_files; f++) {
@@ -646,10 +642,10 @@ void popup_selection(a, state, c) Widget a;
 proc_state_ptr state;
 XtPointer c;
 {
-    Position x, y;
+   
     Widget p;
     char **list;
-    int i;
+   
 
     p = XtParent(XtParent(state->history_list));
     /*
@@ -707,9 +703,7 @@ proc_state_ptr state;
 XawListReturnStruct *list;
 {
     Widget parent;
-    char buff[1000];
-    int ix;
-    char **addr, **base;
+    int  ix;
 
     parent = XtParent(a);
     while (!XtIsTransientShell(parent))
@@ -757,8 +751,6 @@ proc_state_ptr state;
 XawListReturnStruct *list;
 {
     Widget parent;
-    char buff[1000];
-    int ix;
 
     parent = XtParent(a);
     while (!XtIsTransientShell(parent))
@@ -809,8 +801,7 @@ proc_state_ptr state;
 XawListReturnStruct *list;
 {
     Widget parent;
-    char buff[1000];
-    int ix, i, f;
+    int i, f;
 
     parent = XtParent(a);
     while (!XtIsTransientShell(parent))
@@ -922,9 +913,7 @@ int main(argc, argv) int argc;
 char **argv;
 {
     Widget create_widgets();
-    int fd, openok;
     char icon_res[2000];
-    char *suffix, file_name_base[2000];
     MultiSliceFiles f[100];
     int i;
     int t_lines = 0;
@@ -978,8 +967,8 @@ void strech(goal, w) Widget goal, w;
 Widget create_widgets(top, file_name) Widget top;
 char *file_name;
 {
-    static Widget frame, quit, file_button, file_menu;
-    static Widget load, line, content;
+    static Widget frame, quit;
+    static Widget content;
     static Widget select_button, select_menu;
     static Widget proc, var, primary, secondary;
     static Widget op_button, op_menu;
@@ -998,14 +987,7 @@ char *file_name;
     Position cx, hx, x, y;
     int at, dist;
     char buff[1000];
-    static char *plist[] = {"start",
-        "fetch",
-        "redactor",
-        "look_up_value_in_long_name_list",
-        "alpha",
-        "beta",
-        "OMEGA",
-        NULL};
+   
 
     static char pbuff[500] = "<none>", sbuff[500] = "<none>";
     static XtResource res[] = {{XtNrunningFG,

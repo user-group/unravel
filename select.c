@@ -11,24 +11,21 @@
 #include <X11/Xaw/SmeBSB.h>
 #include <X11/Xaw/SmeLine.h>
 #include <X11/Xaw/Viewport.h>
+#include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
-//# include <malloc.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
 #include "config.h"
 #define WAIT 500
 
-static char sccsid[] = "@(#)select.c	1.6  8/16/95";
+// static char sccsid[] = "@(#)select.c	1.6  8/16/95";
 
 int no_slice = 0;
-// int 	sys_nerr;
-// extern __const char *__const sys_errlist[];
 
 char *slicer = "u";
 Widget help_label;
@@ -613,14 +610,11 @@ char *fall[] = {
 			<KeyPress>?: set() highlight() notify() unset()",
     NULL};
 
-int main(np, p) int np;
-char *p[1000];
+int main(int np, char **p)
 {
     XtAppContext ac;
     Widget top;
-    int i;
     char icon_at[2000];
-    time_t clock;
 
     sprintf(icon_at, "*iconPixmap: %s/unravel.icon", HOME);
     fall[0] = icon_at;
@@ -640,4 +634,5 @@ char *p[1000];
 
     make_windows(top, ac);
     XtAppMainLoop(ac);
+    return 0;
 }

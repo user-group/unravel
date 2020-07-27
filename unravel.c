@@ -31,7 +31,7 @@
 #include "config.h"
 #define XtNlinkOnly "linkOnly"
 
-static char sccsid[] = "@(#)unravel.c	1.8  7/26/96";
+//static char sccsid[] = "@(#)unravel.c	1.8  7/26/96";
 
 static int link_only = 0;
 typedef struct {
@@ -77,7 +77,6 @@ int (*compare)();
 
     int i, n_match = 0;
     ll new_ll;
-    struct dirent *new_de;
     ll nodes, node_list = NULL;
 
     dir = opendir(dir_name);
@@ -122,7 +121,6 @@ int scan_dir(f) struct dirent ***f;
 {
     struct dirent **files;
     int count;
-    int i;
 
     count        = myscandir(".", &files, file_selector, compare);
     files[count] = NULL;
@@ -167,7 +165,7 @@ char **f;
 
 void count_system(n_prog, n_dup, n_link) int *n_prog, *n_dup, *n_link;
 {
-    int n   = 0, k, j, s, k_ok, link_ok;
+    int n   = 0, k, s, k_ok, link_ok;
     int dup = 0;
     FILE *sys;
     char buff[2000], name[2000];
@@ -384,7 +382,7 @@ void strech(goal, w) Widget goal, w;
 void make_windows(top) Widget top;
 {
     Widget analysis, review, slice, help, quit;
-    Widget info, dir, dir_label;
+    Widget info, dir;
     Widget src, ana, not, out, prog, dup;
     Widget frame, link;
     Widget review_menu, review_ana, review_slice, review_all, review_this;
@@ -796,10 +794,8 @@ char *p[];
 {
     XtAppContext ac;
     Widget top;
-    char **file_names;
-    struct dirent **files;
-    int n_files, i, n_analyzed, n_prog;
-    int n_not, n_out;
+    int i;
+    
     char icon_at[2000], cmd[2000];
     int sys_ok;
 
