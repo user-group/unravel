@@ -4,8 +4,9 @@
 # include "slice.h"
 # include "lif.h"
 
-static  char    sccsid[] = "@(#)slice.c	1.7  8/16/95";
-static char *sccs_h_id = SLICE_SCCS_ID;
+//static  char    sccsid[] = "@(#)slice.c	1.7  8/16/95";
+//static char *sccs_h_id = SLICE_SCCS_ID;
+
 extern int v_opt;
 static bit_set dont_descend;
 void	(*slice_hook)() = NULL;
@@ -68,7 +69,7 @@ is_id_valid (pid,id)
 void
 set_criteria (int file, int stmt_proc, int stmt, int var_proc, int var)
 {
-	int		var_ix,var_max,var_n;
+	int		var_max,var_n;
 
 	if (var_proc){ /* get all members of a structure */
 		var_n = procs[var_proc].n_locals;
@@ -210,7 +211,7 @@ offset_check(pid,id,off)
     int pid,id,off;
 {
     id_ptr  ids;
-    int     n,is_new;
+    int     n;
     static id_set_ptr   trouble = NULL;
  
     if (pid){
@@ -449,8 +450,8 @@ var_resolve_set (def,proc)
 void
 print_base_state()
 {
-	int		i,top,at;
-	int		ptr,addr;
+	int		i;
+	
 	set_ptr objs;
 
 	printf ("resolve %s at level %d\n",base_pid?
@@ -478,7 +479,7 @@ int
 var_resolve_get (id,pid)
 	int		*id,*pid;
 {
-	int		i,top,at;
+	int		top;
 	int		ptr,addr;
 	set_ptr objs;
 
@@ -771,7 +772,7 @@ add_stmt_to_slice(pid,f,stmt,slice,succ)
 {
 	int		already_in_slice = 0;
 	int		change = 0;
-	bit_set active;
+	
 	id_set_ptr others;
 	int		at;
 	var_ptr	refs;
@@ -952,11 +953,8 @@ print_active (proc,slice)
 	bit_set slice;
 {
 	int		stmt;
-	char	buff[100];
-	int		k,var,n,f;
-	stmt_ptr s;
-	id_set_ptr active;
-
+	int		f;
+	
 	printf ("active sets for proc %s\n",procs[proc].proc_name);
 	f = procs[proc].file_id;
 	for (stmt = procs[proc].entry; stmt <= procs[proc].exit; stmt++){
@@ -1459,12 +1457,10 @@ slice_pass (fs,slices,proc,up,active)
 }
 
 void
-slice_tree (slices,proc,active)
-	bit_set		active,slices[];
-	int			proc;
+slice_tree (bit_set slices[], int proc, bit_set active)
 {
-	int			p,caller_pid,caller_file;
-	int			change,n = 0;
+	int		p,caller_pid,caller_file;
+	int		change;
 	call_ptr	caller;
 
 	clear_bit_set (active);
@@ -1589,7 +1585,7 @@ slice_proc (final_slice_sets,slice_sets,proc,active)
 	bit_set	active;
 {
 	int		i,status;
-	int		pid = proc;
+	
 
 	if(v_opt)printf ("enter slice proc on %s\n",procs[proc].proc_name); 
 	if(is_bit_on (dont_descend,proc)) return; /* don't recurse */
@@ -1632,7 +1628,7 @@ slice (file,proc,stmt,var_proc,var,final_slice_sets,active)
 	int file,proc,stmt,var_proc,var;
 	bit_set	final_slice_sets[],active;
 {
-	int		i,status,call_status;
+	int		i;
 	static	bit_set	*slice_sets,dont_slice = NULL;
 	static	int	need = 1;
 
@@ -1712,7 +1708,7 @@ print_slices1 (print_nodes,slices,active)
 	bit_set	slices[],active;
 	int		print_nodes;
 {
-	int			file,proc;
+	int			file;
 	int			stmt,count;
 	int			line,from,to;
 	int			max = 0,f;

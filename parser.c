@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-static char sccsid[] = "@(#)parser.c	1.9  8/16/95";
+
+//static char sccsid[] = "@(#)parser.c	1.9  8/16/95";
 
 int yydebug;
 extern int yyparse(void);
@@ -36,17 +37,16 @@ void print_options(program_name) char *program_name;
     printf("-z       LIF details\n");
 }
 
-int main(np, parm) int np;
-char *parm[];
+int main(int np, char **parm) 
 {
-    int i;
-    char cmd[2000], buff[2000];
-    int status;
+    int   i;
+    char  buff[2000];
+    int   status;
     FILE *open_ok;
     FILE *t_file  = NULL;
-    int file_open = 0;
+    int   file_open = 0;
     char *dot_at;
-    int out_file_parm;
+    int   out_file_parm;
 
     progname  = parm[0];
     outfile   = stdout;

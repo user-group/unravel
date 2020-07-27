@@ -7,8 +7,8 @@
 
 #define DEPTH 100
 
-static char sccsid[] = "%W%  %G%";
-static bit_set *slices, active;
+//static char sccsid[] = "%W%  %G%";
+
 int lib_opt = 0;
 
 extern int v_opt;
