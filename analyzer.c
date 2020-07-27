@@ -129,7 +129,7 @@ myscandir (char *dir_name, struct dirent ***list, int (*select)(), int (*compare
 
 	int		i,n_match = 0;
 	ll		new_ll;
-	struct dirent *new_de;
+	
 	ll		nodes,node_list = NULL;
 
 	dir = opendir (dir_name);
@@ -164,13 +164,12 @@ myscandir (char *dir_name, struct dirent ***list, int (*select)(), int (*compare
 }
 
 int 
-scan_dir(f)
-	struct dirent ***f;
+scan_dir(struct dirent ***f)
 {
 	struct dirent **files;
 	int		count;
 	int 	alphasort();
-	int		i;
+	
 
 	count = myscandir (".",&files,select_c_file,compare);
 	files[count] = NULL;
@@ -179,9 +178,7 @@ scan_dir(f)
 }
 
 void
-count_lif(n,f,n_ana,n_not,n_out)
-	int		n,*n_ana,*n_not,*n_out;
-	char	**f;
+count_lif(int n, char **f, int *n_ana, int *n_not, int *n_out)
 {
 	int		nk = 0,k = 0,out = 0;
 	struct	stat status_c,status_lif,status_t;
@@ -215,10 +212,9 @@ count_lif(n,f,n_ana,n_not,n_out)
 }
 
 void
-count_system(n_prog,n_dup)
-	int		*n_prog,*n_dup;
+count_system(int *n_prog, int *n_dup)
 {
-	int		n = 0,k,j;
+	int		n = 0,k;
 	int		dup = 0;
 	FILE	*sys;
 	char	buff[2000],name[2000];
@@ -254,8 +250,7 @@ count_system(n_prog,n_dup)
 
 
 void
-notify_unravel (w)
-	Widget	w;
+notify_unravel (Widget w)
 {
 	XClientMessageEvent	e;
 	Status				status = 13;
@@ -301,18 +296,16 @@ do_final_analysis (nf,tt)
 }
 
 void
-do_analysis (nf,tt)
-	nf_ptr		nf;
-	XtIntervalId	*tt;
+do_analysis (nf_ptr nf, XtIntervalId *tt)
 {
 	char	buff[4000],file[1000],mess[2000];
-	int		i,k,cpp_status,parse_status,status,c_status,t_status;
-	int		n,result;
+	int		i,cpp_status,parse_status,status,c_status;
+	int		n;
 	int		len;
-	struct stat	cpp_stat,parse_stat,c_stat,t_stat;
-	XawTextPosition		insert;
+	struct stat	cpp_stat,parse_stat,c_stat;
+	
 	XawTextBlock		chunk;
-	Widget				src;
+	
 	time_t			start,finish,elapsed;
 	int				rate;
 
@@ -409,10 +402,10 @@ run_a (w,nf,c)
 	nf_ptr		nf;
 	XtPointer   c;
 {
-	char	buff[2000],file[1000];
-	int		i,k,cpp_status,parse_status,status,c_status,t_status;
+	char	buff[2000];
+	int		i;
 	int		n;
-	struct stat	cpp_stat,parse_stat,c_stat,t_stat;
+	
 
 	if (nf->running){
 		nf->running = 0;
@@ -513,7 +506,7 @@ alist (w,names,list)
 	name_ptr	names;
 	XawListReturnStruct *list;
 {
-	int		k;
+	
 
 	XawListUnhighlight(w);
 	move_list (list->list_index,names->use,names->skip);
@@ -721,7 +714,7 @@ ilist (w,names,list)
 	name_ptr	names;
 	XawListReturnStruct *list;
 {
-	int		k;
+	
 
 	XawListUnhighlight(w);
 	move_list (list->list_index,names->skip,names->use);
@@ -734,7 +727,7 @@ adjust_lists (frame,left,right)
 	Widget	frame,right,left;
 {
 	Dimension	frame_w,w,left_bw,right_bw,left_w,right_w;
-	int			dist,default_dist;
+	int		default_dist;
 
 	XtUnmanageChild (left);
 	XtUnmanageChild (right);
@@ -831,7 +824,7 @@ void
 align(label1,text1,label2,text2)
 	Widget	label1,text1,label2,text2;
 {
-	Dimension		w1,w2,bw1,bw2;
+	Dimension		w1,w2;
 	int				dd,d;
 	Widget			w,frame;
 
@@ -922,10 +915,10 @@ make_windows(top,ac)
 	Widget			frame,cpp_text,cpp_label;
 	Widget			clear,select_ana;
 	Widget			parse_text,parse_label;
-	Widget			op_menu,opt_menu,op_button,opt_button;
-	Widget			scan_all,select_all;
-	Widget			select_none,select_not,run_selected;
-	static char		cpp_buff[2000] = "",buff[2000];
+	Widget			opt_menu,op_button,opt_button;
+	Widget			select_all;
+	Widget			select_none,select_not;
+	static char		cpp_buff[2000] = "";
 	static char		parser_flags[2000] = "";
 	Dimension		W,H;
 	static struct dirent 	**files;
@@ -1290,7 +1283,7 @@ main (np,p)
 {
 	XtAppContext	ac;
 	Widget			top;
-	int				i;
+	
 	char			icon_at[2000];
 	static XrmOptionDescRec opt[] = {
 		{"-runningfg", "*runningFG", XrmoptionSepArg,NULL},
@@ -1306,4 +1299,5 @@ main (np,p)
 	system ("echo -n ANALYZER \"  \" > HISTORY-A ; date >>HISTORY-A");
 	make_windows(top,ac);
 	XtAppMainLoop(ac);
+	return 0;
 }
