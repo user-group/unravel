@@ -103,13 +103,14 @@ static XtResource resources[] = {
 };
 
 #define Max_line_length 1000
-static void doexpose();
+
+static void doexpose(MultiSliceWidget w, XAnyEvent *x, Region r);
+
 int DEBUG = 0;
 
-static void SliceResize();
+static void SliceResize(MultiSliceWidget w);
 
-void dojump(w, x, y) Widget w;
-XtPointer x, y;
+void dojump(Widget w, XtPointer x, XtPointer y)
 {
     float *p;
 
@@ -123,7 +124,7 @@ XtPointer x, y;
     */
 }
 
-static void fakeexpose(w) MultiSliceWidget w;
+static void fakeexpose(MultiSliceWidget w) 
 {
     XAnyEvent e;
 
@@ -132,8 +133,7 @@ static void fakeexpose(w) MultiSliceWidget w;
     doexpose(w, &e, NULL);
 }
 
-void doscroll(x, w, y) MultiSliceWidget w;
-XtPointer x, y;
+void doscroll(XtPointer x, MultiSliceWidget w, XtPointer y) 
 {
     int i;
     int page = 1;
@@ -160,12 +160,12 @@ XtPointer x, y;
     fakeexpose(w);
 }
 
-static void SliceSetThumb(w, sb) MultiSliceWidget w;
-Widget sb;
-{ w->slicetext.scrollbar = sb; }
+static void SliceSetThumb(MultiSliceWidget w, Widget sb) 
+{ 
+    w->slicetext.scrollbar = sb; 
+}
 
-static void reset_top_line(w, delta) MultiSliceWidget w;
-int delta;
+static void reset_top_line(MultiSliceWidget w, int delta)
 {
     int page, top;
 
@@ -183,18 +183,19 @@ int delta;
     fakeexpose(w);
 }
 
-static void up_a_line(x, w, y) MultiSliceWidget w;
-XtPointer x, y;
-{ reset_top_line(w, -1); }
+static void up_a_line(XtPointer x, MultiSliceWidget w, XtPointer y) 
+{ 
+    reset_top_line(w, -1); 
+}
 
-static void down_a_line(x, w, y) MultiSliceWidget w;
-XtPointer x, y;
-{ reset_top_line(w, 1); }
+static void down_a_line(XtPointer x,MultiSliceWidget w, XtPointer y) 
+{ 
+    reset_top_line(w, 1); 
+}
 
 #include "down.xbm"
 #include "up.xbm"
-Widget CreateSliceBox(name, parent) char *name;
-Widget parent;
+Widget CreateSliceBox(char *name, Widget parent) 
 {
     Widget bar;
     Widget frame;
@@ -329,9 +330,7 @@ Widget parent;
     return slicewin;
 }
 
-static void doinit(r, nw, a, n) MultiSliceWidget r, nw;
-ArgList a;
-Cardinal *n;
+static void doinit(MultiSliceWidget r, MultiSliceWidget nw, ArgList a, Cardinal *n)
 {
     XGCValues values;
     Window root = RootWindowOfScreen(XtScreen(nw));
@@ -390,9 +389,7 @@ Cardinal *n;
         printf("Tabstop %d\n", nw->slicetext.tabstop);
 }
 
-static void buildline(buff, line, n, tabstop, linemap) char *buff, *line;
-int *linemap;
-int n, tabstop;
+static void buildline(char *buff, char *line, int n, int tabstop, int *linemap) 
 {
     int in_at, out_at, add_tabs, n_spaces;
     int i;
@@ -430,11 +427,8 @@ int n, tabstop;
                         w, line_buff, lineoffset,base,at
                  );
 */
-static void drawline(d, win, w, buff, offset, base, at, linemap) Display *d;
-Window win;
-MultiSliceWidget w;
-char *buff;
-int offset, base, at, *linemap;
+static void drawline(Display *d, Window win, MultiSliceWidget w, 
+                     char *buff, int offset, int base, int at, int *linemap) 
 {
     int highlight[Max_line_length];
     int i, chunk, from, to, pos, last;
@@ -501,8 +495,7 @@ int offset, base, at, *linemap;
         printf("\n");
 }
 
-int adjust_line(w, line) int line;
-MultiSliceWidget w;
+int adjust_line(MultiSliceWidget w, int line) 
 {
     int *off, i;
 
@@ -514,9 +507,7 @@ MultiSliceWidget w;
     return line - off[w->slicetext.slicesrc.n_files - 1];
 }
 
-static void doexpose(w, e, r) MultiSliceWidget w;
-XAnyEvent *e;
-Region r;
+static void doexpose(MultiSliceWidget w, XAnyEvent *e, Region r) 
 {
     int base, ascent, descent, h, line, linemap[Max_line_length];
     GC gc_to_use;
@@ -602,8 +593,7 @@ if (DEBUG)fflush(stdout);
         0);
 }
 
-void side_set(w, line_from) int line_from;
-MultiSliceWidget w;
+void side_set(MultiSliceWidget w, int line_from) 
 {
     int ix, at, h;
 
@@ -614,9 +604,8 @@ MultiSliceWidget w;
         XDrawLine(XtDisplay(w), w->slicetext.sidebar, w->slicetext.side_gc, 0, at, 100, at);
 }
 
-static void SliceResize(w) MultiSliceWidget w;
+static void SliceResize(MultiSliceWidget w) 
 {
-
     float top, shown;
     int win, line;
 
@@ -652,8 +641,7 @@ static void SliceResize(w) MultiSliceWidget w;
             side_set(w, line);
 }
 
-void SliceSetTop(w, pc) float pc;
-MultiSliceWidget w;
+void SliceSetTop(MultiSliceWidget w, float pc)
 {
     int old_top;
 
@@ -669,11 +657,12 @@ MultiSliceWidget w;
     }
 }
 
-void SliceRedraw(MultiSliceWidget w) { fakeexpose(w); }
+void SliceRedraw(MultiSliceWidget w) 
+{ 
+    fakeexpose(w); 
+}
 
-void SliceSet(w, line_from, col_from, line_to, col_to, redraw) int line_from, col_from, line_to,
-    col_to, redraw;
-MultiSliceWidget w;
+void SliceSet(MultiSliceWidget w, int line_from, int col_from, int line_to, int col_to, int redraw)
 {
     int line, ix;
 
@@ -724,7 +713,8 @@ MultiSliceWidget w;
         fakeexpose(w);
 }
 
-void SliceClearAll(MultiSliceWidget w) {
+void SliceClearAll(MultiSliceWidget w) 
+{
     int line;
 
     if (DEBUG)
@@ -747,14 +737,11 @@ void SliceClearAll(MultiSliceWidget w) {
 }
 
 void MultiSliceSetHook(MultiSliceWidget w, void (*h)())
-// void (*h)();
-// MultiSliceWidget	w;
 {
     w->slicetext.hook = h;
 }
 
-void find_line_and_file(w, line, fid, line_in_file) int line, *fid, *line_in_file;
-MultiSliceWidget w;
+void find_line_and_file(MultiSliceWidget w, int line, int *fid, int *line_in_file) 
 {
     int *off, i;
 
@@ -801,10 +788,7 @@ void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n
     }
 }
 
-static void MultiSliceSelect(w, event, parm, n) MultiSliceWidget w;
-XEvent *event;
-String *parm;
-Cardinal *n;
+static void MultiSliceSelect(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n) 
 {
     static int line = 0;
     static MultiSliceReturn r;
@@ -830,10 +814,7 @@ Cardinal *n;
         XtCallCallbacks((Widget)w, XtNcallback, (XtPointer)&r);
 }
 
-static void MultiSliceAction(w, event, parm, n) MultiSliceWidget w;
-XEvent *event;
-String *parm;
-Cardinal *n;
+static void MultiSliceAction(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n)
 {
     static int line = 0;
     int y;
@@ -906,7 +887,8 @@ MultiSliceClassRec multisliceClassRec = {{/* core fields */
 
 WidgetClass multisliceWidgetClass = (WidgetClass)&multisliceClassRec;
 
-void BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines) {
+void BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines) 
+{
     int at_line = 1;
     char *old, *at;
     int longest_line = 0, lines;
@@ -966,7 +948,7 @@ void BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines) 
     }
 }
 
-void PrintSliceSrc(w) MultiSliceWidget w;
+void PrintSliceSrc(MultiSliceWidget w) 
 {
     int i, l;
     char *at;
