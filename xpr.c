@@ -1,6 +1,37 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
+
 #include "ansi_parse.h"
 #include "lif.h"
-#include <malloc.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -19,9 +50,12 @@ void source_map(int n, token_ptr from, token_ptr to);
 void assemble_actuals(tree_ptr t, int node_id, int *from, int *upto, int *to);
 void connect_nodes(int from, int to);
 
-int current_addr() { return max_addr; }
+int current_addr(void) 
+{ 
+    return max_addr; 
+}
 
-int is_malloc(name) char *name;
+int is_malloc(char * name) 
 {
     int i;
     for (i = 0; i < n_malloc; i++)
@@ -30,7 +64,8 @@ int is_malloc(name) char *name;
     return 0;
 }
 
-void print_malloc() {
+void print_malloc(void) 
+{
     int i;
     for (i = 0; i < n_malloc; i++)
         printf("\t%s\n", malloc_funs[i]);
@@ -41,7 +76,7 @@ void add_malloc(char *name)
     malloc_funs[n_malloc++] = name; 
 }
 
-addr_tab_ptr addr_of(t) token_ptr t;
+addr_tab_ptr addr_of(token_ptr t) 
 {
     var_ste_ptr var;
     int scope;
@@ -74,8 +109,7 @@ addr_tab_ptr addr_of(t) token_ptr t;
     return var->addr;
 }
 
-void make_malloc(node_id, t) int node_id;
-tree_ptr t;
+void make_malloc(int node_id, tree_ptr t)
 {
     token_ptr var_token;
     addr_tab_ptr addr;
@@ -91,8 +125,7 @@ tree_ptr t;
     }
 }
 
-tree_ptr make_leaf(code, token) token_ptr token;
-int code;
+tree_ptr make_leaf(int code, token_ptr token) 
 {
     tree_ptr new;
 
@@ -104,8 +137,7 @@ int code;
     return new;
 }
 
-tree_ptr make_tree(code, left, right) tree_ptr left, right;
-int code;
+tree_ptr make_tree(int code, tree_ptr left, tree_ptr right) 
 {
     tree_ptr new;
 
@@ -117,7 +149,7 @@ int code;
     return new;
 }
 
-void print_tree(t) tree_ptr t;
+void print_tree(tree_ptr t) 
 {
     if (!x_opt)
         return;
@@ -127,7 +159,7 @@ void print_tree(t) tree_ptr t;
 }
 
 /*static*/
-void print_trees(t) tree_ptr t;
+void print_trees(tree_ptr t)
 {
     static char *ops[] = {"!?",
         "-",
@@ -213,7 +245,7 @@ void print_trees(t) tree_ptr t;
 #define REF 0
 #define DEF 1
 
-void cref_def(is_def, node, chain) int is_def, node, chain;
+void cref_def(int is_def, int node, int chain) 
 {
     int code;
 
@@ -228,7 +260,7 @@ void cref_def(is_def, node, chain) int is_def, node, chain;
     fprintf(outfile, "\n");
 }
 
-void ref_def_id(is_def, node, id, scope) int is_def, node, id, scope;
+void ref_def_id(int is_def, int node, int id, int scope)
 {
     int code, level;
 
@@ -259,8 +291,7 @@ void ref_def_id(is_def, node, id, scope) int is_def, node, id, scope;
     fprintf(outfile, "\n");
 }
 
-void ref_def_var(is_def, node, t, used_as_array) int is_def, node, used_as_array;
-token_ptr t;
+void ref_def_var(int is_def, int node, token_ptr t, int used_as_array) 
 {
     int scope, code, id, level;
     var_ste_ptr var;
@@ -318,7 +349,7 @@ token_ptr t;
     }
 }
 
-token_ptr leftmost(t) tree_ptr t;
+token_ptr leftmost(tree_ptr t)
 {
     token_ptr left, right;
 
@@ -355,7 +386,7 @@ token_ptr leftmost(t) tree_ptr t;
     return NULL;
 }
 
-static token_ptr rightmost(t) tree_ptr t;
+static token_ptr rightmost(tree_ptr t)
 {
     token_ptr left, right;
 
@@ -394,10 +425,7 @@ static token_ptr rightmost(t) tree_ptr t;
 
 #define ID_LVALUE 1
 #define PTR_LVALUE 2
-static int get_lvalue(t, tk, chain_id, array_seen) tree_ptr t;
-token_ptr *tk;
-int *chain_id;
-int *array_seen;
+static int get_lvalue(tree_ptr t, token_ptr *tk, int *chain_id, int *array_seen)
 {
     int lvalue, scope;
     var_ste_ptr var;
@@ -504,9 +532,7 @@ int *array_seen;
     return 0;
 }
 
-static void scan_tree(t, node_id, from_node, upto_node, to_node) tree_ptr t;
-int node_id;
-int *from_node, *to_node, *upto_node;
+static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, int *to_node)
 {
     static tree_ptr recent_typename = NULL;
     int new_from, new_to, new_upto;
@@ -773,9 +799,7 @@ int *from_node, *to_node, *upto_node;
     return;
 }
 
-void make_arg(t, node_id, from, upto, to) tree_ptr t;
-int node_id;
-int *from, *to, *upto;
+void make_arg(tree_ptr t, int node_id, int *from, int *upto, int* to)
 {
     token_ptr tk;
     int lvalue;
@@ -790,9 +814,7 @@ int *from, *to, *upto;
     scan_tree(t, node_id, from, upto, to);
 }
 
-void assemble_actuals(t, node_id, from, upto, to) tree_ptr t;
-int node_id;
-int *from, *to, *upto;
+void assemble_actuals(tree_ptr t, int node_id, int *from, int *upto, int *to) 
 {
     if (!t)
         return;
@@ -804,8 +826,7 @@ int *from, *to, *upto;
         make_arg(t, node_id, from, upto, to);
 }
 
-int xpr_gen(t, from, to) tree_ptr t;
-int *from, *to;
+int xpr_gen(tree_ptr t, int *from, int *to) 
 {
     token_ptr tk;
     int lvalue;
@@ -839,3 +860,4 @@ int *from, *to;
         *to = node_id;
     return node_id; /* return the main stmt node */
 }
+
