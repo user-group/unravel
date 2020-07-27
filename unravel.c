@@ -1,4 +1,36 @@
 /*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
+
+
+/*
 *******************************************************************
 *                                                                 *
 *   Unravel control panel                                         *
@@ -34,6 +66,7 @@
 //static char sccsid[] = "@(#)unravel.c	1.8  7/26/96";
 
 static int link_only = 0;
+
 typedef struct {
     Widget top, src, ana, not, out, prog, dup, link;
     Widget text;
@@ -42,30 +75,26 @@ typedef struct {
 
 Widget help_label;
 
-void button_help(w, mess, e, ok) Widget w;
-char *mess;
-XEvent *e;
-Boolean *ok;
-{ XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL); }
+void button_help(Widget w, char *mess, XEvent *e, Boolean *ok)
+{ 
+    XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL); 
+}
 
-void set_button_help(w, mess) Widget w;
-char *mess;
+void set_button_help(Widget w, char *mess)
 {
     static char buff[] = "Description of object under mouse pointer is displayed here";
     XtAddEventHandler(w, EnterWindowMask, False, button_help, mess);
     XtAddEventHandler(w, LeaveWindowMask, False, button_help, buff);
 }
 
-int compare(a, b) struct dirent **a, **b;
+int compare(struct dirent **a, struct dirent **b) 
 {
     if (strcmp((*a)->d_name, (*b)->d_name) > 0)
         return 1;
     return 0;
 }
-int myscandir(dir_name, list, select, compare) char *dir_name;
-struct dirent ***list;
-int (*select)();
-int (*compare)();
+
+int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*compare)()) 
 {
     DIR *dir;
     struct dirent *entry;
@@ -104,7 +133,7 @@ int (*compare)();
     return n_match;
 }
 
-int file_selector(entry) struct dirent *entry;
+int file_selector(struct dirent *entry) 
 {
     int ix;
 
@@ -117,7 +146,7 @@ int file_selector(entry) struct dirent *entry;
     return 0;
 }
 
-int scan_dir(f) struct dirent ***f;
+int scan_dir(struct dirent ***f) 
 {
     struct dirent **files;
     int count;
@@ -128,15 +157,13 @@ int scan_dir(f) struct dirent ***f;
     return count;
 }
 
-void count_lif(n, f, n_ana, n_not, n_out) int n, *n_ana, *n_not, *n_out;
-char **f;
+void count_lif(int n, char **f, int *n_ana, int *n_not, int *n_out) 
 {
     int nk = 0, k = 0, out = 0;
     struct stat status_c, status_lif, status_t;
-    int c, lif, t;
+    int  c, lif, t;
     char buff[2000];
-
-    int s, i;
+    int  s, i;
 
     for (i = 0; i < n; i++) {
         c = stat(f[i], &status_c);
@@ -163,7 +190,7 @@ char **f;
     *n_out = out;
 }
 
-void count_system(n_prog, n_dup, n_link) int *n_prog, *n_dup, *n_link;
+void count_system(int *n_prog, int *n_dup, int *n_link)
 {
     int n   = 0, k, s, k_ok, link_ok;
     int dup = 0;
@@ -209,9 +236,7 @@ void count_system(n_prog, n_dup, n_link) int *n_prog, *n_dup, *n_link;
     *n_dup  = dup;
 }
 
-void update(w, n, mess) Widget w;
-int n;
-char *mess;
+void update(Widget w, int n, char *mess) 
 {
     char buff[2000];
 
@@ -219,7 +244,7 @@ char *mess;
     XtVaSetValues(w, XtNlabel, buff, NULL);
 }
 
-void update_src_info(label) label_ptr label;
+void update_src_info(label_ptr label)
 {
     char **file_names = NULL;
     struct dirent **files;
@@ -263,17 +288,14 @@ void update_src_info(label) label_ptr label;
         n_dup == 1 ? "%3d duplicate procedure found" : "%3d duplicate procedures found");
 }
 
-void ana_done(w, labels, e, ok) Widget w;
-XEvent *e;
-label_ptr labels;
-Boolean *ok;
-{ update_src_info(labels); }
+void ana_done(Widget w, label_ptr labels, XEvent *e, Boolean *ok) 
+{ 
+    update_src_info(labels); 
+}
 
-void push_analysis(w, labels, w_data) Widget w;
-label_ptr labels;
-XtPointer w_data;
+void push_analysis(Widget w, label_ptr labels, XtPointer w_data) 
 {
-    char buff[2000];
+    char       buff[2000];
     static int set = 0;
 
     if (!set) {
@@ -287,7 +309,6 @@ XtPointer w_data;
 }
 
 void push_review(Widget w, int hist, XtPointer w_data)
-
 {
     char buff[2000];
     static char *title[]     = {"Result of Last Analysis",
@@ -304,21 +325,17 @@ void push_review(Widget w, int hist, XtPointer w_data)
     system(buff);
 }
 
-void push_slice(w, u_data, w_data) Widget w;
-XtPointer u_data;
-XtPointer w_data;
+void push_slice(Widget w, XtPointer u_data, XtPointer w_data) 
 {
     char buff[2000];
     sprintf(buff, "%s/select %s >HISTORY-S 2>&1 &", HOME, link_only ? "-noslice" : "");
     system(buff);
 }
 
-void push_dir(w, labels, w_data) Widget w;
-XtPointer w_data;
-label_ptr labels;
+void push_dir(Widget w, label_ptr labels, XtPointer w_data)
 {
     char buff[2000];
-    int status;
+    int  status;
     XawTextPosition from, to;
     XawTextBlock block;
 
@@ -344,9 +361,7 @@ label_ptr labels;
     }
 }
 
-void push_help(w, u_data, w_data) Widget w;
-XtPointer u_data;
-XtPointer w_data;
+void push_help(Widget w, XtPointer u_data, XtPointer w_data)
 {
     char buff[2000];
 
@@ -358,19 +373,17 @@ XtPointer w_data;
     system(buff);
 }
 
-void done(w, u_data, w_data) Widget w;
-XtPointer u_data;
-XtPointer w_data;
+void done(Widget w, XtPointer u_data, XtPointer w_data) 
 {
     system("/bin/cat HISTORY >> HISTORY.LOG; /bin/rm -f HISTORY *ERR");
     exit(0);
 }
 
-void strech(goal, w) Widget goal, w;
+void strech(Widget goal, Widget w) 
 {
     Dimension width, bw;
-    Position x;
-    int dist;
+    Position  x;
+    int       dist;
 
     XtUnmanageChild(w);
     XtVaGetValues(goal, XtNdefaultDistance, &dist, XtNwidth, &width, NULL);
@@ -379,7 +392,7 @@ void strech(goal, w) Widget goal, w;
     XtManageChild(w);
 }
 
-void make_windows(top) Widget top;
+void make_windows(Widget top) 
 {
     Widget analysis, review, slice, help, quit;
     Widget info, dir;
@@ -746,7 +759,6 @@ char *fall[] = {
     /* don't move the first entry (iconPixmap) */
     "*iconPixmap:	unravel.icon",
     "*font:	lucidasans-bold-14",
-
     "*background: seashell3",
     "*foreground: blue",
     "*shapeStyle: oval",
@@ -786,11 +798,24 @@ char *fall[] = {
         XtGetApplicationResources (top,&a_res,res,XtNumber(res),NULL,0);
 
 */
-static XtResource res[] = {{XtNlinkOnly, XtCValue, XtRInt, sizeof(int), 0, XtRString, "0"}};
+static XtResource res[] = 
+    {{XtNlinkOnly, 
+      XtCValue, 
+      XtRInt, 
+      sizeof(int), 
+      0, 
+      XtRString, 
+      "0"
+    }};
 
-static XrmOptionDescRec opt[] = {{"-noslice", "*linkOnly", XrmoptionNoArg, "1"}};
-int main(np, p) int np;
-char *p[];
+static XrmOptionDescRec opt[] = 
+    {{"-noslice", 
+      "*linkOnly", 
+      XrmoptionNoArg, 
+      "1"
+    }};
+
+int main(int np, char **p) 
 {
     XtAppContext ac;
     Widget top;
@@ -841,3 +866,4 @@ char *p[];
     XtAppMainLoop(ac);
     return 0;
 }
+
