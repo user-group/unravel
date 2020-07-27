@@ -5,8 +5,8 @@
 #define FALSE 0
 #define TRUE 1
 
-static char *sccs_h_id = SETS_SCCS_ID;
-static char *sccs_id   = "@(#)sets.c	1.2  8/16/95";
+//static char *sccs_h_id = SETS_SCCS_ID;
+//static char *sccs_id   = "@(#)sets.c	1.2  8/16/95";
 
 void clear_id_set(head) id_set_ptr head;
 {

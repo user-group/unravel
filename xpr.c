@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static char sccsid[] = "@(#)xpr.c	1.4  4/26/95";
+// static char sccsid[] = "@(#)xpr.c	1.4  4/26/95";
 
 #define MAX_MALLOC 100
 static int max_addr   = 0;
@@ -36,8 +36,10 @@ void print_malloc() {
         printf("\t%s\n", malloc_funs[i]);
 }
 
-void add_malloc(name) char *name;
-{ malloc_funs[n_malloc++] = name; }
+void add_malloc(char *name) 
+{ 
+    malloc_funs[n_malloc++] = name; 
+}
 
 addr_tab_ptr addr_of(t) token_ptr t;
 {

@@ -6,7 +6,8 @@
 #include "lif.h"
 #include "sym_tab.h"
 
-static char sccsid[]   = "@(#)sym_tab.c	1.4  4/26/95";
+//static char sccsid[]   = "@(#)sym_tab.c	1.4  4/26/95";
+
 static int scope_level = 1;
 static symbol_table_entries symbol_table[MAX_NEST];
 static int max_local_id  = 1;
@@ -334,7 +335,7 @@ type_ptr make_abstract_type(flag, style, formals) token_ptr formals;
 unsigned int flag;
 int style;
 {
-    type_ptr new, old;
+    type_ptr new;
 
     new          = alloc_type();
     new->is      = flag;
@@ -1140,7 +1141,7 @@ void print_st() {
     type_ste_ptr types;
     var_ste_ptr vars;
     tag_ste_ptr tags;
-    token_ptr token, t;
+    token_ptr token;
     type_ptr details;
     int i;
     static char *ty[] = {"scalar", "fun ret", "array of", "ptr to"};
