@@ -15,18 +15,21 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/time.h>
-# include <malloc.h>
+//# include <malloc.h>
 # include <errno.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <string.h>
+
 # include "config.h"
 # define WAIT 500
 
 static  char    sccsid[] = "@(#)select.c	1.6  8/16/95";
 
 int	no_slice = 0;
-int 	sys_nerr;
-extern __const char *__const sys_errlist[];
+//int 	sys_nerr;
+//extern __const char *__const sys_errlist[];
+
 
 char	*slicer = "u";
 Widget	help_label;
@@ -121,8 +124,8 @@ need_to_link (main_file_name)
 	end--;
 
 	if (stat(main_file_name,&c_stat))
-		cannot_link (main_file_name,errno < sys_nerr?
-			sys_errlist[errno]:"","Could not access %s: %s");
+		cannot_link (main_file_name,
+			strerror(errno),"Could not access %s: %s");
 	strcpy (file_name,main_file_name);
 	file_name[end] = 'K';
 	if (stat(file_name,&k_stat)) return clear_y(main_file_name);
@@ -137,21 +140,21 @@ need_to_link (main_file_name)
 		strcpy (file_name,progs[i]);
 		end = strlen(file_name) - 1;
 		if (stat(file_name,&src_stat))
-			cannot_link (file_name,errno < sys_nerr?
-				sys_errlist[errno]:"","Could not access %s: %s");
+			cannot_link (file_name,
+				strerror(errno),"Could not access %s: %s");
 		file_name[end] = 'T';
 		if (stat(file_name,&t_stat))
-			cannot_link (file_name,errno < sys_nerr?
-				sys_errlist[errno]:"","Could not access %s: %s");
+			cannot_link (file_name,
+				strerror(errno),"Could not access %s: %s");
 		file_name[end] = 'H';
 		if (stat(file_name,&h_stat))
-			cannot_link (file_name,errno < sys_nerr?
-				sys_errlist[errno]:"","Could not access %s: %s");
+			cannot_link (file_name,
+				strerror(errno),"Could not access %s: %s");
 		file_name[end] = '\0';
 		strcat (file_name,"LIF");
 		if (stat(file_name,&lif_stat))
-			cannot_link (file_name,errno < sys_nerr?
-				sys_errlist[errno]:"","Could not access %s: %s");
+			cannot_link (file_name,
+				strerror(errno),"Could not access %s: %s");
 		if ( (h_stat.st_mtime < src_stat.st_mtime) ||
 			(t_stat.st_mtime < src_stat.st_mtime) ||
 			(lif_stat.st_mtime < src_stat.st_mtime) )
