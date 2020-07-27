@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-static char *sccs_h_id = CONTROL_SCCS_ID;
-static char *sccs_id   = "@(#)control.c	1.1  8/10/95";
+//static char *sccs_h_id = CONTROL_SCCS_ID;
+//static char *sccs_id   = "@(#)control.c	1.1  8/10/95";
 
 void control(code, ctrl_entry, ctrl_exit, stmt_entry, stmt_exit, else_entry, else_exit) int code,
     ctrl_entry, ctrl_exit, stmt_entry, stmt_exit, else_entry, else_exit;

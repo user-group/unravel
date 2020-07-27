@@ -4,7 +4,9 @@
 #include <string.h>
 
 #include "lif.h"
-static char sccsid[] = "@(#)slink.c	1.4  4/26/95";
+
+
+//static char sccsid[] = "@(#)slink.c	1.4  4/26/95";
 int v_opt            = 0;
 
 typedef struct local_struct local_rec, *local_ptr;
@@ -145,7 +147,7 @@ void get_lif_files(n, f, dir) int n;
 file_rec f[];
 char *dir;
 {
-    int i, j, k, len;
+    int i, j;
     int pid = 0, pix;
     int code, id, chain, fid, offset, addr, scope;
     char buff[2000], name[2000], flags[2000];
@@ -281,7 +283,7 @@ int n;
 file_rec f[];
 char *dir;
 {
-    int i, j, k, len, nr;
+    int i, j, len, nr;
     char buff[2000];
     FILE *t_file;
     int t_globals = 0;
@@ -511,7 +513,7 @@ proc_ptr *assign_procs(n_files, f) int n_files;
 file_rec f[];
 {
     int total = 0;
-    int i, j, k, last, at;
+    int i, j, last, at;
     proc_ptr *procs;
 
     last = 0;
@@ -570,8 +572,8 @@ file_rec f[];
 {
     int total = 0;
     addr_ptr *addrs;
-    int i, j, last = 0, at;
-    int pix, real_pid, real_id;
+    int i, j, last = 0;
+    int pix, real_id;
     int addr_found;
     local_ptr lx;
 
@@ -807,11 +809,11 @@ file_ptr f;
 char *dir;
 {
     char out_name[2000], lif_name[2000];
-    char file[2000];
+    
     FILE *out_file, *lif_file;
-    int i, j, id, pid, px, code, node, chain;
+    int i, id, pid, px, code, node, chain;
     int gid;
-    char name[2000], flags[2000], buff[2000];
+    char flags[2000], buff[2000];
     field_ptr field;
 
     sprintf(out_name, "%s/%sLINK", dir, f[0].name);
@@ -995,7 +997,7 @@ proc_ptr procs[];
 char *dir;
 global_rec g[];
 {
-    char buff[2000], name[2000], flags[2000];
+    char buff[2000], name[2000];
     FILE *h_file, *k_file;
     h_ptr new_h, h_list = NULL;
     h_ptr at_h = NULL;
@@ -1106,7 +1108,7 @@ char *p[];
     proc_ptr *procs;
     chain_ptr *chains;
     addr_ptr *addrs;
-    int t_chains, i, fx;
+    int i, fx;
     char *slash, *main_name;
 
     if ((np < 2) || (np > 3)) {

@@ -50,6 +50,9 @@
 #define XtCAltFont XtCFont
 #define XtCTabStop "TabStop"
 
+#include <X11/IntrinsicP.h>
+
+
 /* declare specific MultiSliceWidget class and instance datatypes */
 
 typedef struct _MultiSliceClassRec*   MultiSliceWidgetClass;

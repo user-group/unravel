@@ -8,7 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 
-static char sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
+//static char sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
 static bit_set *slices, active;
 
 extern int v_opt;
@@ -46,8 +46,6 @@ char *p[];
     int i, fx;
     int file, stmt, proc, var;
     char message[1000], cmd[2000];
-    int line_number;
-    int is_err;
     int t_locals = 0;
     int t_stmts  = 0;
 
@@ -160,7 +158,7 @@ void verify_criterion(int file, int stmt, int proc, int var) {
 }
 
 void do_slice(int file, int stmt, int proc, int var) {
-    int f, i, at, status;
+    int f, i, at;
     int stmt_proc;
     int size = 0;
     time_t start, finish;

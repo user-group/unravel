@@ -4,7 +4,7 @@
 #include "lif.h"
 #include <string.h>
 
-static char sccsid[] = "@(#)stmt.c	1.9  8/11/95";
+//static char sccsid[] = "@(#)stmt.c	1.9  8/11/95";
 
 list_ptr returns      = NULL;
 static int max_proc   = 0;

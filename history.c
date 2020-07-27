@@ -41,7 +41,7 @@ void clear_history(void) { history = NULL; }
 void setup_history(file) char *file;
 {
     FILE *h_file;
-    int var_pid, var_id, file_id, stmt_id, n_files, is_partial;
+    int var_pid, var_id, file_id, stmt_id, is_partial;
     int fid, s;
     history_ptr new, at;
     char text[1000];

@@ -5,7 +5,7 @@
 #include "lif.h"
 
 int max_chain        = 0;
-static char sccsid[] = "@(#)chain.c	1.3  5/5/94";
+//static char sccsid[] = "@(#)chain.c	1.3  5/5/94";
 
 int current_chain() { return max_chain; }
 
@@ -261,7 +261,7 @@ tree_ptr t;
 chain_ptr c;
 {
     var_ste_ptr var;
-    int code, scope = 0, is_ptr, is_array;
+    int code, scope = 0;
 
     var = look_up_id(NULL, buff, &scope);
     if (var) {
@@ -295,7 +295,7 @@ chain_ptr c;
 {
     int status = 0;
     var_ste_ptr var;
-    int scope, is_ptr, is_array;
+    int scope;
     char hold[2000];
 
     switch (t->op_code) {
