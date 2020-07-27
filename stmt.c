@@ -2,6 +2,7 @@
 # include "ansi_parse.h"
 # include "control.h"
 # include "lif.h"
+# include "stmt.h"
 
 	static  char    sccsid[] = "@(#)stmt.c	1.9  8/11/95";
 
@@ -10,7 +11,7 @@ static	int	max_proc = 0;
 static	proc_ptr	procs = NULL;
 static	int			pid = 0;
 
-void gen_require (int node_required, int from, int to);
+
 void connect_nodes (int from, int to);
 
 label_ptr	labels = NULL;
@@ -199,8 +200,7 @@ int	get_stmt_no (){
 }
 
 void
-connect_nodes (from,to)
-	int		from,to;
+connect_nodes (int from, int to)
 {
 	fprintf (outfile,"%d(%d,%d)",LIF_SUCC,from,to);
 	if (z_opt) fprintf (outfile,"   connect from %d to %d",from,to);

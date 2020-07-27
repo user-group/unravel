@@ -66,8 +66,7 @@ is_id_valid (pid,id)
 }
 
 void
-set_criteria (file,stmt_proc,stmt,var_proc,var)
-	int		file,stmt,stmt_proc,var_proc,var;
+set_criteria (int file, int stmt_proc, int stmt, int var_proc, int var)
 {
 	int		var_ix,var_max,var_n;
 

@@ -135,9 +135,12 @@ char *var_name();
 void	(*slice_hook)();
 void	(*slice_pass_hook)();
 char	**get_slice_list ();
+
 int find_slice ();
-extern void clear_active(void);
-extern void print_slices1(int print_nodes, bit_set slices[], bit_set active);
-extern void slice (int file, int proc, int stmt, int var_proc, int var, bit_set final_slice_sets[], bit_set active);
+void clear_active(void);
+void print_slices1(int print_nodes, bit_set slices[], bit_set active);
+void slice (int file, int proc, int stmt, int var_proc, int var, bit_set final_slice_sets[], bit_set active);
+
+void set_criteria (int file, int stmt_proc, int stmt, int var_proc, int var);
 	
 #endif /* _slice_h */

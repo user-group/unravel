@@ -1,8 +1,12 @@
+
+# include <stdlib.h>
+# include <string.h>
+
 # include "ansi_parse.h"
 # include "lif.h"
-# include <malloc.h>
-# include <string.h>
-	static  char    sccsid[] = "@(#)sym_tab.c	1.4  4/26/95";
+# include "sym_tab.h"
+
+static  char    sccsid[] = "@(#)sym_tab.c	1.4  4/26/95";
 static int scope_level = 1;
 static symbol_table_entries	symbol_table[MAX_NEST];
 static	int max_local_id = 1;
@@ -13,9 +17,7 @@ static symbol_table_entries	closed_symbol_tables[MAX_ST];
 static int	n_st = 0;
 
 
-void insert_struct_members (char * base, var_ste_ptr members, var_ste_ptr *st, int *off_set);
-void list_procs(void);
-void print_flags(int flags);
+
 
 void
 declared(var)
@@ -389,7 +391,7 @@ open_scope()
 *********************************************************************
 */
 void
-close_scope()
+close_scope(void)
 {
 	type_ste_ptr	types;
 	var_ste_ptr		vars;
@@ -1064,13 +1066,13 @@ var_ste_ptr look_up_id (table,name,scope)
 *********************************************************************
 */
 void
-start_typedef()
+start_typedef(void)
 {
 	in_typedef = True;
 }
 
 void
-end_typedef()
+end_typedef(void)
 {
 	in_typedef = False;
 }

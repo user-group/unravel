@@ -1095,8 +1095,7 @@ identifier
 %%
 
 void
-print_flags (flags)
-	int		flags;
+print_flags (int flags)
 {
 	static char	*flag_names[] = {
 		"char", "short", "int", "long", "signed",
@@ -1163,8 +1162,7 @@ print_decl (type_spec,var_specs)
 }
 
 void
-print_token(t)
-	token_ptr	t;
+print_token(token_ptr t)
 {
 	printf ("TOKEN:");
 	if (t){

@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <time.h>
+# include <unistd.h>
 
 
 static  char    sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
@@ -14,6 +15,12 @@ static	bit_set	*slices,active;
 extern	int		v_opt;
 	int			n_opt;
 	int			l_opt,g_opt,s_opt;
+
+extern int read_k_file(char *name);
+extern int read_link_file(char *name);
+extern void print_all_active(bit_set slices[], bit_set active);
+void verify_criterion(int file, int stmt, int proc, int var);
+void do_slice(int file, int stmt, int proc, int var);
 
 void 
 time_out(sig, code, scp, addr)
@@ -123,8 +130,7 @@ main(np,p)
 }
 
 void
-verify_criterion(file,stmt,proc,var)
-	int	file,stmt,proc,var;
+verify_criterion(int file, int stmt, int proc, int var)
 {
 	if ((file < 0) || (file >= n_files)){
 		fprintf (stderr,"file %d is out of range [0..%d]",file,
@@ -158,8 +164,7 @@ verify_criterion(file,stmt,proc,var)
 }
 
 void
-do_slice(file,stmt,proc,var)
-	int	file,stmt,proc,var;
+do_slice(int file, int stmt, int proc, int var)
 {
 	int		f,i,at,status;
 	int		stmt_proc;

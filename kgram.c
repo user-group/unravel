@@ -1,13 +1,25 @@
-extern char *malloc(), *realloc();
+//extern char *malloc(), *realloc();
 
 # line 2 "kgram.y"
+# include <stdlib.h>
 # include <stdio.h>
 # include "ansi_parse.h"
 # include "lif.h"
-	static	set_typedef = 0;
-	static  char    sccsid[] = "@(#)kgram.y	1.7  10/26/94";
-	static	char	*parse_h_sccs_id = PARSE_H_SCCS_ID;
-	static	char	*lif_h_sccs_id = LIF_H_SCCS_ID;
+# include "sym_tab.h"
+# include "stmt.h"
+
+extern void clear_type_flag(void);
+extern void end_init(void);
+
+void start_local_decl(void);
+int yyerror(char *msg);
+int yylex(void);
+
+static	int set_typedef = 0;
+// static  char    sccsid[] = "@(#)kgram.y	1.7  10/26/94";
+static	char	*parse_h_sccs_id = PARSE_H_SCCS_ID;
+static	char	*lif_h_sccs_id = LIF_H_SCCS_ID;
+
 # define IDENTIFIER 257
 # define CONSTANT 258
 # define STRING_LITERAL 259
@@ -79,8 +91,8 @@ YYSTYPE yylval, yyval;
 
 # line 1069 "kgram.y"
 
-print_flags (flags)
-	int		flags;
+void 
+print_flags (int flags)
 {
 	static char	*flag_names[] = {
 		"char", "short", "int", "long", "signed",
