@@ -33,7 +33,8 @@
 # define WAIT 500
 # include "config.h"
 
-	static  char    sccsid[] = "@(#)analyzer.c	1.5  8/16/95";
+//static  char    sccsid[] = "@(#)analyzer.c	1.5  8/16/95";
+
 /*
 # define XtNrunningFG "runningFG"
 # define XtNrunningBG "runningBG"
@@ -54,6 +55,7 @@
 # define XtNrunningBG "runningBG"
 Widget	help_label;
 int unravel_win_id = 0;
+
 typedef struct name_struct name_rec,*name_ptr;
 struct name_struct {
 	char	**use,**skip,**pick;
@@ -78,11 +80,7 @@ struct nf_struct {
 };
 
 void
-button_help (w,mess,e,ok)
-	Widget	w;
-	char	*mess;
-	XEvent	*e;
-	Boolean	*ok;
+button_help (Widget w, char *mess, XEvent *e, Boolean *ok)
 {
 	XtVaSetValues (help_label,
 		XtNlabel, (XtArgVal) mess,
@@ -90,9 +88,7 @@ button_help (w,mess,e,ok)
 }
 
 void
-set_button_help (w,mess)
-	Widget	w;
-	char	*mess;
+set_button_help (Widget w, char *mess)
 {
 	static char buff[] = 
 		"Description of object under mouse pointer is displayed here";
@@ -101,16 +97,14 @@ set_button_help (w,mess)
 }
 
 int 
-compare(a,b)
-	struct dirent **a,**b;
+compare(struct dirent ** a, struct dirent **b)
 {
 	if (strcmp((*a)->d_name,(*b)->d_name) > 0) return 1;
 	return 0;
 }
 
 static int 
-select_c_file(entry)
-	struct dirent *entry;
+select_c_file(struct dirent *entry)
 {
 	int	len;
 
@@ -123,11 +117,7 @@ select_c_file(entry)
 }
 
 int 
-myscandir (dir_name,list,select,compare)
-	char	*dir_name;
-	struct dirent ***list;
-	int (*select)();
-	int (*compare)();
+myscandir (char *dir_name, struct dirent ***list, int (*select)(), int (*compare)())
 {
 	DIR		*dir;
 	struct dirent *entry;
