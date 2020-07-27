@@ -267,7 +267,7 @@ int find_ptr(tree_ptr t, chain_ptr c)
     }
 }
 
-int get_chain(t) tree_ptr t;
+int get_chain(tree_ptr t)
 {
     chain_rec c;
     int status = 0;
@@ -284,13 +284,17 @@ int get_chain(t) tree_ptr t;
     return c.chain_id;
 }
 
-void print_local_ptr_tab() { printf("\nLocal Pointer Table\n"); }
+void print_local_ptr_tab(void) 
+{ 
+    printf("\nLocal Pointer Table\n"); 
+}
 
-void print_global_ptr_tab() { printf("\nGlobal Pointer Table\n"); }
+void print_global_ptr_tab(void) 
+{ 
+    printf("\nGlobal Pointer Table\n"); 
+}
 
-void dot_really_ptr(buff, t, c) char *buff;
-tree_ptr t;
-chain_ptr c;
+void dot_really_ptr(char *buff, tree_ptr t, chain_ptr c)
 {
     var_ste_ptr var;
     int code, scope = 0;
@@ -321,9 +325,7 @@ chain_ptr c;
     }
 }
 
-void assemble_dot(buff, t, c) char *buff;
-tree_ptr t;
-chain_ptr c;
+void assemble_dot(char *buff, tree_ptr t, chain_ptr c) 
 {
     int status = 0;
     var_ste_ptr var;

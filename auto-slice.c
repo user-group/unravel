@@ -53,12 +53,12 @@ extern void print_all_active(bit_set slices[], bit_set active);
 void verify_criterion(int file, int stmt, int proc, int var);
 void do_slice(int file, int stmt, int proc, int var);
 
-void time_out(sig, code, scp, addr) int sig, code;
-struct sigcontext *scp;
-char *addr;
-{ abandon_slice = 1; }
+void time_out(int sig, int code, struct sigcontext *scp, char *addr)
+{ 
+    abandon_slice = 1; 
+}
 
-int find_main() {
+int find_main(void) {
     int p;
     for (p = 1; p <= n_procs; p++) {
         if (strcmp(procs[p].proc_name, "main") == 0)
@@ -67,12 +67,12 @@ int find_main() {
     return 0;
 }
 
-float f_stmts = 0.0;
-int hours = 0, mins = 0;
+float        f_stmts  = 0.0;
+int          hours    = 0, 
+             mins     = 0;
 unsigned int max_time;
 
-int main(np, p) int np;
-char *p[];
+int main(int np, char **p) 
 {
     int status;
     int i, fx;
@@ -161,9 +161,12 @@ char *p[];
             }
         }
     system("date >>AUTO");
+    
+    return 0;
 }
 
-void verify_criterion(int file, int stmt, int proc, int var) {
+void verify_criterion(int file, int stmt, int proc, int var) 
+{
     if ((file < 0) || (file >= n_files)) {
         fprintf(stderr, "file %d is out of range [0..%d]", file, n_files - 1);
         exit(1);
@@ -189,14 +192,15 @@ void verify_criterion(int file, int stmt, int proc, int var) {
     }
 }
 
-void do_slice(int file, int stmt, int proc, int var) {
-    int f, i, at;
-    int stmt_proc;
-    int size = 0;
+void do_slice(int file, int stmt, int proc, int var) 
+{
+    int    f, i, at;
+    int    stmt_proc;
+    int    size = 0;
     time_t start, finish;
-    int elapsed;
-    char cmd[1000];
-    float pcent;
+    int    elapsed;
+    char   cmd[1000];
+    float  pcent;
 
     clear_active();
     for (i = 1; i <= n_procs; i++) {
@@ -269,3 +273,4 @@ void do_slice(int file, int stmt, int proc, int var) {
     if (v_opt)
         print_all_active(slices, active);
 }
+
