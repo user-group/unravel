@@ -1,0 +1,63 @@
+                     Slicer Control Panel Help
+
+  This is the control panel for the slicer.  The slicer allows the
+user to select variables and source lines to perform slices on.  A
+program slice, calculated for a variable, v, and a statement, n, is
+the set of statements that might influence the value of v just before
+execution of statement n.
+
+  Program slices can be used as a program understanding aid to help
+answer questions about a single computation.  If the program slice is
+smaller than the original program, it should be easier to understand
+just the slice than the entire program.
+
+  Program slices may be combined to find statements common
+to two computations (backbone slice) or statements unique
+to one of two computations.
+
+The slicer interface presents the following:
+  Select -- A menu to pop up lists for selection
+    local variable -- This brings up a list of the procedures of the
+program.  Selecting "No Selection" takes no action.  Selecting a
+procedure brings up a list of variables local to the procedure to
+select from.  Selecting a variable makes that variable the variable in
+the slicing criteria.
+    global variable -- This brings up a list of the files of the
+program.  Selecting "No Selection" takes no action.  Selecting a file
+brings up a list of variables declared in that file to select from.
+Selecting a variable makes that variable the variable in the slicing
+criteria.
+    primary -- This selection brings up a list of already computed
+slices.  Selecting a slice makes it the primary slice.
+    secondary -- This selection brings up a list of already computed
+slices.  Selecting a slice makes it the secondary slice.
+    Operation  -- A menu for selecting an operation to apply to the
+primary and secondary slices.
+    Help -- This selection brings up this text in a window.
+    scroll bar -- This can be used to move around in the source file.
+          Left Mouse Button -- Page up
+          Right Mouse Button -- Page down
+          Middle Mouse Button -- Go to indicated location
+    tick bar -- Each tick represents a marked location or locations in
+the source file.  Click the tick bar at the mark to go to that
+location.
+
+  To compute a slice select a variable and a line from the
+program.  To select a variable first select either global or local
+variables from the select menu.  Follow the appropriate instructions as
+given above.  After a variable has been selected, use the mouse in the
+text window to select a line and compute the slice on the current
+variable and selected line by clicking either the left or middle mouse
+button on the desired line.  If the left mouse button is selected, the
+slice becomes the primary selection, if the middle mouse button is
+clicked, the slice becomes the secondary selection.
+
+  To make an already computed slice the primary or secondary
+selection, use the primary or secondary menu items
+to pop up a list of already computed slices.
+
+  After a primary and a secondary slice are selected, the
+operation menu can be used to compute backbone slices
+and program dices.
+
+Version: @(#)u.help	1.2  9/23/94
