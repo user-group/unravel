@@ -273,22 +273,25 @@ void print_match_results(main_ptr mp)
 {
     file_list need_files;
     proc_list p;
-    proc_ptr same;
-    FILE *sys;
-    int n;
-    int col;
+    proc_ptr  same;
+    FILE     *sys;
+    int       n;
+    int       col;
 
     sys = stdout;
     while (mp) {
         col        = fprintf(sys, "Main program file %s requires", mp->main_file->name);
         need_files = mp->files;
         n          = 0;
+        
         while (need_files) {
             n++;
             need_files = need_files->next;
         }
+        
         col += fprintf(sys, " %d files: ", n);
         need_files = mp->files;
+        
         while (need_files) {
             if (col > 60) {
                 fprintf(sys, "\n");
@@ -297,11 +300,14 @@ void print_match_results(main_ptr mp)
             col += fprintf(sys, "%s ", need_files->file->name);
             need_files = need_files->next;
         }
+        
         p = mp->ambigous_procs;
+        
         if (p)
             fprintf(sys, "\nThe following procedures are defined in more than one file:\n");
         else
             fprintf(sys, "\n");
+            
         while (p) {
             fprintf(sys, "\t%s ", p->proc->name);
             same = p->proc->same_name;
@@ -327,10 +333,10 @@ void output_match_results(char *dir_name, main_ptr mp)
     file_list need_files;
     proc_list p;
     proc_ptr  same;
-    FILE *sys;
-    int n;
-    char buff[2000];
-    int col;
+    FILE     *sys;
+    int       n;
+    char      buff[2000];
+    int       col;
 
     sprintf(buff, "%s/SYSTEM", dir_name);
     sys = fopen(buff, "w");
