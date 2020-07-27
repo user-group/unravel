@@ -136,7 +136,7 @@ void print_procs(p) proc_ptr p[];
     }
 }
 
-void print_globals(g) global_rec g[];
+void print_globals(global_rec g[])
 {
     int i;
 
@@ -147,7 +147,7 @@ void print_globals(g) global_rec g[];
     }
 }
 
-int chains_are_equal(a, b) chain_ptr a, b;
+int chains_are_equal(chain_ptr a, chain_ptr b)
 {
     field_ptr af, bf;
 
@@ -173,9 +173,7 @@ int chains_are_equal(a, b) chain_ptr a, b;
     return 1;
 }
 
-void get_lif_files(n, f, dir) int n;
-file_rec f[];
-char *dir;
+void get_lif_files(int n, file_rec f[], char *dir)
 {
     int i, j;
     int pid = 0, pix;
@@ -308,16 +306,13 @@ char *dir;
     }
 }
 
-void get_t_files(sys, n, f, dir) FILE *sys;
-int n;
-file_rec f[];
-char *dir;
+void get_t_files(FILE *sys, int n, file_rec f[], char *dir)
 {
-    int i, j, len, nr;
-    char buff[2000];
+    int   i, j, len, nr;
+    char  buff[2000];
     FILE *t_file;
-    int t_globals = 0;
-    int warning   = 1;
+    int   t_globals = 0;
+    int   warning   = 1;
 
     fscanf(sys, "%s", buff);
     for (i = 0; i < n; i++) {
@@ -402,8 +397,7 @@ char *dir;
     }
 }
 
-int scan_system(sys, target) FILE *sys;
-char *target;
+int scan_system(FILE *sys, char *target)
 {
     char buff[2000], name[2000];
     int n = 0;
@@ -418,8 +412,7 @@ char *target;
     return 0;
 }
 
-void print_files(n, f) int n;
-file_rec f[];
+void print_files(int n, file_rec f[])
 {
     int i, j;
     int k;
@@ -500,8 +493,7 @@ file_rec f[];
     }
 }
 
-int pid_to_index(n, f, i, pid) int pid, n, i;
-file_rec f[];
+int pid_to_index(int n, file_rec f[], int i, int pid)
 {
     int pix;
 
@@ -511,9 +503,7 @@ file_rec f[];
     return -1;
 }
 
-int find_proc(np, procs, name) int np;
-proc_ptr *procs;
-char *name;
+int find_proc(int np, proc_ptr *procs, char *name)
 {
     int i;
     for (i = 1; i <= np; i++) {
@@ -524,9 +514,7 @@ char *name;
     return 0;
 }
 
-int find_global(ng, g, name) int ng;
-global_rec g[];
-char *name;
+int find_global(int ng, global_rec g[], char *name) 
 {
     int i;
     int k;
@@ -539,8 +527,7 @@ char *name;
     return 0;
 }
 
-proc_ptr *assign_procs(n_files, f) int n_files;
-file_rec f[];
+proc_ptr *assign_procs(int n_files, file_rec f[]) 
 {
     int total = 0;
     int i, j, last, at;
@@ -579,12 +566,12 @@ file_rec f[];
     return procs;
 }
 
-int otn_globals(f, fid, old) file_rec f[];
-int fid, old;
-{ return f[fid].globals[old].new; }
+int otn_globals(file_rec f[], int fid, int old)
+{ 
+    return f[fid].globals[old].new; 
+}
 
-int find_global_addr(n, a, var) int n, var;
-addr_ptr *a;
+int find_global_addr(int n, addr_ptr *a, int var)
 {
     int i;
     int gvar;
@@ -597,8 +584,7 @@ addr_ptr *a;
     return 0;
 }
 
-addr_ptr *assign_addrs(n_files, f) int n_files;
-file_rec f[];
+addr_ptr *assign_addrs(int n_files, file_rec f[]) 
 {
     int total = 0;
     addr_ptr *addrs;
@@ -680,8 +666,7 @@ file_rec f[];
     return addrs;
 }
 
-int really_global(f, i, j, id) int i, j, id;
-file_rec f[];
+int really_global(file_rec f[], int i, int j, int id) 
 {
     local_ptr lx;
 
@@ -696,8 +681,7 @@ file_rec f[];
     return 0;
 }
 
-chain_ptr *shrink_chains(n_files, f) int n_files;
-file_rec f[];
+chain_ptr *shrink_chains(int n_files, file_rec f[]) 
 {
     int i, j, k, global, pid, id, at = 0;
     chain_ptr *c = NULL, *new;
@@ -744,8 +728,7 @@ file_rec f[];
     return c;
 }
 
-global_ptr assign_globals(n_files, f) int n_files;
-file_rec f[];
+global_ptr assign_globals(int n_files, file_rec f[])
 {
     int total = 0;
     int i, j, k = 0, last, at;
@@ -830,13 +813,13 @@ file_rec f[];
     return globals;
 }
 
-void merge_lif(n, f, dir, globals, procs, addrs, chains) int n;
-chain_ptr *chains;
-global_ptr globals;
-proc_ptr *procs;
-addr_ptr *addrs;
-file_ptr f;
-char *dir;
+void merge_lif(int        n, 
+               file_ptr   f, 
+               char      *dir, 
+               global_ptr globals, 
+               proc_ptr  *procs, 
+               addr_ptr  *addrs, 
+               chain_ptr *chains) 
 {
     char out_name[2000], lif_name[2000];
     
@@ -986,8 +969,7 @@ char *dir;
     fclose(out_file);
 }
 
-var_ptr find_var(list, id) var_ptr list;
-int id;
+var_ptr find_var(var_ptr list, int id)
 {
     while (list) {
         if (list->id == id)
@@ -997,9 +979,7 @@ int id;
     return NULL;
 }
 
-int look_up_var(i, f, name) int i;
-file_rec f[];
-char *name;
+int look_up_var(int i, file_rec f[], char *name) 
 {
     int k;
 
@@ -1010,8 +990,7 @@ char *name;
     return 0;
 }
 
-h_ptr find_h(list, name) h_ptr list;
-char *name;
+h_ptr find_h(h_ptr list, char *name) 
 {
     while (list) {
         if (strcmp(list->name, name) == 0)
@@ -1021,11 +1000,7 @@ char *name;
     return NULL;
 }
 
-void merge_head(n, f, dir, procs, g) int n;
-file_rec f[];
-proc_ptr procs[];
-char *dir;
-global_rec g[];
+void merge_head(int n, file_rec f[], char *dir, proc_ptr procs[], global_rec g[]) 
 {
     char buff[2000], name[2000];
     FILE *h_file, *k_file;
@@ -1033,7 +1008,7 @@ global_rec g[];
     h_ptr at_h = NULL;
     var_ptr v;
     int i, var, n_h = 0;
-    ;
+    
 
     sprintf(buff, "%s/%sK", dir, f[0].name);
     k_file = fopen(buff, "w");
@@ -1128,17 +1103,17 @@ global_rec g[];
 
 int main(int np, char **p) 
 {
-    FILE *sys;
-    int n_files;
-    file_ptr files;
-    char *dir;
-    char buff[2000];
+    FILE      *sys;
+    int        n_files;
+    file_ptr   files;
+    char      *dir;
+    char       buff[2000];
     global_ptr globals;
-    proc_ptr *procs;
+    proc_ptr  *procs;
     chain_ptr *chains;
-    addr_ptr *addrs;
-    int i, fx;
-    char *slash, *main_name;
+    addr_ptr  *addrs;
+    int        i, fx;
+    char      *slash, *main_name;
 
     if ((np < 2) || (np > 3)) {
         fprintf(stderr, "%s: wrong number of parms\n", p[0]);
