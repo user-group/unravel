@@ -1,7 +1,7 @@
 *.o
 !*.c
 !*.h
-
+!.clang-format
 ./analyzer
 ./auto-slice
 ./visit-filter
