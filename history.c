@@ -1,3 +1,33 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
 
 #include "MultiSlice.h"
 #include "sets.h"
@@ -25,8 +55,8 @@ struct history_struct {
 };
 
 static history_ptr history = NULL;
-static char history_file[1000];
-static char *list[LIST_MAX];
+static char        history_file[1000];
+static char       *list[LIST_MAX];
 
 extern void bit_on(bit_set s, int id);
 void SliceSet(MultiSliceWidget w, int line_from, int col_from, int line_to, int col_to, int redraw);
@@ -36,16 +66,19 @@ extern int is_id_valid(int var_pid, int var_id);
 
 // typedef void *Widget;
 
-void clear_history(void) { history = NULL; }
+void clear_history(void) 
+{ 
+    history = NULL; 
+}
 
-void setup_history(file) char *file;
+void setup_history(char *file) 
 {
-    FILE *h_file;
-    int var_pid, var_id, file_id, stmt_id, is_partial;
-    int fid, s;
+    FILE       *h_file;
+    int         var_pid, var_id, file_id, stmt_id, is_partial;
+    int         fid, s;
     history_ptr new, at;
-    char text[1000];
-    long addr;
+    char        text[1000];
+    long        addr;
 
     sprintf(history_file, "%sY", file);
     h_file = fopen(history_file, "r");
@@ -112,9 +145,7 @@ int find_slice(var_pid, var_id, file_id, stmt_id) int var_pid, var_id, file_id, 
     return -1;
 }
 
-void load_slice(w, index, n_files, slices, line_map) Widget w;
-int index, n_files, line_map[];
-bit_set slices[];
+void load_slice(Widget w, int index, int n_files, bit_set slices[], int line_map[])
 {
     history_ptr at;
     FILE *h_file;
@@ -127,6 +158,7 @@ bit_set slices[];
     }
     if (index)
         return;
+        
     h_file = fopen(history_file, "r");
     if (h_file) {
         SliceClearAll(w);
@@ -154,9 +186,7 @@ bit_set slices[];
     SliceRedraw(w);
 }
 
-void save_slice(var_pid, var_id, file_id, stmt_id, is_partial, n_files, slices) int var_pid, var_id,
-    file_id, stmt_id, n_files, is_partial;
-bit_set slices[];
+void save_slice(int var_pid, int var_id, int file_id, int stmt_id, int is_partial, int n_files, bit_set slices[]) 
 {
     FILE *h_file;
     history_ptr new, at;
@@ -225,7 +255,7 @@ files[file_id].stmts[stmt_id].froml,files[file_id].name);
     fclose(h_file);
 }
 
-char **get_slice_list() {
+char **get_slice_list(void) {
     history_ptr at;
     int i = 1;
 
@@ -239,3 +269,4 @@ char **get_slice_list() {
     list[i] = NULL;
     return list;
 }
+

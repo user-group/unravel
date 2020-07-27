@@ -5,8 +5,10 @@
 #include <stdio.h>
 #include <string.h>
 
-static char sccsid[] = "@(#)pss.c	1.4  4/26/95";
+//static char sccsid[] = "@(#)pss.c	1.4  4/26/95";
+
 typedef struct ptr_struct ptr_rec, *ptr_ptr;
+
 struct ptr_struct {
     int id; /* index in ids array */
     int proc_id;
@@ -15,9 +17,9 @@ struct ptr_struct {
 
 int v_opt = 0;
 int n_vars, n_ptrs;
-id_ptr *ids;
-ptr_ptr ptrs;
-bit_set ptrs_in, ptrs_out, ptrs_refed;
+id_ptr  *ids;
+ptr_ptr  ptrs;
+bit_set  ptrs_in, ptrs_out, ptrs_refed;
 set_ptr *proc_ret_ptrs;
 
 void bit_on(bit_set b, int at);
@@ -303,7 +305,7 @@ int pointer_assign(dix, rix) int dix, rix;
 void resolve_chain(in, out, f) bit_set in, out;
 field_ptr f;
 {
-    int new_id, a_id, ptr, id, pid, new_ptr;
+    int new_id, a_id, ptr, new_ptr;
     set_ptr addr;
 
     clear_bit_set(out);
@@ -496,8 +498,8 @@ int capture_assigns(pid, fid, sid) int pid, fid, sid;
 
 int prop_call(pid, fid, sid) int pid, fid, sid;
 {
-    var_ptr r, d;
-    int rp, var_refed, rix, var_defed, id;
+    var_ptr d;
+    int var_defed, id;
     int count = 0, ptr;
     int called_pid;
     call_ptr c;
@@ -822,7 +824,7 @@ int propagate() {
 }
 
 int do_calls() {
-    int pid, fid, sid;
+    int pid, fid;
     int change = 0;
     call_ptr call_list;
 

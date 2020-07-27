@@ -98,6 +98,9 @@ extern void modify_type (token_ptr token, unsigned int flag, int style, token_pt
 %type <token> string_literal_list
 %type <token> specifier_qual_list type_qualifier type_qualifier_list
 
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
+
 %start program
 %%
 
@@ -887,7 +890,7 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expr ')' statement
+	: IF '(' expr ')' statement %prec LOWER_THAN_ELSE
 		{$$ = if_stmt ($1,$3,$4,$5,(token_ptr)NULL,(stmt_ptr)NULL);}
 	| IF '(' expr ')' statement ELSE statement
 		{$$ = if_stmt ($1,$3,$4,$5,$6,$7);}

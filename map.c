@@ -1,4 +1,35 @@
 /*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
+
+/*
 *******************************************************************
 *                                                                 *
 *   Unravel sysgen map                                            *
@@ -14,7 +45,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/time.h>
+//#include <sys/time.h>
 #include <sys/types.h>
 
 //static char sccsid[] = "@(#)map.c	1.6  8/11/95";
@@ -63,7 +94,7 @@ struct main_struct {
     main_ptr next;
 };
 
-proc_list proc_entry(proc) proc_ptr proc;
+proc_list proc_entry(proc_ptr proc) 
 {
     proc_list new;
 
@@ -73,7 +104,7 @@ proc_list proc_entry(proc) proc_ptr proc;
     return new;
 }
 
-file_list file_entry(file) file_ptr file;
+file_list file_entry(file_ptr file)
 {
     file_list new;
 
@@ -83,7 +114,7 @@ file_list file_entry(file) file_ptr file;
     return new;
 }
 
-file_ptr find_file(list, file) file_ptr list, file;
+file_ptr find_file(file_ptr list, file_ptr file) 
 {
     file_ptr at;
 
@@ -96,8 +127,7 @@ file_ptr find_file(list, file) file_ptr list, file;
     return NULL;
 }
 
-file_list find_file_list(list, file) file_ptr file;
-file_list list;
+file_list find_file_list(file_list list, file_ptr file)
 {
     file_list at;
 
@@ -110,8 +140,7 @@ file_list list;
     return NULL;
 }
 
-proc_ptr find_proc_list(list, proc) proc_ptr proc;
-proc_list list;
+proc_ptr find_proc_list(proc_list list, proc_ptr proc) 
 {
     proc_list at;
 
@@ -124,7 +153,7 @@ proc_list list;
     return NULL;
 }
 
-proc_ptr find_proc(list, proc) proc_ptr list, proc;
+proc_ptr find_proc(proc_ptr list, proc_ptr proc) 
 {
     proc_ptr at;
 
@@ -137,9 +166,7 @@ proc_ptr find_proc(list, proc) proc_ptr list, proc;
     return NULL;
 }
 
-void match_procs_to_files(mp, fp, pp) main_ptr mp;
-file_ptr fp;
-proc_ptr pp;
+void match_procs_to_files(main_ptr mp, file_ptr fp, proc_ptr pp) 
 {
     main_ptr m;
     file_ptr f;
@@ -242,7 +269,7 @@ proc_ptr pp;
     }
 }
 
-void print_match_results(mp) main_ptr mp;
+void print_match_results(main_ptr mp)
 {
     file_list need_files;
     proc_list p;
@@ -295,8 +322,7 @@ void print_match_results(mp) main_ptr mp;
     fclose(sys);
 }
 
-void output_match_results(dir_name, mp) main_ptr mp;
-char *dir_name;
+void output_match_results(char *dir_name, main_ptr mp) 
 {
     file_list need_files;
     proc_list p;
@@ -393,7 +419,7 @@ print_match_results (mp)
 }
 */
 
-int file_selector(entry) struct dirent *entry;
+int file_selector(struct dirent *entry) 
 {
     int ix;
 
@@ -406,17 +432,15 @@ int file_selector(entry) struct dirent *entry;
     return 0;
 }
 
-int compare(a, b) struct dirent **a, **b;
+int compare(struct dirent **a, struct dirent **b)
 {
     if (strcmp((*a)->d_name, (*b)->d_name) > 0)
         return 1;
+        
     return 0;
 }
 
-int myscandir(dir_name, list, select, compare) char *dir_name;
-struct dirent ***list;
-int (*select)();
-int (*compare)();
+int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*compare)()) 
 {
     DIR *dir;
     struct dirent *entry;
@@ -455,8 +479,7 @@ int (*compare)();
     return n_match;
 }
 
-int scan_dir(dir, f) struct dirent ***f;
-char *dir;
+int scan_dir(char *dir, struct dirent ***f) 
 {
     struct dirent **files;
     int count;
@@ -477,17 +500,17 @@ int main(int np, char **p)
 {
     /* struct direct 	**files; */
     struct dirent **files;
-    int n_files, i, j, length;
-    char *dir_name;
-    FILE *t_file;
-    char buff[3000];
-    proc_ptr same;
+    int             n_files, i, j, length;
+    char           *dir_name;
+    FILE           *t_file;
+    char            buff[3000];
+    proc_ptr        same;
 
-    file_ptr fp = NULL, new_fp;
-    proc_ptr pp = NULL, new_pp;
-    main_ptr mp = NULL, new_main;
+    file_ptr  fp = NULL, new_fp;
+    proc_ptr  pp = NULL, new_pp;
+    main_ptr  mp = NULL, new_main;
     proc_list new_proc_list;
-    proc_ptr new_proc;
+    proc_ptr  new_proc;
 
     int n_procs = 0;
     int fx;
@@ -647,3 +670,4 @@ int main(int np, char **p)
     output_match_results(dir_name, mp);
     return 0;
 }
+

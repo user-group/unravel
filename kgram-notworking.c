@@ -136,7 +136,7 @@ extern void modify_type (token_ptr token, unsigned int flag, int style, token_pt
 
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
