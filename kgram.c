@@ -109,6 +109,7 @@ print_flags (int flags)
 	}
 }
 
+void
 print_decl (type_spec,var_specs)
 	token_ptr	type_spec,var_specs;
 {
@@ -157,6 +158,7 @@ print_decl (type_spec,var_specs)
 	printf ("\n");
 }
 
+void 
 print_token(t)
 	token_ptr	t;
 {
@@ -2124,3 +2126,4 @@ case 232:
 	}
 	goto yystack;		/* reset registers in driver code */
 }
+
