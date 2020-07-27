@@ -1,0 +1,109 @@
+.\" %W%  %G%;
+.TH UNRAVEL 1 "11 August 1995"
+.SH NAME
+unravel \- Compute program slices
+.SH SYNOPSIS
+.B unravel
+.RB "[ "
+.I directory
+.RB " ]"
+.SH DESCRIPTION
+
+.LP
+\fBUnravel\fR is a software analysis tool for extracting source program
+statements relevant to a computation.  The computation is defined as
+the state of some program variable at some statement in the program.
+.LP
+This is the main control window for \fBunravel\fR.
+Before a slice can be
+computed, the source files must be examined (analyzed) to build the
+data structures needed to compute a program slice.
+.LP
+The main panel has several buttons to invoke each part of \fBunravel\fR,
+review results and ask to see this help file.  The main panel also
+displays the analysis status of each source file in the current
+directory.
+.LP
+A typical \fBunravel\fR session would require the following:
+.IP (1)
+Preparation -- Locate the a directory containing the source files
+to analyze.
+.IP (2)
+Run the \fBunravel\fR program -- This brings up the 
+.I main control panel.
+.IP (3)
+Run the Analyzer -- Push the
+.B Run Analyzer
+button.  This brings up the
+.I Analyzer Control Panel
+where the files are selected for analysis.  From the
+.I Analyzer Control Panel,
+the button
+.B Analyze Selected Files
+will run the
+analyzer on the selected files.  This builds data structures and
+support files needed to perform slicing.  If any source file does not
+contain ANSI C, \fBunravel\fR cannot analyze that file.  
+.IP (4)
+Review analysis results -- Examine the analysis results by pushing
+the
+.B Review History
+button and selecting
+.B Last Analysis
+from the menu.
+This brings up the results of the last run of the analyzer.
+.IP (5)
+Run the Slicer  -- Push the
+.B Run Slicer
+button.  This brings up the
+.I Slice Control Panel.
+From this panel you can calculate slices on the source
+programs.
+.SH FILES
+.PD 0i
+.IP \fIfile.\fBc\fR 1.5i
+Source program
+.IP \fIfile.\fBh\fR 1.5i
+Source program header
+.IP \fIfile.\fBLIF\fR 1.5i
+Language Independent Format of \fIfile.\fBc\fR
+.IP \fIfile.\fBT\fR 1.5i
+Summary of \fIfile.\fBLIF\fR
+.IP \fIfile.\fBH\fR 1.5i
+Mapping of global variable declarations to header files
+.IP \fBSYSTEM\fR 1.5i
+Mapping of files to main programs
+.IP \fIfile.\fBLINK\fR 1.5i
+Link (merge) of \fBLIF\fR for all source files needed by main program
+in \fIfile.\fBc\fR
+.IP \fIfile.\fBK\fR 1.5i
+Summary of \fIfile.\fBLINK\fR
+.IP \fIfile.\fBY\fR 1.5i
+Saved program slices from \fIfile.\fBc\fR
+.IP \fBHISTORY\fR 1.5i
+History of the current \fBunravel\fR session.
+.IP \fBHISTOR-A\fR 1.5i
+Results of last analyzer session
+.IP \fBHISTORY-S\fR 1.5i
+Results of last slice session
+.IP \fBHISTORY.LOG\fR 1.5i
+History of \fBunravel\fR sessions in the current directory.
+.SH MORE INFORMATION
+.PD .4v
+\fBUnravel\fR was developed at:
+.LP
+Computer Systems Laboratory
+.LP
+National Institute of Standards and Technology
+.br
+Gaithersburg, Maryland 20899
+.sp
+The source code and a
+two volumne technical report (NISTIR 5691) describing
+the requirements
+and design (volume 1) of \fBUnravel\fR along with a user manual
+(volume 2) is available over the WWW at the following URL:
+.br
+http://hissa.ncsl.nist.gov/unravel.html
+.br
+For more information contact Dr. James R. Lyle (301) 975-3270

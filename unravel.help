@@ -1,0 +1,35 @@
+                         Main Control Panel Help
+
+
+
+                             Welcome to unravel
+
+  Unravel is a software analysis tool for extracting source program
+statements relevant to a computation.  The computation is defined as
+the state of some program variable at some statement in the program.
+
+  This is the main control window for unravel.  Before a slice can be
+computed, the source files must be examined (analyzed) to build the
+data structures needed to compute a program slice.
+
+  The main panel has several buttons to invoke each part of unravel,
+review results and ask to see this help file.  The main panel also
+displays the analysis status of each source file in the current directory.
+
+  A typical unravel session would require the following:
+(1) Preparation -- Load the source files into a directory
+(2) Run the unravel program -- This brings up the main control window
+(3) Run the Analyzer -- Push the Run Analyzer button.  This brings up
+the analyzer panel where the files to analyze are selected.  From the
+analyzer panel, the button Analyze Selected Files will run the
+analyzer on the selected files.  This builds data structures and
+support files needed to perform slicing.  If any source does not
+contain ANSI C unravel cannot analyze that file.  
+(4) Review analysis results -- Examine the analysis results by pushing
+the REVIEW HISTORY button and selecting Last Analysis from the menu.
+This brings up the results of the last run of the analyzer.
+(5) Run the Slicer  -- Push the Run Slicer button.  This brings up the
+slicer panel.  From this panel you can calculate slices on the source
+programs.
+
+Version: @(#)unravel.help	1.2  9/23/94
