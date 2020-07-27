@@ -1,0 +1,12 @@
+                         Select Control Panel Help
+
+   This is the selection panel where the user can choose which program
+will be loaded into the slicer.  Select is presenting a list of main
+programs that can be sliced.
+
+  Click on the main file of the program that you want to slice.
+
+  If you click on "No Selection" you return to the main panel without
+running the slicer.
+
+Version: @(#)select.help	1.2  9/23/94

@@ -1,0 +1,14 @@
+                      Analyzer Control Panel Help
+
+  This is the interface to the analyzer.  Source files must be
+analyzed and linked before the slicer can be used.  The analyzer
+parses the source file and produces two files that capture information
+required by the slicer.
+
+  Pushing the Run Analyzer button runs the analyzer on the selected
+files.  The analyzer expects ANSI C source files.  If the source file
+contains C code that is not ANSI C then the analyzer may not be able
+to parse the program.  Some compilers have extensions to ANSI C such
+as extra key words that unravel does not know about.
+
+Version: @(#)analyzer.help	1.2  9/23/94
