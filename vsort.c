@@ -16,11 +16,10 @@ typedef struct {
 	} node, *node_ptr;
 
 node	nodes[10000];
-int		n_nodes = 0;
+int	n_nodes = 0;
 
 void
-output(k)
-	int		k;
+output(int k)
 {
 	ll		go_list;
 
@@ -35,8 +34,7 @@ output(k)
 }
 
 void
-output1(k)
-	int		k;
+output1(int k)
 {
 	int		at;
 	ll		from;
@@ -60,9 +58,8 @@ output1(k)
 	}
 }
 
-int 
-go_deep (k)
-	int		k;
+void 
+go_deep (int k)
 {
 	int	at;
 	at = k;
