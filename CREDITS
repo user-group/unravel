@@ -1,0 +1,24 @@
+The original source code was developed by the Unravel Team
+at NIST:
+
+James R. Lyle
+Dolores R. Wallace
+James R. Graham
+Keith B. Gallagher
+Joseph P. Poole
+David W. Binkley 
+
+U.S. DEPARTMENT OF COMMERCE
+Technology Administration
+National Institute of Standards
+and Technology
+Computer Systems Laboratory
+Gaithersburg, MD 20899
+
+The source code was adapted for Linux by Klaas-Jan Stol.
+These changes include: compiler warning fixes, update to 
+modern C style (from K&R function declarations), removal 
+of unused variables. The code was reformatted using the 
+clang-format program, using the rules in the file 
+".clang-format".
+
