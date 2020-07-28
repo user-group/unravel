@@ -33,3 +33,9 @@
 ./.git/hooks/prepare-commit-msg.sample
 ./parser
 ./vprep
+*.LIF
+*.T
+*.V
+*.Y
+*.ERR
+*.LOG
