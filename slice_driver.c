@@ -1,3 +1,34 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
+
 #include "sets.h"
 #include "slice.h"
 #include <stdio.h>
@@ -16,13 +47,15 @@ extern int read_link_file(char *name);
 extern void verify_input(int i);
 extern void print_all_active(bit_set slices[], bit_set active);
 
-int make_criterion(
-    char *file_name, int line_number, char *var_spec, int *file, int *stmt, int *proc, int *var);
+int make_criterion(char *file_name, int line_number, char *var_spec, 
+                   int *file, int *stmt, int *proc, int *var);
 
-void trace(proc, stmt) int proc, stmt;
-{ printf("at stmt %d (line %d) in %s\n", stmt, 0, procs[proc].proc_name); }
+void trace(int proc, int stmt) 
+{ 
+    printf("at stmt %d (line %d) in %s\n", stmt, 0, procs[proc].proc_name); 
+}
 
-void verify_criterion(file, stmt, proc, var) int file, stmt, proc, var;
+void verify_criterion(int file, int stmt, int proc, int var)
 {
     if ((file < 0) || (file >= n_files)) {
         fprintf(stderr, "file %d is out of range [0..%d]", file, n_files - 1);
@@ -49,7 +82,7 @@ void verify_criterion(file, stmt, proc, var) int file, stmt, proc, var;
     }
 }
 
-void do_slice(file, stmt, proc, var) int file, stmt, proc, var;
+void do_slice(int file, int stmt, int proc, int var) 
 {
     int i;
     int stmt_proc;
@@ -88,8 +121,7 @@ void do_slice(file, stmt, proc, var) int file, stmt, proc, var;
         print_all_active(slices, active);
 }
 
-int main(np, p) int np;
-char *p[];
+int main(int np, char **p) 
 {
     int status;
     int i, fx;
@@ -149,4 +181,6 @@ char *p[];
         }
         printf("Enter criterion -- file name line number variable spec: ");
     }
+    return 0;
 }
+
