@@ -41,7 +41,8 @@ struct id_struct
     char **progs;
 };
 
-int rescan_system(char *main_file_name, char *progs[])
+int
+rescan_system(char *main_file_name, char *progs[])
 {
     int n = 0, k, j;
     FILE *sys;
@@ -79,7 +80,8 @@ int rescan_system(char *main_file_name, char *progs[])
     return 0;
 }
 
-int clear_y(char *file)
+int
+clear_y(char *file)
 {
     char file_name[2000];
     int end;
@@ -91,7 +93,8 @@ int clear_y(char *file)
     return 1;
 }
 
-void cannot_link(char *main, char *file, char *fmt)
+void
+cannot_link(char *main, char *file, char *fmt)
 {
     printf("Link error (link failed)\n  ");
     printf(fmt, main, file);
@@ -99,7 +102,8 @@ void cannot_link(char *main, char *file, char *fmt)
     exit(1);
 }
 
-int need_to_link(char *main_file_name)
+int
+need_to_link(char *main_file_name)
 {
     /*
     ********************************************************************
@@ -169,7 +173,8 @@ int need_to_link(char *main_file_name)
     return 0;
 }
 
-void only_one(char *file_name)
+void
+only_one(char *file_name)
 {
     char buff[2000];
 
@@ -195,7 +200,8 @@ void only_one(char *file_name)
     exit(0);
 }
 
-int cmp(char **a, char **b)
+int
+cmp(char **a, char **b)
 {
     return strcmp(*a, *b);
 }
@@ -270,19 +276,22 @@ scan_system(void)
     *************/
 }
 
-void button_help(Widget w, char *mess, XEvent *e, Boolean *ok)
+void
+button_help(Widget w, char *mess, XEvent *e, Boolean *ok)
 {
     XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL);
 }
 
-void set_button_help(Widget w, char *mess)
+void
+set_button_help(Widget w, char *mess)
 {
     static char buff[] = "Description of object under mouse pointer is displayed here";
     XtAddEventHandler(w, EnterWindowMask, False, button_help, mess);
     XtAddEventHandler(w, LeaveWindowMask, False, button_help, buff);
 }
 
-void do_slice(id_ptr id, XtIntervalId *tt)
+void
+do_slice(id_ptr id, XtIntervalId *tt)
 {
     char buff[2000];
     int n, at, shifting;
@@ -322,7 +331,8 @@ void do_slice(id_ptr id, XtIntervalId *tt)
         exit(0);
 }
 
-void do_link(id_ptr id, XtIntervalId *tt)
+void
+do_link(id_ptr id, XtIntervalId *tt)
 {
     char buff[2000];
 
@@ -351,7 +361,8 @@ void do_link(id_ptr id, XtIntervalId *tt)
     return;
 }
 
-void strech_to(Widget frame, Widget w, Widget goal)
+void
+strech_to(Widget frame, Widget w, Widget goal)
 {
     Dimension width, width_goal, width_w, bw_w, bw;
     Position x;
@@ -368,7 +379,8 @@ void strech_to(Widget frame, Widget w, Widget goal)
     XtManageChild(w);
 }
 
-void strech(Widget goal, Widget w)
+void
+strech(Widget goal, Widget w)
 {
     Dimension width, bw;
     Position x;
@@ -381,7 +393,8 @@ void strech(Widget goal, Widget w)
     XtManageChild(w);
 }
 
-void call_slice(Widget w, id_ptr id, XawListReturnStruct *list)
+void
+call_slice(Widget w, id_ptr id, XawListReturnStruct *list)
 {
 
     XtVaSetValues(id->status, XtNlabel, "Linking . . .", NULL);
@@ -392,12 +405,14 @@ void call_slice(Widget w, id_ptr id, XawListReturnStruct *list)
     do_link(id, NULL);
 }
 
-void push_quit(Widget w, XtPointer u_data, XtPointer w_data)
+void
+push_quit(Widget w, XtPointer u_data, XtPointer w_data)
 {
     exit(0);
 }
 
-void push_help(Widget w, XtPointer u_data, XtPointer w_data)
+void
+push_help(Widget w, XtPointer u_data, XtPointer w_data)
 {
     char buff[2000];
 
@@ -406,7 +421,8 @@ void push_help(Widget w, XtPointer u_data, XtPointer w_data)
     system(buff);
 }
 
-void v_wrap(Widget p, Widget lw)
+void
+v_wrap(Widget p, Widget lw)
 {
     Dimension hp, hl;
 
@@ -421,7 +437,8 @@ void v_wrap(Widget p, Widget lw)
     XtManageChild(lw);
 }
 
-Widget make_list_box(Widget parent, Widget help, Widget status, char *prefix, char *title, id_ptr id)
+Widget
+make_list_box(Widget parent, Widget help, Widget status, char *prefix, char *title, id_ptr id)
 {
     Widget frame, label, port, list;
     char name[2000];
@@ -503,7 +520,8 @@ Widget make_list_box(Widget parent, Widget help, Widget status, char *prefix, ch
     return frame;
 }
 
-void make_windows(Widget top, XtAppContext ac)
+void
+make_windows(Widget top, XtAppContext ac)
 {
     static Widget status, info, selected, frame;
     static Widget help, quit;
