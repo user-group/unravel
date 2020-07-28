@@ -1,11 +1,43 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
 #include "slice.h"
 #include "lif.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// static  char    sccsid[] = "@(#)slice.c	1.7  8/16/95";
-// static char *sccs_h_id = SLICE_SCCS_ID;
+/* 
+static  char    sccsid[] = "@(#)slice.c	1.7  8/16/95";
+static char *sccs_h_id = SLICE_SCCS_ID;
+*/
 
 extern int v_opt;
 static bit_set dont_descend;
@@ -22,7 +54,7 @@ int bit_set_equal(bit_set a, bit_set b);
 void bit_off(bit_set b, int at);
 void print_proc_defs(int nc, int proc);
 
-int stmt_to_proc(file, stmt) int file, stmt;
+int stmt_to_proc(int file, int stmt) 
 {
     int i;
 
@@ -34,7 +66,7 @@ int stmt_to_proc(file, stmt) int file, stmt;
     return 0; /* no proc found */
 }
 
-int is_id_valid(pid, id) int pid, id;
+int is_id_valid(int pid, int id) 
 {
     if ((pid < 0) || (pid > n_procs)) {
         fprintf(stderr, "proc %d out of range %d\n", pid, n_procs);
@@ -57,7 +89,8 @@ int is_id_valid(pid, id) int pid, id;
     return 1;
 }
 
-void set_criteria(int file, int stmt_proc, int stmt, int var_proc, int var) {
+void set_criteria(int file, int stmt_proc, int stmt, int var_proc, int var)
+{
     int var_max, var_n;
 
     if (var_proc) { /* get all members of a structure */
@@ -80,7 +113,7 @@ void set_criteria(int file, int stmt_proc, int stmt, int var_proc, int var) {
     }
 }
 
-void clear_active_proc(proc) int proc;
+void clear_active_proc(int proc) 
 {
     int file, stmt;
 
@@ -105,9 +138,7 @@ void clear_active(void) {
         }
 }
 
-int lib_defs(stmt, id, is_local) int id;
-int is_local; /* KS guessing type */
-stmt_ptr stmt;
+int lib_defs(stmt_ptr stmt, int id, int is_local) 
 {
     call_ptr calls;
     var_ptr var;
@@ -138,8 +169,7 @@ stmt_ptr stmt;
     return 0;
 }
 
-int is_var_defed(stmt, id, is_local) int id, is_local;
-stmt_ptr stmt;
+int is_var_defed(stmt_ptr stmt, int id, int is_local) 
 {
     var_ptr defs;
     int result;
@@ -174,7 +204,7 @@ stmt_ptr stmt;
     */
 }
 
-void print_addr(addr_set) set_ptr addr_set;
+void print_addr(set_ptr addr_set) 
 {
     int addr, id, pid;
 
@@ -186,12 +216,11 @@ void print_addr(addr_set) set_ptr addr_set;
 }
 
 static int base_id, base_pid, base_ptr, base_level, base_done = 1;
-;
 static var_ptr base;
 static set_ptr base_addrs[200];
 static int base_off[200];
 
-int offset_check(pid, id, off) int pid, id, off;
+int offset_check(int pid, int id, int off)
 {
     id_ptr ids;
     int n;
@@ -221,8 +250,7 @@ int offset_check(pid, id, off) int pid, id, off;
     return 1;
 }
 
-void print_field_resolve(ptr, f) int ptr;
-field_ptr f;
+void print_field_resolve(int ptr, field_ptr f)
 {
     set_ptr addr;
     int id, pid, p;
@@ -245,8 +273,7 @@ field_ptr f;
     }
 }
 
-void chain_resolve_set(def, proc) int proc;
-int def;
+void chain_resolve_set(int def, int proc) 
 {
     int chain_id, head_id, head_pid, ptr;
     int id, pid;
@@ -301,7 +328,7 @@ int def;
     }
 }
 
-int chain_resolve_get(id, pid) int *id, *pid;
+int chain_resolve_get(int *id, int *pid) 
 {
     int level, addr;
     int idx, pidx, ptr;
@@ -399,8 +426,7 @@ int chain_resolve_get(id, pid) int *id, *pid;
     return 0;
 }
 
-void var_resolve_set(def, proc) int proc;
-var_ptr def;
+void var_resolve_set(var_ptr def, int proc) 
 {
     int i, id, pid, ptr, addr;
 
@@ -429,7 +455,7 @@ var_ptr def;
     }
 }
 
-void print_base_state() {
+void print_base_state(void) {
     int i;
 
     set_ptr objs;
@@ -455,7 +481,7 @@ void print_base_state() {
 /* var_resolve_get does a depth first traversal of the pointer state*/
 /*                                                                  */
 /********************************************************************/
-int var_resolve_get(id, pid) int *id, *pid;
+int var_resolve_get(int *id, int *pid) 
 {
     int top;
     int ptr, addr;
@@ -507,7 +533,7 @@ int var_resolve_get(id, pid) int *id, *pid;
     return 0;
 }
 
-void chain_resolve_path(f, n, proc) int f, n, proc;
+void chain_resolve_path(int f, int n, int proc) 
 {
     int i, id, pid, addr;
 
@@ -528,7 +554,7 @@ void chain_resolve_path(f, n, proc) int f, n, proc;
         }
 }
 
-void var_resolve_path(f, n, proc) int f, n, proc;
+void var_resolve_path(int f, int n, int proc) 
 {
     int i, id, pid, addr;
 
@@ -546,8 +572,7 @@ void var_resolve_path(f, n, proc) int f, n, proc;
         }
 }
 
-int is_other_active(set, pid, id) id_set_ptr set;
-int id, pid;
+int is_other_active(id_set_ptr set, int pid, int id) 
 {
     while (set) {
         if ((set->id == id) && (set->pid == pid))
@@ -557,7 +582,7 @@ int id, pid;
     return 0;
 }
 
-int active_defed(f, n, succ, proc) int f, n, succ, proc;
+int active_defed(int f, int n, int succ, int proc) 
 {
     int match = 0;
 
@@ -651,7 +676,7 @@ int active_defed(f, n, succ, proc) int f, n, succ, proc;
     return match;
 }
 
-void add_to_active(f, n, pid, id, proc_id) int f, n, pid, id, proc_id;
+void add_to_active(int f, int n, int pid, int id, int proc_id)
 {
     bit_set active;
 
@@ -672,8 +697,7 @@ void add_to_active(f, n, pid, id, proc_id) int f, n, pid, id, proc_id;
     bit_on(active, id);
 }
 
-void de_ref_chain(f, pid, refs, n) var_ptr refs;
-int pid, f, n;
+void de_ref_chain(int f, int pid, var_ptr refs, int n) 
 {
     int id, proc_id;
     stmt_ptr stmt;
@@ -693,8 +717,7 @@ int pid, f, n;
     }
 }
 
-void de_ref_ref(f, pid, refs, n) var_ptr refs;
-int pid, f, n;
+void de_ref_ref(int f, int pid, var_ptr refs, int n)
 {
     int id, proc_id;
     stmt_ptr stmt;
@@ -719,9 +742,7 @@ int pid, f, n;
     }
 }
 
-int add_stmt_to_slice(pid, f, stmt, slice, succ) int pid, f, stmt;
-stmt_ptr succ;
-bit_set slice;
+int add_stmt_to_slice(int pid, int f, int stmt, bit_set slice, stmt_ptr succ) 
 {
     int already_in_slice = 0;
     int change           = 0;
@@ -802,7 +823,7 @@ bit_set slice;
     return change + 1 - already_in_slice;
 }
 
-int pass_criteria(f, stmt, succ) int f, stmt, succ;
+int pass_criteria(int f, int stmt, int succ) 
 {
     int change, c;
     id_set_ptr active;
@@ -825,8 +846,7 @@ int pass_criteria(f, stmt, succ) int f, stmt, succ;
 }
 
 #define LINE 60
-void print_active_stmt(f, proc, stmt, mark) int f, stmt, mark;
-int proc;
+void print_active_stmt(int f, int proc, int stmt, int mark)
 {
     stmt_ptr s;
     int k, var, n;
@@ -878,7 +898,7 @@ int proc;
     printf("\n");
 }
 
-void active_hook(fid, line) int fid, line;
+void active_hook(int fid, int line) 
 {
     int stmt, proc;
 
@@ -894,8 +914,7 @@ void active_hook(fid, line) int fid, line;
     }
 }
 
-void print_active(proc, slice) int proc;
-bit_set slice;
+void print_active(int proc, bit_set  slice) 
 {
     int stmt;
     int f;
@@ -907,7 +926,7 @@ bit_set slice;
     }
 }
 
-void print_all_active(slices, active) bit_set slices[], active;
+void print_all_active(bit_set slices[], bit_set active) 
 {
     int file, proc;
 
@@ -918,7 +937,7 @@ void print_all_active(slices, active) bit_set slices[], active;
     }
 }
 
-void add_ptr_to_active(f, pid, ptr_id, stmt) int f, pid, stmt, ptr_id;
+void add_ptr_to_active(int f, int pid, int ptr_id, int stmt) 
 {
     int ptr, var_id, proc_id;
     set_ptr a;
@@ -945,9 +964,7 @@ void add_ptr_to_active(f, pid, ptr_id, stmt) int f, pid, stmt, ptr_id;
     }
 }
 
-void add_an_actual(from_pid, call, act) call_ptr call;
-int from_pid;
-actual_ptr act;
+void add_an_actual(int from_pid, call_ptr call, actual_ptr act) 
 {
     int pid, stmt, f;
     var_ptr refs;
@@ -985,8 +1002,7 @@ actual_ptr act;
     }
 }
 
-void add_actuals(from_pid, call) call_ptr call;
-int from_pid;
+void add_actuals(int from_pid, call_ptr call) 
 {
     int pid, stmt, f;
     actual_ptr act;
@@ -1027,8 +1043,7 @@ int from_pid;
     }
 }
 
-actual_ptr find_actual(call, n) int n;
-call_ptr call;
+actual_ptr find_actual(call_ptr call, int n)
 {
     actual_ptr act;
 
@@ -1041,10 +1056,7 @@ call_ptr call;
     return NULL;
 }
 
-void export_called_active(call, called_proc, calling_proc, calling_stmt) int calling_proc,
-    called_proc;
-int calling_stmt;
-call_ptr call;
+void export_called_active(call_ptr call, int called_proc, int calling_proc, int calling_stmt) 
 {
     int f, fs, start;
     int at;
@@ -1079,10 +1091,7 @@ call_ptr call;
     }
 }
 
-void slice_across_call(final, slice_sets, call, proc, active) int proc;
-bit_set final[], slice_sets[];
-bit_set active;
-call_ptr call;
+void slice_across_call(bit_set final[], bit_set slice_sets[], call_ptr call, int proc, bit_set active)
 {
     int pid;
     int f, fs;
@@ -1130,8 +1139,7 @@ call_ptr call;
     export_called_active(call, pid, proc, call->stmt);
 }
 
-int globals_defed(call, succ, pid) call_ptr call;
-int pid, succ;
+int globals_defed(call_ptr call, int succ, int pid) 
 {
     int stmt, f;
     int at;
@@ -1173,8 +1181,7 @@ int pid, succ;
     return 0;
 }
 
-int active_actuals(call, succ, pid) call_ptr call;
-int pid, succ;
+int active_actuals(call_ptr call, int succ, int pid)
 {
     int stmt, f;
     actual_ptr act;
@@ -1221,8 +1228,7 @@ int pid, succ;
     }
     return 0;
 }
-int lib_def_active(calling_proc, f, stmt, succ, call) call_ptr call;
-int calling_proc, f, stmt, succ;
+int lib_def_active(int calling_proc, int f, int stmt, int succ, call_ptr call) 
 {
     int called_proc;
     actual_ptr act;
@@ -1266,8 +1272,7 @@ int calling_proc, f, stmt, succ;
     return status;
 }
 
-void add_req_set(f, pid, s, slice) int f, s, pid;
-bit_set slice;
+void add_req_set(int f, int pid, int s, bit_set slice) 
 {
     set_ptr r;
 
@@ -1278,10 +1283,7 @@ bit_set slice;
     }
 }
 
-int check_calls(fs, slices, proc, stmt, succ, active) int proc, stmt;
-set_ptr succ;
-bit_set fs[], slices[];
-bit_set active;
+int check_calls(bit_set fs[], bit_set slices[], int proc, int stmt, set_ptr succ, bit_set active) 
 {
     call_ptr calls;
     int status;
@@ -1326,9 +1328,7 @@ bit_set active;
     return status;
 }
 
-int slice_pass(fs, slices, proc, up, active) bit_set slices[], fs[];
-int proc, up;
-bit_set active;
+int slice_pass(bit_set fs[], bit_set slices[], int proc, int up, bit_set active) 
 {
     bit_set slice;
     int from, to, delta, file, stmt;
@@ -1372,7 +1372,8 @@ bit_set active;
     return change;
 }
 
-void slice_tree(bit_set slices[], int proc, bit_set active) {
+void slice_tree(bit_set slices[], int proc, bit_set active) 
+{
     int p, caller_pid, caller_file;
     int change;
     call_ptr caller;
@@ -1417,9 +1418,7 @@ void slice_tree(bit_set slices[], int proc, bit_set active) {
     }
 }
 
-void add_call_to_slice(slice_sets, proc, call) bit_set slice_sets[];
-int proc;
-call_ptr call;
+void add_call_to_slice(bit_set slice_sets[], int proc, call_ptr call)
 {
     set_ptr return_at;
 
@@ -1449,9 +1448,7 @@ call_ptr call;
     }
 }
 
-void slice_up(final_slice_sets, slice_sets, proc, active, dont_slice) int proc;
-bit_set final_slice_sets[], slice_sets[];
-bit_set active, dont_slice;
+void slice_up(bit_set final_slice_sets[], bit_set slice_sets[], int proc, bit_set active, bit_set dont_slice) 
 {
     call_ptr calls;
 
@@ -1471,9 +1468,7 @@ bit_set active, dont_slice;
     }
 }
 
-int call_pass(slice_sets, proc) /* d e a d    c o d e */
-    bit_set slice_sets[];
-int proc;
+int call_pass(bit_set slice_sets[], int proc) /* d e a d    c o d e */
 {
     int status = 0;
     call_ptr calls;
@@ -1497,9 +1492,7 @@ int proc;
     return status;
 }
 
-void slice_proc(final_slice_sets, slice_sets, proc, active) int proc;
-bit_set final_slice_sets[], slice_sets[];
-bit_set active;
+void slice_proc(bit_set  final_slice_sets[], bit_set slice_sets[], int proc, bit_set  active)
 {
     int i, status;
 
@@ -1544,9 +1537,7 @@ bit_set active;
 *********************************************************************
 */
 
-void slice(file, proc, stmt, var_proc, var, final_slice_sets, active) int file, proc, stmt,
-    var_proc, var;
-bit_set final_slice_sets[], active;
+void slice(int file, int proc, int stmt, int var_proc, int var, bit_set final_slice_sets[], bit_set active)
 {
     int i;
     static bit_set *slice_sets, dont_slice = NULL;
@@ -1590,8 +1581,7 @@ bit_set final_slice_sets[], active;
 }
 
 #define LINE_LENGTH 67
-void print_slices(print_nodes, slices, active) bit_set slices[], active;
-int print_nodes;
+void print_slices(int print_nodes, bit_set slices[], bit_set active) 
 {
     int file, proc;
     int stmt, count;
@@ -1622,8 +1612,7 @@ int print_nodes;
     }
 }
 
-void print_slices1(print_nodes, slices, active) bit_set slices[], active;
-int print_nodes;
+void print_slices1(int print_nodes, bit_set slices[], bit_set active) 
 {
     int file;
     int stmt, count;
@@ -1671,3 +1660,4 @@ int print_nodes;
             printf("\n");
     }
 }
+
