@@ -33,7 +33,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <stdlib.h>
 
-//static char sccsid[] = "@(#)visit-post.c	1.2  8/16/95";
+/*
+static char sccsid[] = "@(#)visit-post.c	1.2  8/16/95";
+*/
 /*
         force proc entry and exit to be first and last
 */

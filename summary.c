@@ -34,8 +34,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdlib.h>
 #include <string.h>
 
-//static char sccsid[] = "@(#)summary.c	1.3  4/26/95";
-
+/*
+static char sccsid[] = "@(#)summary.c	1.3  4/26/95";
+*/
 typedef struct p_struct {
     int proc_id;
     int n_locals;

@@ -657,8 +657,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 # define R in_enum=1;
 # define S in_init=1;
 
-//static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
-
+/*
+static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
+*/
 void eat_string();
 void count();
 void comment();
@@ -680,8 +681,8 @@ int in_typedef   = 0,
 int want_id      = 0;
 int last_was_dot = 0;
 
-#line 684 "<stdout>"
 #line 685 "<stdout>"
+#line 686 "<stdout>"
 
 #define INITIAL 0
 
@@ -901,9 +902,9 @@ YY_DECL
 		}
 
 	{
-#line 75 "kscan.l"
+#line 76 "kscan.l"
 
-#line 907 "<stdout>"
+#line 908 "<stdout>"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -963,144 +964,144 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 76 "kscan.l"
+#line 77 "kscan.l"
 { comment(); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 78 "kscan.l"
+#line 79 "kscan.l"
 {T return reserved_word (AUTO); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 79 "kscan.l"
+#line 80 "kscan.l"
 { return reserved_word (BREAK); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 80 "kscan.l"
+#line 81 "kscan.l"
 { return reserved_word (CASE); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 81 "kscan.l"
+#line 82 "kscan.l"
 {Q return reserved_word (CHAR); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 82 "kscan.l"
+#line 83 "kscan.l"
 { return reserved_word (CONST); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 83 "kscan.l"
+#line 84 "kscan.l"
 { return reserved_word (CONTINUE); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 84 "kscan.l"
+#line 85 "kscan.l"
 { return reserved_word (DEFAULT); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 85 "kscan.l"
+#line 86 "kscan.l"
 { return reserved_word (DO); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 86 "kscan.l"
+#line 87 "kscan.l"
 {Q return reserved_word (DOUBLE); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 87 "kscan.l"
+#line 88 "kscan.l"
 { return reserved_word (ELSE); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 88 "kscan.l"
+#line 89 "kscan.l"
 {Q R return reserved_word (ENUM); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 89 "kscan.l"
+#line 90 "kscan.l"
 {T return reserved_word (EXTERN); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 90 "kscan.l"
+#line 91 "kscan.l"
 {Q return reserved_word (FLOAT); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 91 "kscan.l"
+#line 92 "kscan.l"
 { return reserved_word (FOR); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 92 "kscan.l"
+#line 93 "kscan.l"
 { return reserved_word (GOTO); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 93 "kscan.l"
+#line 94 "kscan.l"
 { return reserved_word (IF); }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 94 "kscan.l"
+#line 95 "kscan.l"
 {Q return reserved_word (INT); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 95 "kscan.l"
+#line 96 "kscan.l"
 {Q return reserved_word (LONG); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 96 "kscan.l"
+#line 97 "kscan.l"
 {T ;return reserved_word (REGISTER); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 97 "kscan.l"
+#line 98 "kscan.l"
 { return reserved_word (RETURN); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 98 "kscan.l"
+#line 99 "kscan.l"
 {Q return reserved_word (SHORT); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 99 "kscan.l"
+#line 100 "kscan.l"
 {Q return reserved_word (SIGNED); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 100 "kscan.l"
+#line 101 "kscan.l"
 { return reserved_word (SIZEOF); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 101 "kscan.l"
+#line 102 "kscan.l"
 {T want_id = 0; return reserved_word (STATIC); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 102 "kscan.l"
+#line 103 "kscan.l"
 {Q in_struct++;
 					need_brace = 2;
 					return reserved_word (STRUCT); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 105 "kscan.l"
+#line 106 "kscan.l"
 { return reserved_word (SWITCH); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 106 "kscan.l"
+#line 107 "kscan.l"
 {
 				in_typedef = 1;
 				type_seen = 0;
@@ -1108,45 +1109,45 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 110 "kscan.l"
+#line 111 "kscan.l"
 {Q in_struct++;
 					need_brace = 2;
 					return reserved_word (UNION); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 113 "kscan.l"
+#line 114 "kscan.l"
 {Q return reserved_word (UNSIGNED); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 114 "kscan.l"
+#line 115 "kscan.l"
 {Q return reserved_word (VOID); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 115 "kscan.l"
+#line 116 "kscan.l"
 { return reserved_word (VOLATILE); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 116 "kscan.l"
+#line 117 "kscan.l"
 { return reserved_word (WHILE); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 117 "kscan.l"
+#line 118 "kscan.l"
 {count(); /* eat gcc extension keyword */}
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 118 "kscan.l"
+#line 119 "kscan.l"
 { reset_line(); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 120 "kscan.l"
+#line 121 "kscan.l"
 { int	type_code;
 					if (need_brace > 0) need_brace--;
 					type_code = check_type(yytext);
@@ -1155,43 +1156,43 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 126 "kscan.l"
+#line 127 "kscan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 128 "kscan.l"
+#line 129 "kscan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 130 "kscan.l"
+#line 131 "kscan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 132 "kscan.l"
+#line 133 "kscan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 134 "kscan.l"
+#line 135 "kscan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 135 "kscan.l"
+#line 136 "kscan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 136 "kscan.l"
+#line 137 "kscan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 137 "kscan.l"
+#line 138 "kscan.l"
 {eat_string(); return(STRING_LITERAL);
 	/*
 	L?\"([^\n"\\]|(\\[^\n]))*\"	{
@@ -1201,119 +1202,119 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 144 "kscan.l"
+#line 145 "kscan.l"
 { count(); return(RIGHT_ASSIGN); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 145 "kscan.l"
+#line 146 "kscan.l"
 { count(); return(LEFT_ASSIGN); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 146 "kscan.l"
+#line 147 "kscan.l"
 { count(); return(ADD_ASSIGN); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 147 "kscan.l"
+#line 148 "kscan.l"
 { count(); return(SUB_ASSIGN); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 148 "kscan.l"
+#line 149 "kscan.l"
 { count(); return(MUL_ASSIGN); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 149 "kscan.l"
+#line 150 "kscan.l"
 { count(); return(DIV_ASSIGN); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 150 "kscan.l"
+#line 151 "kscan.l"
 { count(); return(MOD_ASSIGN); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 151 "kscan.l"
+#line 152 "kscan.l"
 { count(); return(AND_ASSIGN); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 152 "kscan.l"
+#line 153 "kscan.l"
 { count(); return(XOR_ASSIGN); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 153 "kscan.l"
+#line 154 "kscan.l"
 { count(); return(OR_ASSIGN); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 154 "kscan.l"
+#line 155 "kscan.l"
 { count(); return(RIGHT_OP); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 155 "kscan.l"
+#line 156 "kscan.l"
 { count(); return(LEFT_OP); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 156 "kscan.l"
+#line 157 "kscan.l"
 { yylval.token = create_token(NULL);
 				count(); return(INC_OP); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 158 "kscan.l"
+#line 159 "kscan.l"
 { yylval.token = create_token(NULL);
 				count(); return(DEC_OP); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 160 "kscan.l"
+#line 161 "kscan.l"
 { count(); last_was_dot = 1; return(PTR_OP); }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 161 "kscan.l"
+#line 162 "kscan.l"
 { count(); return(AND_OP); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 162 "kscan.l"
+#line 163 "kscan.l"
 { count(); return(OR_OP); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 163 "kscan.l"
+#line 164 "kscan.l"
 { count(); return(LE_OP); }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 164 "kscan.l"
+#line 165 "kscan.l"
 { count(); return(GE_OP); }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 165 "kscan.l"
+#line 166 "kscan.l"
 { count(); return(EQ_OP); }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 166 "kscan.l"
+#line 167 "kscan.l"
 { count(); return(NE_OP); }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 167 "kscan.l"
+#line 168 "kscan.l"
 { count(); return ELIPSIS; }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 168 "kscan.l"
+#line 169 "kscan.l"
 { count(); recent_comma = 1;
 				if (in_parms) want_id = 0;
 				if (k_opt) printf ("SEE COMMA NOW ip %d wi %d\n",
@@ -1322,94 +1323,94 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 173 "kscan.l"
+#line 174 "kscan.l"
 {S count(); return('='); }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 174 "kscan.l"
+#line 175 "kscan.l"
 { count(); return('['); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 175 "kscan.l"
+#line 176 "kscan.l"
 { count(); return(']'); }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 176 "kscan.l"
+#line 177 "kscan.l"
 { count(); last_was_dot = 1; return('.'); }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 177 "kscan.l"
+#line 178 "kscan.l"
 { count(); return('&'); }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 178 "kscan.l"
+#line 179 "kscan.l"
 { count(); return('!'); }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 179 "kscan.l"
+#line 180 "kscan.l"
 { count(); return('~'); }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 180 "kscan.l"
+#line 181 "kscan.l"
 { count(); return('-'); }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 181 "kscan.l"
+#line 182 "kscan.l"
 { count(); return('+'); }
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 182 "kscan.l"
+#line 183 "kscan.l"
 { 
 				yylval.token = create_token(NULL);
 				count(); return('*'); }
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 185 "kscan.l"
+#line 186 "kscan.l"
 { count(); return('/'); }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 186 "kscan.l"
+#line 187 "kscan.l"
 { count(); return('%'); }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 187 "kscan.l"
+#line 188 "kscan.l"
 { count(); return('<'); }
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 188 "kscan.l"
+#line 189 "kscan.l"
 { count(); return('>'); }
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 189 "kscan.l"
+#line 190 "kscan.l"
 { count(); return('^'); }
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 190 "kscan.l"
+#line 191 "kscan.l"
 { count(); return('|'); }
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 191 "kscan.l"
+#line 192 "kscan.l"
 { count(); return('?'); }
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 192 "kscan.l"
+#line 193 "kscan.l"
 {	
 				braces--;
 				/*
@@ -1422,7 +1423,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 201 "kscan.l"
+#line 202 "kscan.l"
 {
 				want_id = 0;
 				if (k_opt) printf (" want id = %d :%s: \n",want_id,
@@ -1444,7 +1445,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 219 "kscan.l"
+#line 220 "kscan.l"
 { yylval.token = create_token(NULL);
 				if (yytext[0] == ')') want_id = 0;
 				if (yytext[0] == '(') want_id = 0;
@@ -1457,7 +1458,7 @@ YY_RULE_SETUP
 case 88:
 /* rule 88 can match eol */
 YY_RULE_SETUP
-#line 228 "kscan.l"
+#line 229 "kscan.l"
 {int save;
 					save = last_was_dot;
 					count();
@@ -1465,15 +1466,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 232 "kscan.l"
+#line 233 "kscan.l"
 { count(); /* ignore bad characters */ }
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 234 "kscan.l"
+#line 235 "kscan.l"
 ECHO;
 	YY_BREAK
-#line 1477 "<stdout>"
+#line 1478 "<stdout>"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2481,7 +2482,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 234 "kscan.l"
+#line 235 "kscan.l"
 
 
 int yywrap(void)

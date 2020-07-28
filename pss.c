@@ -36,8 +36,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <string.h>
 
-//static char sccsid[] = "@(#)pss.c	1.4  4/26/95";
-
+/*
+static char sccsid[] = "@(#)pss.c	1.4  4/26/95";
+*/
 typedef struct ptr_struct ptr_rec, *ptr_ptr;
 
 struct ptr_struct {

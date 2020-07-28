@@ -40,8 +40,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 # define R in_enum=1;
 # define S in_init=1;
 
-//static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
-
+/*
+static  char    sccsid[] = "@(#)kscan.l	1.4  7/20/94";
+*/
 void eat_string();
 void count();
 void comment();

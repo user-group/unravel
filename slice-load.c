@@ -36,7 +36,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <string.h>
 #include <unistd.h>
 
-//static char sccsid[] = "@(#)slice-load.c	1.6  8/16/95";
+/*
+static char sccsid[] = "@(#)slice-load.c	1.6  8/16/95";
+*/
 
 int v_opt;
 int c_opt = 0;

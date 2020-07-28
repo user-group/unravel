@@ -35,7 +35,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdlib.h>
 #include <string.h>
 
-// static  char    sccsid[] = "@(#)slice_driver.c	1.4  8/16/95";
+/* 
+static  char    sccsid[] = "@(#)slice_driver.c	1.4  8/16/95";
+*/
 static bit_set *slices, active;
 
 extern int c_opt;

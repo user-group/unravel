@@ -42,8 +42,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 #define LIST_MAX 2000
 
-// static  char    sccsid[] = "@(#)history.c	1.2  4/26/95";
-
+/* 
+static  char    sccsid[] = "@(#)history.c	1.2  4/26/95";
+*/
 typedef struct history_struct history_rec, *history_ptr;
 
 struct history_struct {
@@ -64,7 +65,8 @@ void SliceRedraw(MultiSliceWidget w);
 void SliceClearAll(MultiSliceWidget w);
 extern int is_id_valid(int var_pid, int var_id);
 
-// typedef void *Widget;
+/* typedef void *Widget;
+*/
 
 void clear_history(void) 
 { 

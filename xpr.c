@@ -35,8 +35,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <string.h>
 
-// static char sccsid[] = "@(#)xpr.c	1.4  4/26/95";
-
+/* 
+static char sccsid[] = "@(#)xpr.c	1.4  4/26/95";
+*/
 #define MAX_MALLOC 100
 static int max_addr   = 0;
 addr_tab_ptr addr_tab = NULL;

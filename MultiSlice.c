@@ -39,10 +39,11 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <X11/Xaw/Scrollbar.h>
 
 
-//static char sccsid[]    = "@(#)MultiSlice.c	1.5  8/14/95";
-//static char *sccs_h_id  = MSLICE_H_SCCS_ID;
-//static char *sccs_ph_id = MSLICE_PH_SCCS_ID;
-
+/*
+static char sccsid[]    = "@(#)MultiSlice.c	1.5  8/14/95";
+static char *sccs_h_id  = MSLICE_H_SCCS_ID;
+static char *sccs_ph_id = MSLICE_PH_SCCS_ID;
+*/
 void SliceSetTop(MultiSliceWidget w, float pc);
 
 static XtResource resources[] = {
@@ -760,7 +761,7 @@ void find_line_and_file(MultiSliceWidget w, int line, int *fid, int *line_in_fil
     return;
 }
 
-// static
+/* static */
 void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n) {
     static int line = 0;
     int y;

@@ -63,7 +63,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "config.h"
 #define XtNlinkOnly "linkOnly"
 
-//static char sccsid[] = "@(#)unravel.c	1.8  7/26/96";
+/*
+static char sccsid[] = "@(#)unravel.c	1.8  7/26/96";
+*/
 
 static int link_only = 0;
 
@@ -513,7 +515,10 @@ void make_windows(Widget top)
 
     strcpy(buff, "Current directory: ");
 
-    strcat(buff, "/home/alan/Documents/unravel"); // getcwd(NULL,1000));
+    /*
+    strcat(buff, "/home/alan/Documents/unravel"); 
+    */ 
+    strcat(buff, getcwd(NULL,1000));
     dir = XtVaCreateManagedWidget("dir",
         labelWidgetClass,
         frame,
@@ -854,7 +859,9 @@ int main(int np, char **p)
     }
     fprintf(stderr, "calling getcwd()\n");
     char buff[2000];
-    char *cwd = "/home/alan/Documents/unravel/"; // getcwd(buff, 2000);
+    /*
+    char *cwd = "/home/alan/Documents/unravel/"; */ 
+    char *cwd = getcwd(buff, 2000);
     fprintf(stderr, "creating cmd...[%s]\n", cwd);
 
     sprintf(cmd, "echo -n UNRAVEL \" %s \" >> HISTORY ; date >>HISTORY", cwd);

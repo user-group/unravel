@@ -37,7 +37,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 int max_chain        = 0;
 
-//static char sccsid[] = "@(#)chain.c	1.3  5/5/94";
+/*
+static char sccsid[] = "@(#)chain.c	1.3  5/5/94";
+*/
 
 int current_chain(void) { 
     return max_chain; 

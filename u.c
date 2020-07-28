@@ -56,8 +56,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <sys/stat.h>
 #include <time.h>
 
-// static  char    sccsid[] = "@(#)u.c	1.12  7/26/96";
-
+/* 
+static  char    sccsid[] = "@(#)u.c	1.12  7/26/96";
+*/
 #define WIDTH 450
 
 #define XtNrunningFG "runningFG"

@@ -40,7 +40,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "slice.h"
 
 
-//static char sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
+/*
+static char sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
+*/
 static bit_set *slices, active;
 
 extern int v_opt;

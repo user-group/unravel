@@ -66,8 +66,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 
 
-// static  char    sccsid[] = "@(#)analyzer.c	1.5  8/16/95";
-
+/* 
+static  char    sccsid[] = "@(#)analyzer.c	1.5  8/16/95";
+*/
 /*
 # define XtNrunningFG "runningFG"
 # define XtNrunningBG "runningBG"

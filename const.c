@@ -33,7 +33,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "ansi_parse.h"
 #include <stdio.h>
 
-//static char sccsid[] = "@(#)const.c	1.2  8/14/95";
+/*
+static char sccsid[] = "@(#)const.c	1.2  8/14/95";
+*/
 
 int n_opt = 0, c_opt = 0, p_opt = 0, i_opt = 0, a_opt = 0, k_opt = 0, o_opt = 0, x_opt = 0,
     z_opt = 0, m_opt = 0, s_opt = 0, lineno = 1, stmtno = 0, current_column = 1, global_scope = 1,

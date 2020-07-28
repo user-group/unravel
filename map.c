@@ -45,11 +45,12 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-//#include <sys/time.h>
+
 #include <sys/types.h>
 
-//static char sccsid[] = "@(#)map.c	1.6  8/11/95";
-
+/*
+static char sccsid[] = "@(#)map.c	1.6  8/11/95";
+*/
 int v_opt = 0;
 
 typedef struct file_struct file_rec, *file_ptr;

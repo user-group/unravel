@@ -41,7 +41,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <stdlib.h>
 
-//static char sccsid[] = "@(#)helpu.c	1.1  10/14/94";
+/*
+static char sccsid[] = "@(#)helpu.c	1.1  10/14/94";
+*/
 
 void quitB(Widget w, Widget x, caddr_t y) 
 { 

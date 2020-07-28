@@ -34,13 +34,15 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <sys/time.h>
+
 #include "sets.h"
 #include "slice.h"
 
 #define DEPTH 100
 
-//static char sccsid[] = "%W%  %G%";
+/*
+static char sccsid[] = "%W%  %G%";
+*/
 
 int lib_opt = 0;
 

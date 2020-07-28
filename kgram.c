@@ -1,5 +1,6 @@
-//extern char *malloc(), *realloc();
-
+/*
+extern char *malloc(), *realloc();
+*/
 # line 2 "kgram.y"
 # include <stdlib.h>
 # include <stdio.h>
@@ -16,9 +17,12 @@ int yyerror(char *msg);
 int yylex(void);
 
 static	int set_typedef = 0;
-// static  char    sccsid[] = "@(#)kgram.y	1.7  10/26/94";
+/*
+static  char    sccsid[] = "@(#)kgram.y	1.7  10/26/94";
+
 static	char	*parse_h_sccs_id = PARSE_H_SCCS_ID;
 static	char	*lif_h_sccs_id = LIF_H_SCCS_ID;
+*/
 
 # define IDENTIFIER 257
 # define CONSTANT 258

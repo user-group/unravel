@@ -33,8 +33,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "ansi_parse.h"
 #include <stdio.h>
 
-//static char sccsid[] = "@(#)err.c	1.1  1/27/94";
-
+/*
+static char sccsid[] = "@(#)err.c	1.1  1/27/94";
+*/
 void warning(char *s, char *t)
 {
     /*

@@ -36,8 +36,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <string.h>
 #include <unistd.h>
 
-//static char sccsid[] = "@(#)parser.c	1.9  8/16/95";
-
+/*
+static char sccsid[] = "@(#)parser.c	1.9  8/16/95";
+*/
 int yydebug;
 extern int yyparse(void);
 

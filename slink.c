@@ -36,7 +36,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "lif.h"
 
 
-//static char sccsid[] = "@(#)slink.c	1.4  4/26/95";
+/*
+static char sccsid[] = "@(#)slink.c	1.4  4/26/95";
+*/
 int v_opt            = 0;
 
 typedef struct local_struct local_rec, *local_ptr;

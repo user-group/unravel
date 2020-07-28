@@ -16,15 +16,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/time.h>
+#include <time.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include "config.h"
 #define WAIT 500
 
-// static char sccsid[] = "@(#)select.c	1.6  8/16/95";
-
+/* 
+static char sccsid[] = "@(#)select.c	1.6  8/16/95";
+*/
 int no_slice = 0;
 
 char *slicer = "u";
@@ -615,14 +616,16 @@ int main(int np, char **p)
     XtAppContext ac;
     Widget top;
     char icon_at[2000];
-
+    int clock;
+    
     sprintf(icon_at, "*iconPixmap: %s/unravel.icon", HOME);
     fall[0] = icon_at;
 
     top = XtAppInitialize(&ac, "Unravel", NULL, 0, &np, p, fall, NULL, 0);
-    fprintf(stderr, "made top()\n");
-    // clock = time(NULL);
-    // fprintf (stderr, "Link & Slice  %s\n",ctime(&clock));
+    
+    clock = time(NULL);
+    fprintf (stderr, "Link & Slice  %s\n",ctime(&clock));
+    
     no_slice = 0;
     if (np == 2)
         no_slice = 1;

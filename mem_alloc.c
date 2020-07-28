@@ -35,8 +35,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <string.h>
 
-//static char sccsid[] = "@(#)mem_alloc.c	1.2  4/26/95";
-
+/*
+static char sccsid[] = "@(#)mem_alloc.c	1.2  4/26/95";
+*/
 static int n_strings = 0, n_text = 0, n_tokens = 0, n_types = 0, n_type_ste = 0, n_var_ste = 0,
            n_trees = 0, n_procs = 0, n_lists = 0, n_stmts = 0, n_tag_ste = 0, n_addr_tab = 0,
            n_labels = 0, n_decls = 0;

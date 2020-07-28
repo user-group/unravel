@@ -65,8 +65,10 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <string.h>
 
-//static char *sccs_h_id = CONTROL_SCCS_ID;
-//static char *sccs_id   = "@(#)control.c	1.1  8/10/95";
+/*
+static char *sccs_h_id = CONTROL_SCCS_ID;
+static char *sccs_id   = "@(#)control.c	1.1  8/10/95";
+*/
 
 void control(int code, int ctrl_entry, int ctrl_exit, int stmt_entry, 
              int stmt_exit, int else_entry, int else_exit) 
