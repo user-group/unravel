@@ -304,7 +304,7 @@ void push_analysis(Widget w, label_ptr labels, XtPointer w_data)
         set = 1;
         XtAddEventHandler(w, NoEventMask, True, ana_done, labels);
     }
-    sprintf(buff, "PATH=%s:$PATH ; ./analyzer %ld &", HOME, XtWindow(w));
+    sprintf(buff, "PATH=%s:$PATH ; analyzer %ld &", HOME, XtWindow(w));
     fprintf(stderr, "executing [%s]\n", buff);
     system(buff);
     update_src_info(labels);

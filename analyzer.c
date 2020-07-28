@@ -41,6 +41,13 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 *******************************************************************
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <time.h>
+#include <unistd.h>
+
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
 #include <X11/StringDefs.h>
@@ -55,14 +62,15 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <X11/Xaw/SmeLine.h>
 #include <X11/Xaw/Viewport.h>
 #include <dirent.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <time.h>
-#include <unistd.h>
+
+
+
 #define WAIT 500
+
 #include "config.h"
+
+/* For some reason, GCC -Wall gives a warning about snprintf() not being declared */
+extern int snprintf(char *buf, size_t size, const char *fmt, ...);
 
 
 
@@ -300,6 +308,7 @@ XtIntervalId *tt;
         XtVaSetValues(nf->r, XtNlabel, (XtArgVal) "Analyze Selected Files", NULL);
     return;
 }
+
 
 void do_analysis(nf_ptr nf, XtIntervalId *tt) {
     char buff[4000], file[1000], mess[2000];
