@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -32,10 +32,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #define WORD_SIZE 32
-#define FALSE     0
-#define TRUE      1
+#define FALSE 0
+#define TRUE 1
 
 /*
 static char *sccs_h_id = SETS_SCCS_ID;
@@ -45,7 +44,8 @@ void clear_id_set(head) id_set_ptr head;
 {
     id_set_ptr at;
 
-    while (head) {
+    while (head)
+    {
         at = head->next;
         free((char *)head);
         head = at;
@@ -57,9 +57,11 @@ int id, pid;
 {
     id_set_ptr at;
 
-    if (head) {
+    if (head)
+    {
         at = head;
-        while (at) {
+        while (at)
+        {
             if ((at->id == id) && (at->pid == pid))
                 return 1;
             at = at->next;
@@ -73,9 +75,11 @@ int id, pid;
 {
     id_set_ptr last, new, at;
 
-    if (*head) {
+    if (*head)
+    {
         at = *head;
-        while (at) {
+        while (at)
+        {
             if ((at->id == id) && (at->pid == pid))
                 return 0;
             last = at;
@@ -83,7 +87,8 @@ int id, pid;
         }
     }
     new = (id_set_ptr)malloc(sizeof(id_set_node));
-    if (!new) {
+    if (!new)
+    {
         fprintf(stderr, "out of memory in add_to_id_set\n");
         exit(1);
     }
@@ -103,7 +108,8 @@ int id, level, code;
     var_ptr new;
 
     new = s;
-    while (new) {
+    while (new)
+    {
         if ((id == new->id) && (level == new->level) && (code == new->code))
             return s;
         new = new->next;
@@ -119,7 +125,8 @@ int v;
     set_ptr new;
 
     new = s;
-    while (new) {
+    while (new)
+    {
         if (v == new->id)
             return s;
         new = new->next;
@@ -150,7 +157,8 @@ bit_set create_bit_set(size) int size;
             start[i] = 0;
 
     b = (bit_set)malloc(sizeof(bit_set_node));
-    if (b) {
+    if (b)
+    {
         b->bits = start;
         b->max  = size;
     }
@@ -208,7 +216,8 @@ void copy_bit_set(to, from) bit_set to, from;
 {
     int i;
 
-    if (to->max > from->max) {
+    if (to->max > from->max)
+    {
         fprintf(stderr, "Bad call to copy_bit_set");
         exit(1);
     }
@@ -221,7 +230,8 @@ int bit_set_equal(a, b) bit_set a, b;
 {
     int i;
 
-    if (a->max != b->max) {
+    if (a->max != b->max)
+    {
         fprintf(stderr, "Bad call to bit_set_equal");
         exit(1);
     }
@@ -236,7 +246,8 @@ void union_bit_set(to, from) bit_set to, from;
 {
     int i;
 
-    if (to->max != from->max) {
+    if (to->max != from->max)
+    {
         fprintf(stderr, "Bad call to union_bit_set");
         fprintf(stderr, " to(%d) vs from(%d)\n", to->max, from->max);
         exit(4);
@@ -251,13 +262,15 @@ int cunion_bit_set(to, from) bit_set to, from;
     int i;
     int change = 0, old;
 
-    if (to->max != from->max) {
+    if (to->max != from->max)
+    {
         fprintf(stderr, "Bad call to union_bit_set");
         fprintf(stderr, " to(%d) vs from(%d)\n", to->max, from->max);
         exit(4);
     }
 
-    for (i = 0; i < (to->max + WORD_SIZE - 1) / WORD_SIZE; i++) {
+    for (i = 0; i < (to->max + WORD_SIZE - 1) / WORD_SIZE; i++)
+    {
         old = to->bits[i];
         to->bits[i] |= from->bits[i];
         if (to->bits[i] != old)
@@ -271,18 +284,21 @@ int is_subset(sub, set) bit_set sub, set;
     int i;
     int proper = 0;
 
-    if (!sub || !set) {
+    if (!sub || !set)
+    {
         fprintf(stderr, "Bad call to is_subset");
         exit(1);
     }
 
-    if (sub->max != set->max) {
+    if (sub->max != set->max)
+    {
         fprintf(stderr, "Bad call to is_subset");
         fprintf(stderr, " sub(%d) vs set(%d)\n", sub->max, set->max);
         exit(4);
     }
 
-    for (i = 0; i < (sub->max + WORD_SIZE - 1) / WORD_SIZE; i++) {
+    for (i = 0; i < (sub->max + WORD_SIZE - 1) / WORD_SIZE; i++)
+    {
         if (sub->bits[i] & (~set->bits[i]))
             return 0;
         if (sub->bits[i] != set->bits[i])
@@ -295,7 +311,8 @@ void not_bit_set(to) bit_set to;
 {
     int i;
 
-    if (!to) {
+    if (!to)
+    {
         fprintf(stderr, "Bad call to not_bit_set");
         exit(1);
     }
@@ -308,7 +325,8 @@ void and_bit_set(to, from) bit_set to, from;
 {
     int i;
 
-    if (to->max != from->max) {
+    if (to->max != from->max)
+    {
         fprintf(stderr, "Bad call to and_bit_set");
         exit(1);
     }
@@ -363,4 +381,3 @@ int last;
                     return i;
     return -1;
 }
-

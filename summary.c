@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -37,7 +37,8 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 /*
 static char sccsid[] = "@(#)summary.c	1.3  4/26/95";
 */
-typedef struct p_struct {
+typedef struct p_struct
+{
     int proc_id;
     int n_locals;
     int n_global_refs;
@@ -53,7 +54,8 @@ typedef struct p_struct {
     char *name;
 } proc_rec, *proc_ptr;
 
-int main(int np, char **p)
+int
+main(int np, char **p)
 {
     proc_rec procs[10000];
     char buff[2000], name[2000];
@@ -66,20 +68,25 @@ int main(int np, char **p)
     int id, node, code;
     int level;
 
-    if (np == 2) {
+    if (np == 2)
+    {
         ff_file = fopen(p[1], "r");
-        if (ff_file == NULL) {
+        if (ff_file == NULL)
+        {
             fprintf(stderr, "summary: could not open %s\n", p[1]);
             exit(1);
         }
     }
-    if (ff_file == NULL) {
+    if (ff_file == NULL)
+    {
         fprintf(stderr, "summary: no LIF file given\n");
         exit(1);
     }
-    while (NULL != fgets(buff, 2000, ff_file)) {
+    while (NULL != fgets(buff, 2000, ff_file))
+    {
         sscanf(buff, "%d", &code);
-        switch (code) {
+        switch (code)
+        {
         case LIF_PROC_START:
             sscanf(buff, "%*d(%*d,%d,%[^)]", &id, name);
             procs[n_procs].name = malloc(strlen(name) + 1);
@@ -199,7 +206,8 @@ int main(int np, char **p)
         "local_refs",
         "chain_refs",
         "has_return");
-    for (id = 0; id < n_procs; id++) {
+    for (id = 0; id < n_procs; id++)
+    {
         printf("%10d %10d %10d %10d %10d\n",
             procs[id].proc_id,
             procs[id].n_locals,
@@ -219,7 +227,8 @@ int main(int np, char **p)
         "nc",
         "cd",
         "ar");
-    for (id = 0; id < n_procs; id++) {
+    for (id = 0; id < n_procs; id++)
+    {
         printf("%3d %4d %4d %4d %4d %4d %4d %4d %4d %4d %4d =%s= %s\n",
             procs[id].proc_id,
             procs[id].n_irefs,
@@ -240,4 +249,3 @@ int main(int np, char **p)
     }
     return 0;
 }
-

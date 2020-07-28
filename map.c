@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -59,17 +59,20 @@ typedef struct main_struct main_rec, *main_ptr;
 typedef struct proc_list_struct proc_list_rec, *proc_list;
 typedef struct file_list_struct file_list_rec, *file_list;
 
-struct file_list_struct {
+struct file_list_struct
+{
     file_list next;
     file_ptr file;
 };
 
-struct proc_list_struct {
+struct proc_list_struct
+{
     proc_list next;
     proc_ptr proc;
 };
 
-struct file_struct {
+struct file_struct
+{
     int n_procs;
     char *name;
     proc_list procs;       /* procs defined (with body) */
@@ -77,7 +80,8 @@ struct file_struct {
     file_ptr next;
 };
 
-struct proc_struct {
+struct proc_struct
+{
     int proc_id, entry;
     char *name;
     char s_or_x; /* static or extern			 */
@@ -86,7 +90,8 @@ struct proc_struct {
     proc_ptr next;
 };
 
-struct main_struct {
+struct main_struct
+{
     file_list files;
     file_ptr main_file;
     proc_list done;
@@ -95,7 +100,8 @@ struct main_struct {
     main_ptr next;
 };
 
-proc_list proc_entry(proc_ptr proc) 
+proc_list
+proc_entry(proc_ptr proc)
 {
     proc_list new;
 
@@ -105,7 +111,8 @@ proc_list proc_entry(proc_ptr proc)
     return new;
 }
 
-file_list file_entry(file_ptr file)
+file_list
+file_entry(file_ptr file)
 {
     file_list new;
 
@@ -115,12 +122,14 @@ file_list file_entry(file_ptr file)
     return new;
 }
 
-file_ptr find_file(file_ptr list, file_ptr file) 
+file_ptr
+find_file(file_ptr list, file_ptr file)
 {
     file_ptr at;
 
     at = list;
-    while (at) {
+    while (at)
+    {
         if (strcmp(at->name, file->name) == 0)
             return at;
         at = at->next;
@@ -128,12 +137,14 @@ file_ptr find_file(file_ptr list, file_ptr file)
     return NULL;
 }
 
-file_list find_file_list(file_list list, file_ptr file)
+file_list
+find_file_list(file_list list, file_ptr file)
 {
     file_list at;
 
     at = list;
-    while (at) {
+    while (at)
+    {
         if (strcmp(at->file->name, file->name) == 0)
             return at;
         at = at->next;
@@ -141,12 +152,14 @@ file_list find_file_list(file_list list, file_ptr file)
     return NULL;
 }
 
-proc_ptr find_proc_list(proc_list list, proc_ptr proc) 
+proc_ptr
+find_proc_list(proc_list list, proc_ptr proc)
 {
     proc_list at;
 
     at = list;
-    while (at) {
+    while (at)
+    {
         if (strcmp(at->proc->name, proc->name) == 0)
             return at->proc;
         at = at->next;
@@ -154,12 +167,14 @@ proc_ptr find_proc_list(proc_list list, proc_ptr proc)
     return NULL;
 }
 
-proc_ptr find_proc(proc_ptr list, proc_ptr proc) 
+proc_ptr
+find_proc(proc_ptr list, proc_ptr proc)
 {
     proc_ptr at;
 
     at = list;
-    while (at) {
+    while (at)
+    {
         if (strcmp(at->name, proc->name) == 0)
             return at;
         at = at->next;
@@ -167,7 +182,8 @@ proc_ptr find_proc(proc_ptr list, proc_ptr proc)
     return NULL;
 }
 
-void match_procs_to_files(main_ptr mp, file_ptr fp, proc_ptr pp) 
+void
+match_procs_to_files(main_ptr mp, file_ptr fp, proc_ptr pp)
 {
     main_ptr m;
     file_ptr f;
@@ -178,47 +194,59 @@ void match_procs_to_files(main_ptr mp, file_ptr fp, proc_ptr pp)
     file_list files, new_file_entry;
 
     m = mp;
-    while (m) {
+    while (m)
+    {
         if (v_opt)
             printf("\nmatch main %s\n", m->main_file->name);
         m->done  = NULL;
         m->files = file_entry(m->main_file);
         files    = m->files;
-        while (files) {
+        while (files)
+        {
             f = files->file;
             if (v_opt)
                 printf("File: %s\n", f->name);
             not_list = f->not_defined;
             p_list   = f->procs;
-            while (p_list) {
+            while (p_list)
+            {
                 if (v_opt)
                     printf("\tAdd proc %s\n", p_list->proc->name);
                 found = find_proc_list(m->done, p_list->proc);
-                if (found) {
+                if (found)
+                {
                     if (v_opt)
                         printf("\t\tfound %s in %s\n", found->name, f->name);
                     found = find_proc(pp, found);
                     if (f != m->main_file)
-                        if (found->same_name) {
+                        if (found->same_name)
+                        {
                             if (v_opt)
                                 printf("\t\tambig %s in %s\n", found->name, f->name);
-                            if (!find_proc_list(m->ambigous_procs, found)) {
+                            if (!find_proc_list(m->ambigous_procs, found))
+                            {
                                 new_proc_entry       = proc_entry(/*p*/ found);
                                 new_proc_entry->next = m->ambigous_procs;
                                 m->ambigous_procs    = new_proc_entry;
                             }
                         }
-                } else {
+                }
+                else
+                {
                     found = find_proc(pp, p_list->proc);
-                    if ((f != m->main_file) && (found->same_name)) {
+                    if ((f != m->main_file) && (found->same_name))
+                    {
                         if (v_opt)
                             printf("\t\tambig %s in %s\n", found->name, f->name);
-                        if (!find_proc_list(m->ambigous_procs, found)) {
+                        if (!find_proc_list(m->ambigous_procs, found))
+                        {
                             new_proc_entry       = proc_entry(/*p*/ found);
                             new_proc_entry->next = m->ambigous_procs;
                             m->ambigous_procs    = new_proc_entry;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         new_proc_entry       = proc_entry(p_list->proc);
                         new_proc_entry->next = m->done;
                         m->done              = new_proc_entry;
@@ -226,20 +254,26 @@ void match_procs_to_files(main_ptr mp, file_ptr fp, proc_ptr pp)
                 }
                 p_list = p_list->next;
             }
-            while (not_list) {
+            while (not_list)
+            {
                 p     = not_list->proc;
                 found = find_proc_list(m->done, p);
-                if (!found) {
+                if (!found)
+                {
                     new_proc_entry       = proc_entry(p);
                     new_proc_entry->next = m->done;
                     m->done              = new_proc_entry;
                     found                = find_proc(pp, p);
-                    if (found) {
-                        if (found->same_name) {
+                    if (found)
+                    {
+                        if (found->same_name)
+                        {
                             new_proc_entry       = proc_entry(/*p*/ found);
                             new_proc_entry->next = m->ambigous_procs;
                             m->ambigous_procs    = new_proc_entry;
-                        } else if (!find_file_list(m->files, found->in_file)) {
+                        }
+                        else if (!find_file_list(m->files, found->in_file))
+                        {
                             new_file_entry = file_entry(found->in_file);
                             add_f          = files;
                             while (add_f->next)
@@ -256,7 +290,9 @@ void match_procs_to_files(main_ptr mp, file_ptr fp, proc_ptr pp)
                             }
                             */
                         }
-                    } else {
+                    }
+                    else
+                    {
                         new_proc_entry       = proc_entry(p);
                         new_proc_entry->next = m->lib_procs;
                         m->lib_procs         = new_proc_entry;
@@ -270,53 +306,61 @@ void match_procs_to_files(main_ptr mp, file_ptr fp, proc_ptr pp)
     }
 }
 
-void print_match_results(main_ptr mp)
+void
+print_match_results(main_ptr mp)
 {
     file_list need_files;
     proc_list p;
-    proc_ptr  same;
-    FILE     *sys;
-    int       n;
-    int       col;
+    proc_ptr same;
+    FILE *sys;
+    int n;
+    int col;
 
     sys = stdout;
-    while (mp) {
+    while (mp)
+    {
         col        = fprintf(sys, "Main program file %s requires", mp->main_file->name);
         need_files = mp->files;
         n          = 0;
-        
-        while (need_files) {
+
+        while (need_files)
+        {
             n++;
             need_files = need_files->next;
         }
-        
+
         col += fprintf(sys, " %d files: ", n);
         need_files = mp->files;
-        
-        while (need_files) {
-            if (col > 60) {
+
+        while (need_files)
+        {
+            if (col > 60)
+            {
                 fprintf(sys, "\n");
                 col = 0;
             }
             col += fprintf(sys, "%s ", need_files->file->name);
             need_files = need_files->next;
         }
-        
+
         p = mp->ambigous_procs;
-        
+
         if (p)
             fprintf(sys, "\nThe following procedures are defined in more than one file:\n");
         else
             fprintf(sys, "\n");
-            
-        while (p) {
+
+        while (p)
+        {
             fprintf(sys, "\t%s ", p->proc->name);
             same = p->proc->same_name;
             col  = fprintf(sys, "%s ", p->proc->in_file->name);
-            while (same) {
+            while (same)
+            {
                 col += fprintf(sys, "%s ", same->in_file->name);
                 same = same->same_name;
-                if (same && col + strlen(same->in_file->name) > 60) {
+                if (same && col + strlen(same->in_file->name) > 60)
+                {
                     fprintf(sys, "...");
                     same = NULL;
                 }
@@ -329,19 +373,21 @@ void print_match_results(main_ptr mp)
     fclose(sys);
 }
 
-void output_match_results(char *dir_name, main_ptr mp) 
+void
+output_match_results(char *dir_name, main_ptr mp)
 {
     file_list need_files;
     proc_list p;
-    proc_ptr  same;
-    FILE     *sys;
-    int       n;
-    char      buff[2000];
-    int       col;
+    proc_ptr same;
+    FILE *sys;
+    int n;
+    char buff[2000];
+    int col;
 
     sprintf(buff, "%s/SYSTEM", dir_name);
     sys = fopen(buff, "w");
-    if (!sys) {
+    if (!sys)
+    {
         fprintf(stderr, "Could not open 'SYSTEM' file\n");
         fprintf(stderr, "check current directory write permissions,\n");
         fprintf(stderr, "\t\tls -ld .\n");
@@ -351,31 +397,37 @@ void output_match_results(char *dir_name, main_ptr mp)
         fprintf(stderr, "is most likely cause of write failure\n");
         exit(1);
     }
-    while (mp) {
+    while (mp)
+    {
         fprintf(sys, "MAIN %s", mp->main_file->name);
         need_files = mp->files;
         n          = 0;
-        while (need_files) {
+        while (need_files)
+        {
             n++;
             need_files = need_files->next;
         }
         fprintf(sys, " %d\n", n);
         fprintf(sys, "FILES\n");
         need_files = mp->files;
-        while (need_files) {
+        while (need_files)
+        {
             fprintf(sys, "\t%s\n", need_files->file->name);
             need_files = need_files->next;
         }
         fprintf(sys, "AMBIG\n");
         p = mp->ambigous_procs;
-        while (p) {
+        while (p)
+        {
             fprintf(sys, "\t%s ", p->proc->name);
             same = p->proc->same_name;
             col  = fprintf(sys, "%s ", p->proc->in_file->name);
-            while (same) {
+            while (same)
+            {
                 col += fprintf(sys, "%s ", same->in_file->name);
                 same = same->same_name;
-                if (same && col + strlen(same->in_file->name) > 60) {
+                if (same && col + strlen(same->in_file->name) > 60)
+                {
                     fprintf(sys, "...");
                     same = NULL;
                 }
@@ -385,7 +437,8 @@ void output_match_results(char *dir_name, main_ptr mp)
         }
         fprintf(sys, "LIB\n");
         p = mp->lib_procs;
-        while (p) {
+        while (p)
+        {
             fprintf(sys, "\t%s\n", p->proc->name);
             p = p->next;
         }
@@ -426,33 +479,38 @@ print_match_results (mp)
 }
 */
 
-int file_selector(struct dirent *entry) 
+int
+file_selector(struct dirent *entry)
 {
     int ix;
 
     ix = strlen(entry->d_name) - 2;
 
     if (ix > 0)
-        if ((entry->d_name[ix] == '.') && (entry->d_name[ix + 1] == 'T')) {
+        if ((entry->d_name[ix] == '.') && (entry->d_name[ix + 1] == 'T'))
+        {
             return 1;
         }
     return 0;
 }
 
-int compare(struct dirent **a, struct dirent **b)
+int
+compare(struct dirent **a, struct dirent **b)
 {
     if (strcmp((*a)->d_name, (*b)->d_name) > 0)
         return 1;
-        
+
     return 0;
 }
 
-int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*compare)()) 
+int
+myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*compare)())
 {
     DIR *dir;
     struct dirent *entry;
     typedef struct l_struct ll_node, *ll;
-    struct l_struct {
+    struct l_struct
+    {
         ll next;
         struct dirent *e;
     };
@@ -462,12 +520,15 @@ int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*comp
     ll nodes, node_list = NULL;
 
     dir = opendir(dir_name);
-    if (!dir) {
+    if (!dir)
+    {
         fprintf(stderr, "directory open failed for %s\n", dir_name);
         exit(1);
     }
-    for (entry = readdir(dir); entry != NULL; entry = readdir(dir)) {
-        if (select(entry)) {
+    for (entry = readdir(dir); entry != NULL; entry = readdir(dir))
+    {
+        if (select(entry))
+        {
             new_ll       = (ll)malloc(sizeof(ll_node));
             new_ll->next = node_list;
             node_list    = new_ll;
@@ -478,7 +539,8 @@ int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*comp
     }
     *list = (struct dirent **)malloc((n_match + 1) * sizeof(struct dirent *));
     nodes = node_list;
-    for (i = 0; i < n_match; i++) {
+    for (i = 0; i < n_match; i++)
+    {
         (*list)[i] = nodes->e;
         nodes      = nodes->next;
     }
@@ -486,14 +548,16 @@ int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*comp
     return n_match;
 }
 
-int scan_dir(char *dir, struct dirent ***f) 
+int
+scan_dir(char *dir, struct dirent ***f)
 {
     struct dirent **files;
     int count;
     int alphasort();
 
     count = myscandir(dir, &files, file_selector, compare);
-    if (count == -1) {
+    if (count == -1)
+    {
         fprintf(
             stderr, "map: could not open %s\n", strcmp(dir, ".") == 0 ? "current directory" : dir);
         exit(1);
@@ -503,44 +567,51 @@ int scan_dir(char *dir, struct dirent ***f)
     return count;
 }
 
-int main(int np, char **p)
+int
+main(int np, char **p)
 {
     /* struct direct 	**files; */
     struct dirent **files;
-    int             n_files, i, j, length;
-    char           *dir_name;
-    FILE           *t_file;
-    char            buff[3000];
-    proc_ptr        same;
+    int n_files, i, j, length;
+    char *dir_name;
+    FILE *t_file;
+    char buff[3000];
+    proc_ptr same;
 
-    file_ptr  fp = NULL, new_fp;
-    proc_ptr  pp = NULL, new_pp;
-    main_ptr  mp = NULL, new_main;
+    file_ptr fp = NULL, new_fp;
+    proc_ptr pp = NULL, new_pp;
+    main_ptr mp = NULL, new_main;
     proc_list new_proc_list;
-    proc_ptr  new_proc;
+    proc_ptr new_proc;
 
     int n_procs = 0;
     int fx;
 
-    if (np > 3) {
+    if (np > 3)
+    {
         fprintf(stderr, "map: too many parameters (%d)\n", np - 1);
         fprintf(stderr, "%s usage: %s [-v] [directory_name]\n", "map", "map");
         exit(1);
     }
     files = NULL;
     fx    = 0;
-    for (i = 1; i < np; i++) {
-        if (p[i][0] == '-') {
+    for (i = 1; i < np; i++)
+    {
+        if (p[i][0] == '-')
+        {
             if (strcmp("-v", p[i]) == 0)
                 v_opt = 1;
-            else {
+            else
+            {
                 fprintf(stderr, "%s: option (%s) is not valid\n", "map", p[i]);
                 fprintf(stderr, "%s usage: %s [-v] [directory_name]\n", "map", "map");
                 exit(1);
             }
-        } else if (fx == 0)
+        }
+        else if (fx == 0)
             fx = i;
-        else {
+        else
+        {
             fprintf(stderr, "map: only one directory name allowed\n");
             fprintf(stderr, "%s usage: %s [-v] [directory_name]\n", "map", "map");
             exit(1);
@@ -551,10 +622,12 @@ int main(int np, char **p)
     else
         dir_name = ".";
     n_files = scan_dir(dir_name, &files);
-    for (i = 0; i < n_files; i++) {
+    for (i = 0; i < n_files; i++)
+    {
         sprintf(buff, "%s/%s", dir_name, files[i]->d_name);
         t_file = fopen(buff, "r");
-        if (t_file == NULL) {
+        if (t_file == NULL)
+        {
             fprintf(stderr, "map: could not open file %s\n", files[i]->d_name);
             return 1;
         }
@@ -570,7 +643,8 @@ int main(int np, char **p)
         fp                       = new_fp;
         if (v_opt)
             printf("File %s (%d procs)\n", files[i]->d_name, n_procs);
-        for (j = 0; j < n_procs; j++) {
+        for (j = 0; j < n_procs; j++)
+        {
             new_pp              = (proc_ptr)malloc(sizeof(proc_rec));
             new_pp->in_file     = new_fp;
             new_pp->same_name   = NULL;
@@ -586,7 +660,8 @@ int main(int np, char **p)
 
             if (v_opt)
                 printf("\tproc %s %s ", buff, new_pp->s_or_x == 'S' ? "static" : "extern");
-            if (strcmp("main", buff) == 0) {
+            if (strcmp("main", buff) == 0)
+            {
                 new_main                 = (main_ptr)malloc(sizeof(main_rec));
                 new_main->next           = mp;
                 mp                       = new_main;
@@ -596,22 +671,28 @@ int main(int np, char **p)
                 new_main->lib_procs      = NULL;
             }
 
-            if (new_pp->entry == -1) { /* not defined */
+            if (new_pp->entry == -1)
+            { /* not defined */
                 new_proc_list->next = new_fp->not_defined;
                 new_fp->not_defined = new_proc_list;
                 if (v_opt)
                     printf("called, but not defined");
-            } else if (new_pp->s_or_x != 'S') {
+            }
+            else if (new_pp->s_or_x != 'S')
+            {
                 new_proc_list->next = new_fp->procs;
                 new_fp->procs       = new_proc_list;
                 same                = find_proc(pp, new_pp);
-                if (same) {
+                if (same)
+                {
                     if (v_opt)
                         printf("overloaded name");
                     while (same->same_name)
                         same = same->same_name;
                     same->same_name = new_pp;
-                } else {
+                }
+                else
+                {
                     new_pp->next = pp;
                     pp           = new_pp;
                 }
@@ -621,15 +702,18 @@ int main(int np, char **p)
         }
         fclose(t_file);
     }
-    if (v_opt) {
+    if (v_opt)
+    {
         new_fp = fp;
         printf("\nFiles:\n");
-        while (new_fp) {
+        while (new_fp)
+        {
             new_proc_list = new_fp->procs;
             printf("File %s (%d procs)\n", new_fp->name, new_fp->n_procs);
             if (new_proc_list)
                 printf("\tDefined procs:\n");
-            while (new_proc_list) {
+            while (new_proc_list)
+            {
                 new_proc = new_proc_list->proc;
                 printf("\t%20.20s %c %c\n",
                     new_proc->name,
@@ -640,7 +724,8 @@ int main(int np, char **p)
             new_proc_list = new_fp->not_defined;
             if (new_proc_list)
                 printf("\tCalled but not defined procs:\n");
-            while (new_proc_list) {
+            while (new_proc_list)
+            {
                 new_proc = new_proc_list->proc;
                 printf("\t%20.20s %c %c\n",
                     new_proc->name,
@@ -652,13 +737,16 @@ int main(int np, char **p)
         }
         new_pp = pp;
         printf("\nProcs:\n");
-        while (new_pp) {
+        while (new_pp)
+        {
             new_proc = new_pp;
             printf("\t%s:", new_proc->name);
             printf(" (%s)", new_proc->in_file->name);
-            if (new_pp->same_name) {
+            if (new_pp->same_name)
+            {
                 new_proc = new_pp->same_name;
-                while (new_proc) {
+                while (new_proc)
+                {
                     printf(" %s", new_proc->in_file->name);
                     new_proc = new_proc->same_name;
                 }
@@ -668,7 +756,8 @@ int main(int np, char **p)
         }
         new_main = mp;
         printf("\nMain procs:\n");
-        while (new_main) {
+        while (new_main)
+        {
             new_main = new_main->next;
         }
     }
@@ -677,4 +766,3 @@ int main(int np, char **p)
     output_match_results(dir_name, mp);
     return 0;
 }
-

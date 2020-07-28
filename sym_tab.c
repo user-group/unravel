@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -48,7 +48,8 @@ static int in_typedef    = 0;
 static symbol_table_entries closed_symbol_tables[MAX_ST];
 static int n_st = 0;
 
-void declared(char *var)
+void
+declared(char *var)
 {
     if (scope_level > 1)
         return;
@@ -56,14 +57,16 @@ void declared(char *var)
         fprintf(h_file, "\t%s\n", var);
 }
 
-int is_var_ptr_mod(token_ptr t) 
+int
+is_var_ptr_mod(token_ptr t)
 {
     type_ptr mod;
 
     if (!t)
         return False;
     mod = t->desc.type_desc;
-    while (mod) {
+    while (mod)
+    {
         if (mod->is == IS_PTR_TO)
             return True;
         mod = mod->next;
@@ -71,7 +74,8 @@ int is_var_ptr_mod(token_ptr t)
     return False;
 }
 
-int is_type_ptr(type_ste_ptr t) 
+int
+is_type_ptr(type_ste_ptr t)
 {
     if (!t)
         return False;
@@ -85,7 +89,8 @@ int is_type_ptr(type_ste_ptr t)
     return False;
 }
 
-int is_var_ptr(var_ste_ptr var) 
+int
+is_var_ptr(var_ste_ptr var)
 {
     /* is var declared pointer					*/
     if (is_var_ptr_mod(var->token))
@@ -99,7 +104,8 @@ int is_var_ptr(var_ste_ptr var)
     return False;
 }
 
-var_ste_ptr get_var_members(var_ste_ptr var) 
+var_ste_ptr
+get_var_members(var_ste_ptr var)
 {
     type_ste_ptr t;
 
@@ -112,7 +118,8 @@ var_ste_ptr get_var_members(var_ste_ptr var)
     if (var->detail != STE_TYPEDEF)
         return NULL;
     t = var->type_entry;
-    while (t) {
+    while (t)
+    {
         if (t->detail == STE_ANON_STRUCT)
             return t->anon_entry;
         if (t->detail == STE_TAGGED_STRUCT)
@@ -137,14 +144,16 @@ struct hh {			 STE for variable
 };
 */
 
-void is_decl_array_or_pointer(type_ste_ptr t, int *is_array, int *is_pointer) 
+void
+is_decl_array_or_pointer(type_ste_ptr t, int *is_array, int *is_pointer)
 {
     type_ptr details;
 
     if (!t)
         return;
     details = t->token->desc.type_desc;
-    while (details) {
+    while (details)
+    {
         if (details->is == IS_ARRAY_OF)
             *is_array = 1;
         if (details->is == IS_PTR_TO)
@@ -152,7 +161,8 @@ void is_decl_array_or_pointer(type_ste_ptr t, int *is_array, int *is_pointer)
         details = details->next;
     }
     if ((!(*is_pointer && *is_array)) &&
-        (t->type_decl->desc.decl->decl_flags & FLAG_TYPE_USER_NAME)) {
+        (t->type_decl->desc.decl->decl_flags & FLAG_TYPE_USER_NAME))
+    {
         /* look at user defined type unless both array and pointer on */
         if (t->detail == STE_TYPEDEF)
             is_decl_array_or_pointer(t->type_entry, is_array, is_pointer);
@@ -167,7 +177,8 @@ int is_var_array(v) var_ste_ptr v;
     if (!v)
         return 0;
     details = v->token->desc.type_desc;
-    while (details) {
+    while (details)
+    {
         if (details->is == IS_ARRAY_OF)
             return 1;
         details = details->next;
@@ -186,7 +197,9 @@ int is_var_array(v) var_ste_ptr v;
 *                                                                   *
 *********************************************************************
 */
-void do_ids() {
+void
+do_ids()
+{
     var_ste_ptr v;
     int class;
     int is_array, is_pointer;
@@ -194,11 +207,13 @@ void do_ids() {
 
     class = scope_level == 1 ? LIF_GLOBAL_ID : LIF_LOCAL_ID;
     v     = symbol_table[scope_level].var;
-    while (v) {
+    while (v)
+    {
         is_array   = 0;
         is_pointer = 0;
         details    = v->token->desc.type_desc;
-        while (details) {
+        while (details)
+        {
             if (details->is == IS_ARRAY_OF)
                 is_array = 1;
             if (details->is == IS_PTR_TO)
@@ -206,7 +221,8 @@ void do_ids() {
             details = details->next;
         }
         if ((!(is_pointer && is_array)) &&
-            (v->type_decl->desc.decl->decl_flags & FLAG_TYPE_USER_NAME)) {
+            (v->type_decl->desc.decl->decl_flags & FLAG_TYPE_USER_NAME))
+        {
             /* look at user defined type unless both array and pointer on */
             if (v->detail == STE_TYPEDEF)
                 is_decl_array_or_pointer(v->type_entry, &is_array, &is_pointer);
@@ -221,7 +237,8 @@ void do_ids() {
         if (is_array)
             fprintf(outfile, ",A");
         fprintf(outfile, ")");
-        if (z_opt) {
+        if (z_opt)
+        {
             fprintf(outfile, "    %s id", class == LIF_GLOBAL_ID ? "Global" : "local");
             if (is_pointer)
                 fprintf(outfile, " pointer");
@@ -241,17 +258,21 @@ void do_ids() {
 *                                                                   *
 *********************************************************************
 */
-void do_formals() {
+void
+do_formals()
+{
     var_ste_ptr v;
     type_ptr details;
     int is_array = 0, is_pointer = 0;
 
     v = symbol_table[scope_level].var;
-    while (v) {
+    while (v)
+    {
         is_array   = 0;
         is_pointer = 0;
         details    = v->token->desc.type_desc;
-        while (details) {
+        while (details)
+        {
             if (details->is == IS_ARRAY_OF)
                 is_array = 1;
             if (details->is == IS_PTR_TO)
@@ -259,7 +280,8 @@ void do_formals() {
             details = details->next;
         }
         if ((!(is_pointer && is_array)) &&
-            (v->type_decl->desc.decl->decl_flags & FLAG_TYPE_USER_NAME)) {
+            (v->type_decl->desc.decl->decl_flags & FLAG_TYPE_USER_NAME))
+        {
             /* look at user defined type unless both array and pointer on */
             if (v->detail == STE_TYPEDEF)
                 is_decl_array_or_pointer(v->type_entry, &is_array, &is_pointer);
@@ -270,7 +292,8 @@ void do_formals() {
         if (is_array)
             fprintf(outfile, ",A");
         fprintf(outfile, ")");
-        if (z_opt) {
+        if (z_opt)
+        {
             fprintf(outfile, "    Formal parm");
             if (is_pointer)
                 fprintf(outfile, " pointer");
@@ -289,7 +312,11 @@ void do_formals() {
 *                                                                   *
 *********************************************************************
 */
-void start_local_decls() { max_local_id = 1; }
+void
+start_local_decls()
+{
+    max_local_id = 1;
+}
 
 /*
 *********************************************************************
@@ -298,17 +325,36 @@ void start_local_decls() { max_local_id = 1; }
 *                                                                   *
 *********************************************************************
 */
-int current_global() { return max_global_id - 1; }
-int current_local() { return max_local_id - 1; }
-int alloc_local() { return max_local_id++; }
-int alloc_global() { return max_global_id++; }
-int current_id() {
+int
+current_global()
+{
+    return max_global_id - 1;
+}
+int
+current_local()
+{
+    return max_local_id - 1;
+}
+int
+alloc_local()
+{
+    return max_local_id++;
+}
+int
+alloc_global()
+{
+    return max_global_id++;
+}
+int
+current_id()
+{
     if (scope_level == 1)
         return max_global_id - 1;
     return max_local_id - 1;
 }
 
-int alloc_id(void) 
+int
+alloc_id(void)
 {
     int id;
 
@@ -328,7 +374,9 @@ int alloc_id(void)
 *                                                                   *
 *********************************************************************
 */
-void make_decl(token_ptr token, unsigned int flag) {
+void
+make_decl(token_ptr token, unsigned int flag)
+{
     token->desc.decl             = alloc_decl();
     token->desc.decl->decl_flags = flag;
     token->desc.decl->vars       = NULL;
@@ -346,7 +394,8 @@ void make_decl(token_ptr token, unsigned int flag) {
 *                                                                   *
 *********************************************************************
 */
-void modify_type(token_ptr token, unsigned int flag, int style, token_ptr formals) 
+void
+modify_type(token_ptr token, unsigned int flag, int style, token_ptr formals)
 {
     type_ptr new, old;
 
@@ -355,15 +404,18 @@ void modify_type(token_ptr token, unsigned int flag, int style, token_ptr formal
     new->next    = NULL;
     new->style   = style;
     new->formals = formals;
-    if (old = token->desc.type_desc) {
+    if (old = token->desc.type_desc)
+    {
         while (old->next)
             old = old->next;
         old->next = new;
-    } else
+    }
+    else
         token->desc.type_desc = new;
 }
 
-type_ptr make_abstract_type(unsigned int flag, int style, token_ptr formals) 
+type_ptr
+make_abstract_type(unsigned int flag, int style, token_ptr formals)
 {
     type_ptr new;
 
@@ -375,8 +427,11 @@ type_ptr make_abstract_type(unsigned int flag, int style, token_ptr formals)
     return new;
 }
 
-void merge_abstract_type(type_ptr old, type_ptr new) {
-    if (old) {
+void
+merge_abstract_type(type_ptr old, type_ptr new)
+{
+    if (old)
+    {
         while (old->next)
             old = old->next;
         old->next = new;
@@ -390,7 +445,8 @@ void merge_abstract_type(type_ptr old, type_ptr new) {
 *                                                                   *
 *********************************************************************
 */
-void open_scope(void) 
+void
+open_scope(void)
 {
     scope_level++;
     if (c_opt)
@@ -408,7 +464,8 @@ void open_scope(void)
 *                                                                   *
 *********************************************************************
 */
-void close_scope(void) 
+void
+close_scope(void)
 {
     type_ste_ptr types;
     var_ste_ptr vars;
@@ -423,23 +480,27 @@ void close_scope(void)
     closed_symbol_tables[n_st].var   = symbol_table[scope_level].var;
     closed_symbol_tables[n_st].type  = symbol_table[scope_level].type;
     closed_symbol_tables[n_st++].tag = symbol_table[scope_level].tag;
-    if (c_opt) {
+    if (c_opt)
+    {
         vars = symbol_table[scope_level].var;
         printf("\nS C O P E    L E V E L    %d    => st[%d]\n", scope_level, n_st - 1);
         printf("Declared variables:\n");
-        while (vars) {
+        while (vars)
+        {
             printf("%s\n", vars->token->text);
             vars = vars->next;
         }
         types = symbol_table[scope_level].type;
         printf("Declared types:\n");
-        while (types) {
+        while (types)
+        {
             printf("%s\n", types->token->text);
             types = types->next;
         }
         tags = symbol_table[scope_level].tag;
         printf("Declared tags:\n");
-        while (tags) {
+        while (tags)
+        {
             printf("%s\n", tags->tag->desc.decl->tag->text);
             tags = tags->next;
         }
@@ -455,7 +516,8 @@ void close_scope(void)
 *                                                                   *
 *********************************************************************
 */
-tag_ste_ptr find_tag(char *tag, int *local_flag)
+tag_ste_ptr
+find_tag(char *tag, int *local_flag)
 {
     int level;
     tag_ste_ptr vars;
@@ -464,10 +526,12 @@ tag_ste_ptr find_tag(char *tag, int *local_flag)
 
     /*printf ("look for tag %s\n",tag);*/
     *local_flag = True;
-    while (level >= 0) {
+    while (level >= 0)
+    {
         /*	printf ("searching level %d\n",level); */
         vars = symbol_table[level].tag;
-        while (vars) {
+        while (vars)
+        {
             if (strcmp(vars->tag->desc.decl->tag->text, tag) == 0)
                 return vars;
             vars = vars->next;
@@ -486,7 +550,8 @@ tag_ste_ptr find_tag(char *tag, int *local_flag)
 *                                                                   *
 *********************************************************************
 */
-type_ste_ptr find_type(char * type_name)
+type_ste_ptr
+find_type(char *type_name)
 {
     int level;
     type_ste_ptr t;
@@ -498,10 +563,12 @@ type_ste_ptr find_type(char * type_name)
     /*
     printf ("look for type_name %s\n",type_name);
     */
-    while (level >= 0) {
+    while (level >= 0)
+    {
         /*	printf ("searching level %d\n",level); */
         t = symbol_table[level].type;
-        while (t) {
+        while (t)
+        {
             if (strcmp(t->token->text, type_name) == 0)
                 return t;
             t = t->next;
@@ -528,7 +595,8 @@ int *detail_ptr, with_members;
     int no_tag = 0;
     int is_local_tag;
 
-    if (type_desc->desc.decl->decl_flags & FLAG_TYPE_US) {
+    if (type_desc->desc.decl->decl_flags & FLAG_TYPE_US)
+    {
         /*printf ("Do struct/union\n");*/
         /* if this decl has a tag, see if it exists already */
         if (type_desc->desc.decl->tag)
@@ -540,7 +608,8 @@ int *detail_ptr, with_members;
         }
         if (c_opt)
             printf("entry %p  no_tag (%d): ", tag_entry, no_tag);
-        if (!tag_entry && !no_tag) { /* tag not found anywhere */
+        if (!tag_entry && !no_tag)
+        { /* tag not found anywhere */
             tag_entry = new_tag           = alloc_tag_ste();
             new_tag->next                 = symbol_table[scope_level].tag;
             new_tag->tag                  = type_desc;
@@ -551,21 +620,29 @@ int *detail_ptr, with_members;
                     is_local_tag ? "local" : "non-local",
                     tag_entry,
                     scope_level);
-        } else if (is_local_tag) { /* tag exists locally */
-                                   /* if the new decl has members and the existing
-                                           decl does not, then move the member list from
-                                           the new decl to the tagged_ste */
-            if (tag_entry) {
+        }
+        else if (is_local_tag)
+        {   /* tag exists locally */
+            /* if the new decl has members and the existing
+                    decl does not, then move the member list from
+                    the new decl to the tagged_ste */
+            if (tag_entry)
+            {
                 if (!tag_entry->vars)
                     tag_entry->vars = type_desc->desc.decl->member_ste;
             }
-        } else if (no_tag) { /* anon struct */
-        } else {             /* tag found non-local */
+        }
+        else if (no_tag)
+        { /* anon struct */
+        }
+        else
+        { /* tag found non-local */
             /* declare tag as local if either:
                     (1) tag has members or
                     (2) tag does not have variables
             */
-            if ((type_desc->desc.decl->members) || !var_list || with_members) {
+            if ((type_desc->desc.decl->members) || !var_list || with_members)
+            {
                 tag_entry = new_tag           = alloc_tag_ste();
                 new_tag->next                 = symbol_table[scope_level].tag;
                 new_tag->tag                  = type_desc;
@@ -623,7 +700,8 @@ struct_or_union_specifier
                         $1->desc.decl->member_ste = struct_decl($3);
                 }
 */
-var_ste_ptr struct_decl(token_ptr type_desc, int *off) 
+var_ste_ptr
+struct_decl(token_ptr type_desc, int *off)
 {
     token_ptr d, vars;
     var_ste_ptr st = NULL, new_var;
@@ -636,14 +714,16 @@ var_ste_ptr struct_decl(token_ptr type_desc, int *off)
     if (c_opt)
         printf("struct decl: ");
     d = type_desc;
-    while (d) {
+    while (d)
+    {
         vars = d->desc.decl->vars;
         if (c_opt)
             printf("(%08o) ", d->desc.decl->decl_flags);
         detail    = STE_NONE;
         anon      = NULL;
         tag_entry = NULL;
-        if (d->desc.decl->decl_flags & FLAG_TYPE_US) {
+        if (d->desc.decl->decl_flags & FLAG_TYPE_US)
+        {
             /*
                     if (d->desc.decl->tag){
                             tag_entry = find_tag(d->desc.decl->tag->text,
@@ -657,20 +737,27 @@ var_ste_ptr struct_decl(token_ptr type_desc, int *off)
                     }
             */
             tag_decl(d, vars, &tag_entry, &no_tag, d->desc.decl->members != NULL);
-            if (no_tag) {
+            if (no_tag)
+            {
                 detail = STE_ANON_STRUCT;
                 anon   = d->desc.decl->member_ste;
-            } else {
+            }
+            else
+            {
                 if (tag_entry)
                     detail = STE_TAGGED_STRUCT;
                 else
                     detail = STE_NONE;
             }
-        } else if (d->desc.decl->decl_flags & FLAG_TYPE_USER_NAME) {
+        }
+        else if (d->desc.decl->decl_flags & FLAG_TYPE_USER_NAME)
+        {
             type_entry = find_type(d->text);
             if (type_entry)
                 detail = STE_TYPEDEF;
-        } else {
+        }
+        else
+        {
             detail = STE_NONE;
             anon   = NULL;
         }
@@ -678,7 +765,8 @@ var_ste_ptr struct_decl(token_ptr type_desc, int *off)
         if (last)
             while (last->next)
                 last = last->next;
-        while (vars) {
+        while (vars)
+        {
             if (c_opt)
                 printf(" %s <detail %d> ", vars->text, detail);
             new_var             = alloc_var_ste();
@@ -696,7 +784,8 @@ var_ste_ptr struct_decl(token_ptr type_desc, int *off)
             else
                 st = new_var;
             last = new_var;
-            if (!is_var_ptr(new_var)) {
+            if (!is_var_ptr(new_var))
+            {
                 if (c_opt)
                     printf("call insert from struct_decl add(%s)\n", vars->text);
                 insert_struct_members(vars->text, get_var_members(new_var), &st, &off_set);
@@ -711,11 +800,13 @@ var_ste_ptr struct_decl(token_ptr type_desc, int *off)
     }
     if (c_opt)
         printf("\n");
-    if (c_opt) {
+    if (c_opt)
+    {
         var_ste_ptr s;
         printf("Declare a struct: (members)\n");
         s = st;
-        while (s) {
+        while (s)
+        {
             printf("\t%s \n", s->token->text);
             fflush(stdout);
             s = s->next;
@@ -725,7 +816,8 @@ var_ste_ptr struct_decl(token_ptr type_desc, int *off)
     return st;
 }
 
-void insert_ptr_var(int scope, var_ste_ptr var) 
+void
+insert_ptr_var(int scope, var_ste_ptr var)
 {
     var->next               = symbol_table[scope].var;
     symbol_table[scope].var = var;
@@ -740,7 +832,8 @@ void insert_ptr_var(int scope, var_ste_ptr var)
 *********************************************************************
 */
 
-void insert_var_decl(token_ptr var) 
+void
+insert_var_decl(token_ptr var)
 {
     var_ste_ptr new_var;
 
@@ -760,17 +853,20 @@ void insert_var_decl(token_ptr var)
             (declared as int)							*/
 }
 
-void insert_struct_members(char *base, var_ste_ptr members, var_ste_ptr *st, int *off_set) 
+void
+insert_struct_members(char *base, var_ste_ptr members, var_ste_ptr *st, int *off_set)
 {
     char name[3000];
     var_ste_ptr new_var, last;
 
     last = *st;
-    if (last) {
+    if (last)
+    {
         while (last->next)
             last = last->next;
     }
-    while (members) {
+    while (members)
+    {
         sprintf(name, "%s.%s", base, members->token->text);
         if (c_opt)
             printf("INS struct mem new: %s\n", name);
@@ -785,9 +881,12 @@ void insert_struct_members(char *base, var_ste_ptr members, var_ste_ptr *st, int
         new_var->anon_entry  = members->anon_entry;
         new_var->id          = ++(*off_set);
         new_var->addr        = 0;
-        if (last) {
+        if (last)
+        {
             last->next = new_var;
-        } else {
+        }
+        else
+        {
             *st = new_var;
         }
         last    = new_var;
@@ -795,17 +894,20 @@ void insert_struct_members(char *base, var_ste_ptr members, var_ste_ptr *st, int
     }
 }
 
-void insert_members(char *base, var_ste_ptr members) 
+void
+insert_members(char *base, var_ste_ptr members)
 {
     char name[3000];
     var_ste_ptr new_var, last;
 
     last = symbol_table[scope_level].var;
-    if (last) {
+    if (last)
+    {
         while (last->next)
             last = last->next;
     }
-    while (members) {
+    while (members)
+    {
         sprintf(name, "%s.%s", base, members->token->text);
         /* printf ("new: %s\n",name); */
         new_var              = alloc_var_ste();
@@ -823,9 +925,12 @@ void insert_members(char *base, var_ste_ptr members)
         symbol_table[scope_level].var = new_var;
         */
         declared(name);
-        if (last) {
+        if (last)
+        {
             last->next = new_var;
-        } else {
+        }
+        else
+        {
             symbol_table[scope_level].var = new_var;
         }
         last = new_var;
@@ -850,7 +955,9 @@ void insert_members(char *base, var_ste_ptr members)
 *                                                                   *
 *********************************************************************
 */
-void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
+void
+decl(token_ptr type_desc, token_ptr var_list, int with_members)
+{
     token_ptr var, enum_const;
     type_ste_ptr new_type, type_entry;
     var_ste_ptr new_var;
@@ -861,8 +968,10 @@ void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
     if (c_opt)
         printf("Do Decl at line %d\n", type_desc ? type_desc->at.line_start : lineno);
     var = var_list;
-    if (type_desc) {
-        if (type_desc->desc.decl->decl_flags & FLAG_TYPE_USER_NAME) {
+    if (type_desc)
+    {
+        if (type_desc->desc.decl->decl_flags & FLAG_TYPE_USER_NAME)
+        {
             type_entry = find_type(type_desc->text);
             if (c_opt)
                 printf("at line %d using user defined type: ", lineno);
@@ -873,14 +982,18 @@ void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
                     printf(" %s\n", type_entry->token->text);
                 else
                     printf(" not found\n");
-        } else
+        }
+        else
             type_entry = NULL;
-        if (type_desc->desc.decl->decl_flags & FLAG_TYPE_US) {
+        if (type_desc->desc.decl->decl_flags & FLAG_TYPE_US)
+        {
             tag_decl(type_desc, var_list, &tag_entry, &no_tag, with_members);
         }
-        if (type_desc->desc.decl->decl_flags & FLAG_TYPE_ENUM) {
+        if (type_desc->desc.decl->decl_flags & FLAG_TYPE_ENUM)
+        {
             enum_const = type_desc->desc.decl->members;
-            while (enum_const) {
+            while (enum_const)
+            {
                 if (c_opt)
                     printf("enum %s\n", enum_const->text);
 
@@ -898,9 +1011,11 @@ void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
                 enum_const                    = enum_const->next;
             }
         }
-        if (type_desc->desc.decl->decl_flags & FLAG_SC_TYPEDEF) {
+        if (type_desc->desc.decl->decl_flags & FLAG_SC_TYPEDEF)
+        {
             /* var_list is list of type names */
-            while (var) {
+            while (var)
+            {
                 if (c_opt)
                     printf("User defined type: %s  at level %d\n", var->text, scope_level);
                 new_type             = alloc_type_ste();
@@ -912,43 +1027,55 @@ void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
                     new_type->detail = STE_TYPEDEF;
                 else if (tag_entry)
                     new_type->detail = STE_TAGGED_STRUCT;
-                else if (no_tag) {
+                else if (no_tag)
+                {
                     new_type->detail     = STE_ANON_STRUCT;
                     new_type->anon_entry = type_desc->desc.decl->member_ste;
-                } else
+                }
+                else
                     new_type->detail = STE_NONE;
                 new_type->tag_entry            = tag_entry;
                 new_type->type_entry           = type_entry;
                 symbol_table[scope_level].type = new_type;
                 var                            = var->next;
             }
-        } else {
+        }
+        else
+        {
             /* variable declaration */
             if (c_opt)
                 printf("Do vars %s (%d)\n", tag_entry ? "tag found" : "tag not found", no_tag);
-            while (var) {
+            while (var)
+            {
                 if (c_opt)
                     printf("variable declared: %s  at level %d\n", var->text, scope_level);
                 type_mod = var->desc.type_desc;
-                if (type_mod && (type_mod->is == IS_FUNC_RET)) {
+                if (type_mod && (type_mod->is == IS_FUNC_RET))
+                {
                     if (c_opt)
                         printf("%s Is a function\n", var->text);
-                } else {
+                }
+                else
+                {
                     new_var         = alloc_var_ste();
                     new_var->next   = symbol_table[scope_level].var;
                     new_var->detail = 0;
                     if (type_entry)
                         new_var->detail = STE_TYPEDEF;
                     new_var->type_entry = type_entry;
-                    if (tag_entry) {
+                    if (tag_entry)
+                    {
                         new_var->tag_entry = tag_entry;
                         new_var->detail    = STE_TAGGED_STRUCT;
-                    } else
+                    }
+                    else
                         new_var->tag_entry = NULL;
-                    if (no_tag) {
+                    if (no_tag)
+                    {
                         new_var->anon_entry = type_desc->desc.decl->member_ste;
                         new_var->detail     = STE_ANON_STRUCT;
-                    } else
+                    }
+                    else
                         new_var->anon_entry = NULL;
                     new_var->token                = var;
                     new_var->type_decl            = type_desc;
@@ -964,9 +1091,11 @@ void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
                     }
                     else {printf ("not a pointer\n"); }
                     */
-                    if (!is_var_ptr(new_var)) {
+                    if (!is_var_ptr(new_var))
+                    {
                         insert_members(var->text, get_var_members(new_var));
-                        if ((current_id() - new_var->id) > 0) {
+                        if ((current_id() - new_var->id) > 0)
+                        {
                             if (scope_level > 1)
                                 pid = current_proc->proc_id;
                             else
@@ -1006,7 +1135,8 @@ void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
 *                                                                   *
 *********************************************************************
 */
-int is_type_name(char *t, int *local_flag)
+int
+is_type_name(char *t, int *local_flag)
 {
     int level;
     type_ste_ptr types;
@@ -1015,15 +1145,18 @@ int is_type_name(char *t, int *local_flag)
     level = scope_level;
 
     *local_flag = True;
-    while (level >= 0) {
+    while (level >= 0)
+    {
         types = symbol_table[level].type;
-        while (types) {
+        while (types)
+        {
             if (strcmp(types->token->text, t) == 0)
                 return True;
             types = types->next;
         }
         vars = symbol_table[level].var;
-        while (vars) {
+        while (vars)
+        {
             if (strcmp(vars->token->text, t) == 0)
                 return False;
             vars = vars->next;
@@ -1045,26 +1178,33 @@ int is_type_name(char *t, int *local_flag)
 *                                                                   *
 *********************************************************************
 */
-var_ste_ptr look_up_id(var_ste_ptr table, char *name, int *scope) 
+var_ste_ptr
+look_up_id(var_ste_ptr table, char *name, int *scope)
 {
     int level;
     var_ste_ptr vars;
 
     level = scope_level;
 
-    if (table) {
+    if (table)
+    {
         *scope = 0;
         vars   = table;
-        while (vars) {
+        while (vars)
+        {
             if (strcmp(vars->token->text, name) == 0)
                 return vars;
             vars = vars->next;
         }
-    } else {
-        while (level >= 0) {
+    }
+    else
+    {
+        while (level >= 0)
+        {
             *scope = level;
             vars   = symbol_table[level].var;
-            while (vars) {
+            while (vars)
+            {
                 if (strcmp(vars->token->text, name) == 0)
                     return vars;
                 vars = vars->next;
@@ -1082,21 +1222,23 @@ var_ste_ptr look_up_id(var_ste_ptr table, char *name, int *scope)
 *                                                                   *
 *********************************************************************
 */
-void start_typedef(void) 
-{ 
-    in_typedef = True; 
+void
+start_typedef(void)
+{
+    in_typedef = True;
 }
 
-void end_typedef(void) 
-{ 
-    in_typedef = False; 
+void
+end_typedef(void)
+{
+    in_typedef = False;
 }
 
-int top_scope(void) 
-{ 
-    return scope_level == 1; 
+int
+top_scope(void)
+{
+    return scope_level == 1;
 }
-
 
 /*
 *********************************************************************
@@ -1105,7 +1247,8 @@ int top_scope(void)
 *                                                                   *
 *********************************************************************
 */
-static void print_memb(char *prefix, var_ste_ptr v) 
+static void
+print_memb(char *prefix, var_ste_ptr v)
 {
     var_ste_ptr vars = v;
     char buff[2000];
@@ -1113,8 +1256,10 @@ static void print_memb(char *prefix, var_ste_ptr v)
     static var_ste_ptr history[1000];
     int i;
 
-    for (i = 0; i < n; i++) {
-        if (history[i] == v) {
+    for (i = 0; i < n; i++)
+    {
+        if (history[i] == v)
+        {
             printf("recursive\n");
             return;
         }
@@ -1122,17 +1267,22 @@ static void print_memb(char *prefix, var_ste_ptr v)
     history[n++] = v;
     if (!vars)
         printf("no members\n");
-    while (vars) {
+    while (vars)
+    {
         printf("%s.%s ", prefix, vars->token->text);
         vars = vars->next;
     }
     vars = v;
-    while (vars) {
-        if (vars->detail == STE_ANON_STRUCT) {
+    while (vars)
+    {
+        if (vars->detail == STE_ANON_STRUCT)
+        {
             sprintf(buff, "%s.%s", prefix, vars->token->text);
             printf("\n\t\tanon members: ");
             print_memb(buff, vars->anon_entry);
-        } else if (vars->detail == STE_TAGGED_STRUCT) {
+        }
+        else if (vars->detail == STE_TAGGED_STRUCT)
+        {
             sprintf(buff, "%s.%s", prefix, vars->token->text);
             printf("\n\t\ttagged members: ");
             print_memb(buff, vars->tag_entry->vars);
@@ -1149,15 +1299,21 @@ static void print_memb(char *prefix, var_ste_ptr v)
 *                                                                   *
 *********************************************************************
 */
-static void print_types(type_ste_ptr t) 
+static void
+print_types(type_ste_ptr t)
 {
-    if (t->detail == STE_TYPEDEF) {
+    if (t->detail == STE_TYPEDEF)
+    {
         printf("%s ", t->type_entry->token->text);
         if (t->type_entry->detail)
             print_types(t->type_entry);
-    } else if (t->detail == STE_TAGGED_STRUCT) {
+    }
+    else if (t->detail == STE_TAGGED_STRUCT)
+    {
         print_memb(t->token->text, t->tag_entry->vars);
-    } else if (t->detail == STE_ANON_STRUCT) {
+    }
+    else if (t->detail == STE_ANON_STRUCT)
+    {
         print_memb(t->token->text, t->anon_entry);
     }
 }
@@ -1169,7 +1325,8 @@ static void print_types(type_ste_ptr t)
 *                                                                   *
 *********************************************************************
 */
-void print_st(void) 
+void
+print_st(void)
 {
     type_ste_ptr types;
     var_ste_ptr vars;
@@ -1181,7 +1338,8 @@ void print_st(void)
 
     list_procs();
     printf("\n%10sS Y M B O L    T A B L E\n\n", "");
-    for (i = 0; i < n_st; i++) {
+    for (i = 0; i < n_st; i++)
+    {
         vars  = closed_symbol_tables[i].var;
         types = closed_symbol_tables[i].type;
         tags  = closed_symbol_tables[i].tag;
@@ -1189,7 +1347,8 @@ void print_st(void)
             printf("\n\tSymbol table %d\n", i);
         if (vars)
             printf("Declared variables:\n");
-        while (vars) {
+        while (vars)
+        {
             printf("\t%-15s (%03d.%02d..%02d)  ",
                 vars->token->text,
                 vars->token->at.line_start,
@@ -1207,7 +1366,8 @@ void print_st(void)
             }
             */
             details = vars->token->desc.type_desc;
-            while (details) {
+            while (details)
+            {
                 printf("%s ", ty[details->is]);
                 details = details->next;
             }
@@ -1217,11 +1377,14 @@ void print_st(void)
             if (vars->type_entry)
                 printf("[%s] ", vars->type_entry->token->text);
             printf("\n");
-            if (vars->detail == STE_ANON_STRUCT) {
+            if (vars->detail == STE_ANON_STRUCT)
+            {
                 printf("%20s", "members: ");
                 print_memb(vars->token->text, vars->anon_entry);
                 printf("\n");
-            } else if (vars->detail == STE_TAGGED_STRUCT) {
+            }
+            else if (vars->detail == STE_TAGGED_STRUCT)
+            {
                 printf("%20s", "members: ");
                 print_memb(vars->token->text, vars->tag_entry->vars);
                 printf("\n");
@@ -1230,7 +1393,8 @@ void print_st(void)
         }
         if (types)
             printf("Declared types:\n");
-        while (types) {
+        while (types)
+        {
             printf("\t%-15s (%d.%d..%d) <%d>  ",
                 types->token->text,
                 types->token->at.line_start,
@@ -1238,7 +1402,8 @@ void print_st(void)
                 types->token->at.col_end,
                 types->detail);
             details = types->token->desc.type_desc;
-            while (details) {
+            while (details)
+            {
                 printf("%s ", ty[details->is]);
                 details = details->next;
             }
@@ -1249,7 +1414,8 @@ void print_st(void)
         }
         if (tags)
             printf("Declared tags:\n");
-        while (tags) {
+        while (tags)
+        {
             token = tags->tag->desc.decl->tag;
             printf("\t%-15s (%d.%d..%d)",
                 token->text,
@@ -1276,16 +1442,19 @@ void print_st(void)
     printf("\n");
 }
 
-int is_ptr_to_type_ptr(type_ste_ptr te)
+int
+is_ptr_to_type_ptr(type_ste_ptr te)
 {
     int n_ptr   = 0;
     type_ptr tp = NULL;
 
     if (!te)
         return 0;
-    if (te->token) {
+    if (te->token)
+    {
         tp = te->token->desc.type_desc;
-        while (tp) {
+        while (tp)
+        {
             if (tp->is == IS_PTR_TO)
                 n_ptr++;
             tp = tp->next;
@@ -1293,13 +1462,15 @@ int is_ptr_to_type_ptr(type_ste_ptr te)
     }
     if (!te->type_decl)
         return n_ptr;
-    if (te->detail == STE_TYPEDEF) {
+    if (te->detail == STE_TYPEDEF)
+    {
         n_ptr += is_ptr_to_type_ptr(te->type_entry);
     }
     return n_ptr;
 }
 
-int is_ptr_to_ptr(token_ptr t, int *nx) 
+int
+is_ptr_to_ptr(token_ptr t, int *nx)
 {
     int n_ptr   = 0;
     type_ptr tp = NULL;
@@ -1308,29 +1479,35 @@ int is_ptr_to_ptr(token_ptr t, int *nx)
     if (!t)
         return 0;
     tp = t->desc.type_desc;
-    while (tp) {
+    while (tp)
+    {
         if (tp->is == IS_PTR_TO)
             n_ptr++;
         tp = tp->next;
     }
     *nx = n_ptr;
     /*	if (n_ptr > 1) return n_ptr; */
-    if (t->desc.decl->decl_flags & FLAG_TYPE_USER_NAME) {
+    if (t->desc.decl->decl_flags & FLAG_TYPE_USER_NAME)
+    {
         type_entry = find_type(t->text);
-        if (type_entry) {
+        if (type_entry)
+        {
             n_ptr += is_ptr_to_type_ptr(type_entry);
         }
     }
     return n_ptr;
 }
 
-static token_ptr get_base_type(token_ptr t)
+static token_ptr
+get_base_type(token_ptr t)
 {
     type_ste_ptr type_entry;
 
     type_entry = find_type(t->text);
-    if (type_entry) {
-        while (type_entry->detail == STE_TYPEDEF) {
+    if (type_entry)
+    {
+        while (type_entry->detail == STE_TYPEDEF)
+        {
             type_entry = type_entry->type_entry;
         }
         return type_entry->type_decl;
@@ -1338,7 +1515,8 @@ static token_ptr get_base_type(token_ptr t)
     return NULL;
 }
 
-token_ptr fake_var_decl(token_ptr t)
+token_ptr
+fake_var_decl(token_ptr t)
 {
     decl_ptr ty;
     token_ptr var_token;
@@ -1364,18 +1542,23 @@ token_ptr fake_var_decl(token_ptr t)
     var_token->text = malloc(strlen(buff) + 1);
     var_token->text = strcpy(var_token->text, buff);
     var_token->next = NULL;
-    if ((!t) || ((np = is_ptr_to_ptr(t, &nx)) > 1)) {
+    if ((!t) || ((np = is_ptr_to_ptr(t, &nx)) > 1))
+    {
         type_token = alloc_token();
         make_decl(type_token, FLAG_SC_STATIC | FLAG_TYPE_CHAR);
         modify_type(var_token, IS_PTR_TO, NO_STYLE, NULL);
-    } else {
+    }
+    else
+    {
         if (nx)
             type_token = t;
-        else {
+        else
+        {
             type_token = get_base_type(t);
             if (!type_token)
                 type_token = t;
-            else {
+            else
+            {
                 new_token       = alloc_token();
                 new_token->text = type_token->text;
                 new_token->at   = t->at;

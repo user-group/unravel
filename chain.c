@@ -1,58 +1,61 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
 
-
-#include <stdio.h>
-#include <string.h>
 #include "ansi_parse.h"
 #include "lif.h"
+#include <stdio.h>
+#include <string.h>
 
-int max_chain        = 0;
+int max_chain = 0;
 
 /*
 static char sccsid[] = "@(#)chain.c	1.3  5/5/94";
 */
 
-int current_chain(void) { 
-    return max_chain; 
+int
+current_chain(void)
+{
+    return max_chain;
 }
 
 int find_ptr(tree_ptr t, chain_ptr c);
 void assemble_dot(char *buff, tree_ptr t, chain_ptr c);
 
-var_ste_ptr type_member(type_ste_ptr t) 
+var_ste_ptr
+type_member(type_ste_ptr t)
 {
     if (!t)
         return NULL;
-    switch (t->detail) {
+    switch (t->detail)
+    {
     case STE_TYPEDEF:
         return type_member(t->type_entry);
     case STE_TAGGED_STRUCT:
@@ -63,7 +66,8 @@ var_ste_ptr type_member(type_ste_ptr t)
     return NULL;
 }
 
-var_ste_ptr find_members(var_ste_ptr var) 
+var_ste_ptr
+find_members(var_ste_ptr var)
 {
     if (!var)
         return NULL;
@@ -71,7 +75,8 @@ var_ste_ptr find_members(var_ste_ptr var)
     printf ("Find members for %s\n",var->token->text);
     fflush(stdout);
     */
-    switch (var->detail) {
+    switch (var->detail)
+    {
     case STE_TYPEDEF:
         return type_member(var->type_entry);
     case STE_TAGGED_STRUCT:
@@ -82,7 +87,8 @@ var_ste_ptr find_members(var_ste_ptr var)
     return NULL;
 }
 
-int assemble_chain(tree_ptr t, chain_ptr c)
+int
+assemble_chain(tree_ptr t, chain_ptr c)
 {
     char var_name[2000];
     int status = 0;
@@ -90,18 +96,22 @@ int assemble_chain(tree_ptr t, chain_ptr c)
     int code;
     var_ste_ptr var;
 
-    switch (t->op_code) {
+    switch (t->op_code)
+    {
     case DOT_OP:
         assemble_dot(var_name, t, c);
         /*
         printf("chain %d after dot: %s\n",c->chain_id,var_name);
         */
-        if (c->current_seq == -1) { /* 0 was -1???? */
+        if (c->current_seq == -1)
+        { /* 0 was -1???? */
             /*
             printf ("search in symbol table\n");
             */
             var = look_up_id((var_ste_ptr)NULL, var_name, &scope);
-        } else {
+        }
+        else
+        {
             /*printf ("should search in member table\n");
             {
                     var_ste_ptr	v;
@@ -120,7 +130,8 @@ int assemble_chain(tree_ptr t, chain_ptr c)
                 return 1;
             ++c->current_seq;
             c->fields = find_members(var);
-            if (!c->no_output) {
+            if (!c->no_output)
+            {
                 fprintf(outfile,
                     "%d(%d,%d,%d,%s)",
                     LIF_FIELD,
@@ -157,7 +168,8 @@ int assemble_chain(tree_ptr t, chain_ptr c)
         */
         if (c->fields == NULL)
             return 1;
-        if (!c->no_output) {
+        if (!c->no_output)
+        {
             fprintf(outfile, "%d(%d,%d)", code, c->chain_id, var->id);
             if (z_opt)
                 fprintf(outfile,
@@ -180,7 +192,8 @@ int assemble_chain(tree_ptr t, chain_ptr c)
             return 3;
         ++c->current_seq;
         c->fields = find_members(var);
-        if (!c->no_output) {
+        if (!c->no_output)
+        {
             fprintf(outfile,
                 "%d(%d,%d,%d,%s)",
                 LIF_FIELD,
@@ -222,14 +235,16 @@ int assemble_chain(tree_ptr t, chain_ptr c)
     }
     return 2;
 }
-int find_ptr(tree_ptr t, chain_ptr c)
+int
+find_ptr(tree_ptr t, chain_ptr c)
 {
     int left, right;
     chain_rec c_left, c_right;
 
     if (!t)
         return 1;
-    switch (t->op_code) {
+    switch (t->op_code)
+    {
     case BIN_OP:
     case UN_OP:
     case PRE_OP:
@@ -252,7 +267,8 @@ int find_ptr(tree_ptr t, chain_ptr c)
         c_right.no_output = c->no_output;
         if (c_left.fields && c_right.fields)
             return 1;
-        if (c_right.fields) {
+        if (c_right.fields)
+        {
             *c = c_right;
             return find_ptr(t->right, c);
         }
@@ -269,7 +285,8 @@ int find_ptr(tree_ptr t, chain_ptr c)
     }
 }
 
-int get_chain(tree_ptr t)
+int
+get_chain(tree_ptr t)
 {
     chain_rec c;
     int status = 0;
@@ -286,23 +303,27 @@ int get_chain(tree_ptr t)
     return c.chain_id;
 }
 
-void print_local_ptr_tab(void) 
-{ 
-    printf("\nLocal Pointer Table\n"); 
+void
+print_local_ptr_tab(void)
+{
+    printf("\nLocal Pointer Table\n");
 }
 
-void print_global_ptr_tab(void) 
-{ 
-    printf("\nGlobal Pointer Table\n"); 
+void
+print_global_ptr_tab(void)
+{
+    printf("\nGlobal Pointer Table\n");
 }
 
-void dot_really_ptr(char *buff, tree_ptr t, chain_ptr c)
+void
+dot_really_ptr(char *buff, tree_ptr t, chain_ptr c)
 {
     var_ste_ptr var;
     int code, scope = 0;
 
     var = look_up_id(NULL, buff, &scope);
-    if (var) {
+    if (var)
+    {
         c->is_array    = 0;
         c->chain_id    = ++max_chain;
         c->current_seq = 0;
@@ -312,7 +333,8 @@ void dot_really_ptr(char *buff, tree_ptr t, chain_ptr c)
             code = LIF_CHAIN;
         else
             code = LIF_GCHAIN;
-        if (!c->no_output) {
+        if (!c->no_output)
+        {
             fprintf(outfile, "%d(%d,%d)", code, c->chain_id, var->id);
             if (z_opt)
                 fprintf(outfile,
@@ -322,19 +344,23 @@ void dot_really_ptr(char *buff, tree_ptr t, chain_ptr c)
                     var->token->text);
             fprintf(outfile, "\n");
         }
-    } else {
+    }
+    else
+    {
         printf("Warning: var %s in %s at line %d, not found\n", buff, the_current_file, lineno);
     }
 }
 
-void assemble_dot(char *buff, tree_ptr t, chain_ptr c) 
+void
+assemble_dot(char *buff, tree_ptr t, chain_ptr c)
 {
     int status = 0;
     var_ste_ptr var;
     int scope;
     char hold[2000];
 
-    switch (t->op_code) {
+    switch (t->op_code)
+    {
     case ID_OP:
         strcpy(buff, t->token->text);
         return;
@@ -347,34 +373,44 @@ void assemble_dot(char *buff, tree_ptr t, chain_ptr c)
         /*
         printf ("dot dot back %s %s\n",buff,c->is_array?"(array)":"");
         */
-        if (c->is_array) {
+        if (c->is_array)
+        {
             c->is_array = 0;
             strcpy(hold, buff);
             strcat(hold, ".");
             strcat(hold, t->right->token->text);
-            if ((c->chain_id == -1)) {
+            if ((c->chain_id == -1))
+            {
                 var = look_up_id(NULL, hold, &scope);
-                if (var) {
-                } else {
+                if (var)
+                {
+                }
+                else
+                {
                     /*
                     printf ("dot really ptr at line %d\n",lineno);
                     */
                     dot_really_ptr(buff, t, c);
                     return;
                 }
-            } else {
+            }
+            else
+            {
                 var = look_up_id(c->fields, hold, &scope);
-                if (!var) {
+                if (!var)
+                {
                     /*
                     printf ("buff (%s) hold (%s) ",buff,hold);
                     printf ("at line %d, array on chain %d\n",lineno,
                             c->chain_id);
                     */
                     var = look_up_id(c->fields, buff, &scope);
-                    if (var) {
+                    if (var)
+                    {
                         ++c->current_seq;
                         c->fields = find_members(var);
-                        if (!c->no_output) {
+                        if (!c->no_output)
+                        {
                             fprintf(outfile,
                                 "%d(%d,%d,%d,%s)",
                                 LIF_FIELD,
@@ -419,7 +455,8 @@ void assemble_dot(char *buff, tree_ptr t, chain_ptr c)
         /*
         printf ("dot pointer down %s\n",buff);
         */
-        if ((c->chain_id == -1) || (c->chain_id == 0)) {
+        if ((c->chain_id == -1) || (c->chain_id == 0))
+        {
             if (c->no_output)
                 c->chain_id = 0;
             else
@@ -439,4 +476,3 @@ void assemble_dot(char *buff, tree_ptr t, chain_ptr c)
     }
     return;
 }
-

@@ -16,14 +16,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <time.h>
 #include <sys/types.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "config.h"
 #define WAIT 500
 
-/* 
+/*
 static char sccsid[] = "@(#)select.c	1.6  8/16/95";
 */
 int no_slice = 0;
@@ -31,7 +31,8 @@ int no_slice = 0;
 char *slicer = "u";
 Widget help_label;
 typedef struct id_struct id_rec, *id_ptr;
-struct id_struct {
+struct id_struct
+{
     char *file_name;
     Widget status, list;
     XtAppContext ac;
@@ -48,16 +49,21 @@ char *progs[];
     sys = fopen("SYSTEM", "r");
     if (!sys)
         return 0;
-    while (fgets(buff, 2000, sys)) {
-        if (buff[0] == 'M') {
+    while (fgets(buff, 2000, sys))
+    {
+        if (buff[0] == 'M')
+        {
             k = sscanf(buff, "MAIN %s %d", name, &j);
-            if (k == 2) {
-                if (strcmp(name, main_file_name) == 0) {
+            if (k == 2)
+            {
+                if (strcmp(name, main_file_name) == 0)
+                {
                     progs[n] = malloc(strlen(name) + 1);
                     strcpy(progs[n], name);
                     fgets(buff, 2000, sys);
                     n = 0;
-                    while (n < j) {
+                    while (n < j)
+                    {
                         fscanf(sys, "%s", name);
                         progs[n] = malloc(strlen(name) + 1);
                         strcpy(progs[n], name);
@@ -127,7 +133,8 @@ int need_to_link(main_file_name) char *main_file_name;
     if ((k_stat.st_mtime < c_stat.st_mtime) || (link_stat.st_mtime < c_stat.st_mtime))
         return clear_y(main_file_name);
     n = rescan_system(main_file_name, progs);
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++)
+    {
         strcpy(file_name, progs[i]);
         end = strlen(file_name) - 1;
         if (stat(file_name, &src_stat))
@@ -147,11 +154,13 @@ int need_to_link(main_file_name) char *main_file_name;
             cannot_link(
                 main_file_name, progs[i], "%s: %s newer than LIF, H or T (run analyzer again?)");
         if ((h_stat.st_mtime > k_stat.st_mtime) || (t_stat.st_mtime > k_stat.st_mtime) ||
-            (lif_stat.st_mtime > k_stat.st_mtime)) {
+            (lif_stat.st_mtime > k_stat.st_mtime))
+        {
             return clear_y(main_file_name);
         }
         if ((h_stat.st_mtime > link_stat.st_mtime) || (t_stat.st_mtime > link_stat.st_mtime) ||
-            (lif_stat.st_mtime > link_stat.st_mtime)) {
+            (lif_stat.st_mtime > link_stat.st_mtime))
+        {
             return clear_y(main_file_name);
         }
     }
@@ -164,13 +173,16 @@ void only_one(file_name) char *file_name;
     char buff[2000];
 
     printf("Linking %s\n", file_name);
-    if (need_to_link(file_name)) {
+    if (need_to_link(file_name))
+    {
         sprintf(buff, "%s/slink  %s >>HISTORY-S 2>&1 ", HOME, file_name);
         /* fclose(stdout); */ fflush(stdout);
         system(buff);
-    } else /* fclose(stdout); */
+    }
+    else /* fclose(stdout); */
         fflush(stdout);
-    if (!no_slice) {
+    if (!no_slice)
+    {
         sprintf(buff, "%s/%s  %s >>HISTORY-S 2>&1 &", HOME, slicer, file_name);
         system(buff);
     }
@@ -183,9 +195,13 @@ void only_one(file_name) char *file_name;
 }
 
 int cmp(a, b) char **a, **b;
-{ return strcmp(*a, *b); }
+{
+    return strcmp(*a, *b);
+}
 
-char **scan_system() {
+char **
+scan_system()
+{
     int n   = 0, k, j;
     int dup = 0;
     FILE *sys;
@@ -194,23 +210,34 @@ char **scan_system() {
     int ambig_state = 0;
 
     sys = fopen("SYSTEM", "r");
-    if (sys) {
-        while (fgets(buff, 2000, sys)) {
-            if (buff[0] == 'M') {
+    if (sys)
+    {
+        while (fgets(buff, 2000, sys))
+        {
+            if (buff[0] == 'M')
+            {
                 ambig_state = 0;
                 k           = sscanf(buff, "MAIN %s %d", name, &j);
-                if (k == 2) {
+                if (k == 2)
+                {
                     progs[n] = malloc(strlen(name) + 1);
                     strcpy(progs[n], name);
                     n++;
                 }
-            } else if (buff[0] == 'A') {
+            }
+            else if (buff[0] == 'A')
+            {
                 ambig_state = 1;
-            } else if (buff[0] == 'F') {
+            }
+            else if (buff[0] == 'F')
+            {
                 ambig_state = 0;
-            } else if (buff[0] == 'L') {
+            }
+            else if (buff[0] == 'L')
+            {
                 ambig_state = 0;
-            } else if (ambig_state)
+            }
+            else if (ambig_state)
                 dup++;
         }
         fclose(sys);
@@ -246,7 +273,9 @@ void button_help(w, mess, e, ok) Widget w;
 char *mess;
 XEvent *e;
 Boolean *ok;
-{ XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL); }
+{
+    XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL);
+}
 
 void set_button_help(w, mess) Widget w;
 char *mess;
@@ -262,7 +291,8 @@ XtIntervalId *tt;
     char buff[2000];
     int n, at, shifting;
 
-    if (!no_slice) {
+    if (!no_slice)
+    {
         sprintf(buff, "%s/%s  %s >>HISTORY-S 2>&1 &", HOME, slicer, id->file_name);
         system(buff);
         exit(0);
@@ -271,12 +301,17 @@ XtIntervalId *tt;
     at       = 0;
     shifting = 0;
     n        = 0;
-    while (id->progs[at]) {
+    while (id->progs[at])
+    {
         n++;
-        if (shifting) {
+        if (shifting)
+        {
             id->progs[at] = id->progs[at + 1];
-        } else {
-            if (strcmp(id->file_name, id->progs[at]) == 0) {
+        }
+        else
+        {
+            if (strcmp(id->file_name, id->progs[at]) == 0)
+            {
                 shifting      = 1;
                 id->progs[at] = id->progs[at + 1];
                 n--;
@@ -296,7 +331,8 @@ XtIntervalId *tt;
 {
     char buff[2000];
 
-    if (need_to_link(id->file_name)) {
+    if (need_to_link(id->file_name))
+    {
         sprintf(buff, "%s/slink  %s >>HISTORY-S 2>&1 ", HOME, id->file_name);
         /*
         fclose(stdout);
@@ -306,7 +342,9 @@ XtIntervalId *tt;
         XtVaSetValues(id->status, XtNlabel, "Link finished.  Select another program or exit", NULL);
         printf("F I N I S H E D\n");
         fflush(stdout);
-    } else { /* fclose(stdout); */
+    }
+    else
+    { /* fclose(stdout); */
         fflush(stdout);
         XtVaSetValues(
             id->status, XtNlabel, "Already linked.  Select another program or exit", NULL);
@@ -364,7 +402,9 @@ XawListReturnStruct *list;
 void push_quit(w, u_data, w_data) Widget w;
 XtPointer u_data;
 XtPointer w_data;
-{ exit(0); }
+{
+    exit(0);
+}
 
 void push_help(w, u_data, w_data) Widget w;
 XtPointer u_data;
@@ -467,7 +507,8 @@ id_ptr id;
     list =
         XtVaCreateManagedWidget(strcat(name, "List"), listWidgetClass, port, XtNlist, progs, NULL);
     id->list = list;
-    if (progs[0] == NULL) {
+    if (progs[0] == NULL)
+    {
         XtVaSetValues(status, XtNlabel, "Status: No main programs have been analyzed", NULL);
     }
     set_button_help(list, "Click on program to link for slicing");
@@ -611,21 +652,22 @@ char *fall[] = {
 			<KeyPress>?: set() highlight() notify() unset()",
     NULL};
 
-int main(int np, char **p)
+int
+main(int np, char **p)
 {
     XtAppContext ac;
     Widget top;
     char icon_at[2000];
     int clock;
-    
+
     sprintf(icon_at, "*iconPixmap: %s/unravel.icon", HOME);
     fall[0] = icon_at;
 
     top = XtAppInitialize(&ac, "Unravel", NULL, 0, &np, p, fall, NULL, 0);
-    
+
     clock = time(NULL);
-    fprintf (stderr, "Link & Slice  %s\n",ctime(&clock));
-    
+    fprintf(stderr, "Link & Slice  %s\n", ctime(&clock));
+
     no_slice = 0;
     if (np == 2)
         no_slice = 1;

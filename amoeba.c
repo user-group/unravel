@@ -1,9 +1,6 @@
-main(
-argc, 
-argv)
+main(argc, argv)
 {
-	int		input1;
+    int input1;
 
-	return 0;
+    return 0;
 }
-

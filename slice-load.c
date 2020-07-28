@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -79,30 +79,36 @@ id_ptr globals;
 *                                                                   *
 *********************************************************************
 */
-int is_lib_proc(int pid) 
-{ 
-    return procs[pid].entry == -1; 
+int
+is_lib_proc(int pid)
+{
+    return procs[pid].entry == -1;
 }
 
-char *var_name(int pid, int id) 
+char *
+var_name(int pid, int id)
 {
     if (id <= 0)
         return "<no name: id is zero>";
-    if (pid) {
+    if (pid)
+    {
         if ((pid < 0) || (pid > n_procs))
             return "<no name: pid out of range>";
         if (id > procs[pid].n_locals)
             return "<no name: local id too large>";
         else
             return procs[pid].locals[id].name;
-    } else {
+    }
+    else
+    {
         if (id > n_globals)
             return "<no name: global id too large>";
         return globals[id].name;
     }
 }
 
-set_ptr var_points_to(int pid, int id)
+set_ptr
+var_points_to(int pid, int id)
 {
     int ptr_id;
 
@@ -110,10 +116,10 @@ set_ptr var_points_to(int pid, int id)
         ptr_id = procs[pid].locals[id].ptr_id;
     else
         ptr_id = globals[id].ptr_id;
-        
+
     if (ptr_id)
         return ptr_points_to(ptr_id);
-        
+
     return NULL;
 }
 /*
@@ -121,7 +127,8 @@ set_ptr var_points_to(int pid, int id)
 *  malloc n bytes, print fail message if not enough space           *
 *********************************************************************
 */
-char *call_malloc(int n, char *fail)
+char *
+call_malloc(int n, char *fail)
 {
     char *chunk;
     /*
@@ -135,28 +142,33 @@ char *call_malloc(int n, char *fail)
     chunk = malloc(n);
     if (chunk)
         return chunk;
-        
+
     fprintf(stderr, "Slice file load out of memory: %s\n", fail);
     exit(1);
 }
 
-void get_visit_order(char *dir, file_ptr file) 
+void
+get_visit_order(char *dir, file_ptr file)
 {
-    char  mess[2000];
+    char mess[2000];
     FILE *v_file;
-    int   k, n, succ;
+    int k, n, succ;
 
     sprintf(mess, "%s%sV", dir, file->name);
     v_file = fopen(mess, "r");
-    if (v_file) {
+    if (v_file)
+    {
         n = 0;
-        while (fgets(mess, 2000, v_file)) {
+        while (fgets(mess, 2000, v_file))
+        {
             k = sscanf(mess, "%d", &succ);
-            if (k == 1) {
+            if (k == 1)
+            {
                 /*
                 printf ("visit %2d after %2d\n",n,succ);
                 */
-                if ((succ <= 0) || (succ > file->n_stmts)) {
+                if ((succ <= 0) || (succ > file->n_stmts))
+                {
                     printf("visit error at %d %d in %s\n", succ, n, file->name);
                 }
                 file->stmts[succ].visit_next = n;
@@ -178,10 +190,11 @@ void get_visit_order(char *dir, file_ptr file)
 */
 char mess[2000], dir[2000], *at, *start;
 
-void get_source(char *dir_main, file_ptr file) 
+void
+get_source(char *dir_main, file_ptr file)
 {
     char mess[4000], dir[2000], *at, *start;
-    int  fd, i;
+    int fd, i;
 
     sprintf(mess, "allocating %s source", file->name);
     file->text = call_malloc(file->n_chars + 1, mess);
@@ -193,7 +206,8 @@ void get_source(char *dir_main, file_ptr file)
         strcpy(dir, "");
     sprintf(mess, "%s%sc", dir, file->name);
     fd = open(mess, O_RDONLY);
-    if (fd == -1) {
+    if (fd == -1)
+    {
         printf("could not open source: %s\n", mess);
         exit(1);
     }
@@ -205,8 +219,10 @@ void get_source(char *dir_main, file_ptr file)
     at              = file->text;
     start           = at;
     i               = 1;
-    while (*at) {
-        if (*at == '\n') {
+    while (*at)
+    {
+        if (*at == '\n')
+        {
             file->src_index[i] = start;
             start              = at + 1;
             i++;
@@ -223,14 +239,16 @@ void get_source(char *dir_main, file_ptr file)
 *                                                                   *
 *********************************************************************
 */
-void create_stmts(file_ptr file) 
+void
+create_stmts(file_ptr file)
 {
     char mess[2000];
     int i;
 
     sprintf(mess, "%d stmts in %s", file->n_stmts, file->name);
     file->stmts = (stmt_ptr)call_malloc((1 + file->n_stmts) * sizeof(stmt_rec), mess);
-    for (i = 1; i <= file->n_stmts; i++) {
+    for (i = 1; i <= file->n_stmts; i++)
+    {
         file->stmts[i].refs = file->stmts[i].defs = NULL;
         file->stmts[i].requires = file->stmts[i].succ = NULL;
         file->stmts[i].active_global                  = create_bit_set(n_globals + 1);
@@ -252,12 +270,13 @@ void create_stmts(file_ptr file)
 *                                                                   *
 *********************************************************************
 */
-int read_k_file(char *name)
+int
+read_k_file(char *name)
 {
-    char  k_file_name[2000];
+    char k_file_name[2000];
     FILE *k_file;
-    int   i, j, ix, nx, ok;
-    char  buff[2000], mess[4000];
+    int i, j, ix, nx, ok;
+    char buff[2000], mess[4000];
 
     sprintf(k_file_name, "%sK", name);
     k_file = fopen(k_file_name, "r");
@@ -282,16 +301,18 @@ int read_k_file(char *name)
 
     chains =
         (chain_ptr)call_malloc((1 + n_chains) * sizeof(chain_rec), "allocating space for chains");
-    
-    for (i = 1; i <= n_chains; i++) {
+
+    for (i = 1; i <= n_chains; i++)
+    {
         chains[i].fields = NULL;
     }
 
     addrs = (addr_ptr)call_malloc((1 + n_addrs) * sizeof(addr_rec), "allocating space for addrs");
 
     procs = (proc_ptr)call_malloc((1 + n_procs) * sizeof(proc_rec), "allocating space for procs");
-    
-    for (i = 0; i < n_procs; i++) {
+
+    for (i = 0; i < n_procs; i++)
+    {
         fscanf(k_file, "%d", &ix);
         fscanf(k_file,
             "%d %d %d %c %s",
@@ -316,12 +337,14 @@ int read_k_file(char *name)
         strcpy(procs[ix].proc_name, buff);
         sprintf(mess, "%d locals in %s\n", procs[ix].n_locals, buff);
         procs[ix].locals = (id_ptr)call_malloc((1 + procs[ix].n_locals) * sizeof(id_rec), mess);
-        for (j = 1; j <= procs[ix].n_locals; j++) {
+        for (j = 1; j <= procs[ix].n_locals; j++)
+        {
             procs[ix].locals[j].offset = 0;
         }
     }
     files = (file_ptr)call_malloc(n_files * sizeof(file_rec), "space for file records");
-    for (i = 0; i < n_files; i++) {
+    for (i = 0; i < n_files; i++)
+    {
         fscanf(k_file,
             "%*d %d %d %d %d %s",
             &files[i].n_procs,
@@ -336,7 +359,8 @@ int read_k_file(char *name)
     }
 
     headers = (head_ptr)call_malloc((n_heads) * sizeof(head_rec), "space for header file records");
-    for (i = 0; i < n_heads; i++) {
+    for (i = 0; i < n_heads; i++)
+    {
         fscanf(k_file, "%d %s", &headers[i].n, buff);
         nx                     = headers[i].n;
         headers[i].header_file = call_malloc(strlen(buff) + 1, "space for header file name");
@@ -344,7 +368,8 @@ int read_k_file(char *name)
         headers[i].ids = (int *)call_malloc(nx * sizeof(int), "space for header file id indices");
         headers[i].names =
             (char **)call_malloc(nx * sizeof(char *), "space for header file name pointers");
-        for (j = 0; j < headers[i].n; j++) {
+        for (j = 0; j < headers[i].n; j++)
+        {
             fscanf(k_file, "%d %s", &headers[i].ids[j], buff);
             headers[i].names[j] = call_malloc(strlen(buff) + 1, "space for header file id names");
             strcpy(headers[i].names[j], buff);
@@ -459,16 +484,18 @@ generate_call_contexts()
 *  build a list of calling procs for each proc                      *
 *********************************************************************
 */
-void set_called_by(void) 
+void
+set_called_by(void)
 {
-    int      i;
-    int      to_pid;
+    int i;
+    int to_pid;
     call_ptr called, by;
-    
 
-    for (i = 1; i <= n_procs; i++) {
+    for (i = 1; i <= n_procs; i++)
+    {
         called = procs[i].calls;
-        while (called) {
+        while (called)
+        {
             to_pid                  = called->pid;
             by                      = (call_ptr)call_malloc(sizeof(call_rec), "called by records");
             by->next                = procs[to_pid].called_by;
@@ -498,12 +525,14 @@ void set_called_by(void)
 *  mark_sub_structs finds structures declared within other structs  *
 *********************************************************************
 */
-void mark_sub_structs(id_ptr vars, int n_vars, int id, int offset) 
+void
+mark_sub_structs(id_ptr vars, int n_vars, int id, int offset)
 {
-    int   i, j, off;
+    int i, j, off;
     char *at, *dot;
 
-    if (offset > n_vars) {
+    if (offset > n_vars)
+    {
         fprintf(stderr, "offset > n_vars (%d > %d)\n", offset, n_vars);
         abort();
     }
@@ -523,15 +552,18 @@ void mark_sub_structs(id_ptr vars, int n_vars, int id, int offset)
     at = strrchr(vars[id + 1].name, '.'); /* find rightmost . */
     if (!at)
         return;
-    for (i = 2; i <= offset; i++) {
+    for (i = 2; i <= offset; i++)
+    {
         dot = strrchr(vars[id + i].name, '.');
         /* test for new level of members by asking if
            position of rightmost dot has changed */
-        if ((dot - vars[id + i].name) != (at - vars[id + 1].name)) {
+        if ((dot - vars[id + i].name) != (at - vars[id + 1].name))
+        {
             j = i + 1;
             if (j <= offset)
                 dot = strrchr(vars[id + j].name, '.');
-            while ((j <= offset) && (dot - vars[id + j].name) != (at - vars[id + 1].name)) {
+            while ((j <= offset) && (dot - vars[id + j].name) != (at - vars[id + 1].name))
+            {
                 j++;
                 if (j <= offset)
                     dot = strrchr(vars[id + j].name, '.');
@@ -569,7 +601,8 @@ pr_structs()
 }
 */
 
-void close_gdefs(void) 
+void
+close_gdefs(void)
 {
     int more, result, proc;
     call_ptr call;
@@ -581,18 +614,23 @@ void close_gdefs(void)
     int old;
     /* int		v_opt = 1; */
 
-    for (proc = 1; proc <= n_procs; proc++) {
+    for (proc = 1; proc <= n_procs; proc++)
+    {
         more = 1;
         if (v_opt)
             printf("proc %s\n", procs[proc].proc_name);
         if (!is_lib_proc(proc))
-            while (more) {
+            while (more)
+            {
                 more = 0;
-                if (procs[proc].cdefs) {
+                if (procs[proc].cdefs)
+                {
                     chain = -1;
-                    while ((chain = get_next_member(procs[proc].cdefs, chain)) >= 0) {
+                    while ((chain = get_next_member(procs[proc].cdefs, chain)) >= 0)
+                    {
                         chain_resolve_set(chain, proc);
-                        while (chain_resolve_get(&id, &pid)) {
+                        while (chain_resolve_get(&id, &pid))
+                        {
                             if (v_opt)
                                 printf("got %s\n", var_name(pid, id));
                             fflush(stdout);
@@ -606,40 +644,54 @@ void close_gdefs(void)
                                          : globals[id].is_pointer)
                                         ? 'P'
                                         : 'S');
-                            if (offset_check(pid, id, 0)) {
-                                if (pid) {
+                            if (offset_check(pid, id, 0))
+                            {
+                                if (pid)
+                                {
                                     if (pid != proc)
                                         more += add_to_id_set(&procs[proc].other_defs, pid, id);
-                                } else {
+                                }
+                                else
+                                {
                                     if (!procs[proc].global_defs)
                                         procs[proc].global_defs = create_bit_set(n_globals + 1);
-                                    if (!is_bit_on(procs[proc].global_defs, id)) {
+                                    if (!is_bit_on(procs[proc].global_defs, id))
+                                    {
                                         bit_on(procs[proc].global_defs, id);
                                         more++;
                                     }
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 if (v_opt)
                                     printf("id range error\n");
                             }
                         }
                     }
                 }
-                if (procs[proc].global_idefs) {
+                if (procs[proc].global_idefs)
+                {
                     var = -1;
-                    while ((var = get_next_member(procs[proc].global_idefs, var)) >= 0) {
+                    while ((var = get_next_member(procs[proc].global_idefs, var)) >= 0)
+                    {
                         objs = var_points_to(0, var);
-                        while (objs) {
+                        while (objs)
+                        {
                             aix = objs->id;
-                            if (addrs[aix].pid == 0) {
+                            if (addrs[aix].pid == 0)
+                            {
                                 if (!procs[proc].global_defs)
                                     procs[proc].global_defs = create_bit_set(n_globals + 1);
-                                if (!is_bit_on(procs[proc].global_defs, addrs[aix].id)) {
+                                if (!is_bit_on(procs[proc].global_defs, addrs[aix].id))
+                                {
                                     bit_on(procs[proc].global_idefs, addrs[aix].id);
                                     bit_on(procs[proc].global_defs, addrs[aix].id);
                                     more++;
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 old = more;
                                 more += add_to_id_set(
                                     &procs[proc].other_defs, addrs[aix].pid, addrs[aix].id);
@@ -648,26 +700,35 @@ void close_gdefs(void)
                         }
                     }
                 }
-                if (procs[proc].local_idefs) {
+                if (procs[proc].local_idefs)
+                {
                     var = -1;
-                    while ((var = get_next_member(procs[proc].local_idefs, var)) >= 0) {
+                    while ((var = get_next_member(procs[proc].local_idefs, var)) >= 0)
+                    {
                         objs = var_points_to(proc, var);
-                        while (objs) {
+                        while (objs)
+                        {
                             aix = objs->id;
-                            if (addrs[aix].pid == 0) {
+                            if (addrs[aix].pid == 0)
+                            {
                                 if (!procs[proc].global_idefs)
                                     procs[proc].global_idefs = create_bit_set(n_globals + 1);
-                                if (!is_bit_on(procs[proc].global_idefs, addrs[aix].id)) {
+                                if (!is_bit_on(procs[proc].global_idefs, addrs[aix].id))
+                                {
                                     if (!procs[proc].global_defs)
                                         procs[proc].global_defs = create_bit_set(n_globals + 1);
                                     bit_on(procs[proc].global_defs, addrs[aix].id);
                                     bit_on(procs[proc].global_idefs, addrs[aix].id);
                                     more++;
-                                } else {
+                                }
+                                else
+                                {
                                     if (addrs[aix].pid == proc)
                                         bit_on(procs[proc].local_idefs, addrs[aix].id);
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 old = more;
                                 more += add_to_id_set(
                                     &procs[proc].other_defs, addrs[aix].pid, addrs[aix].id);
@@ -676,10 +737,13 @@ void close_gdefs(void)
                         }
                     }
                 }
-                if (procs[proc].lib_arefs) {
+                if (procs[proc].lib_arefs)
+                {
                     addr = -1;
-                    while ((addr = get_next_member(procs[proc].lib_arefs, addr)) >= 0) {
-                        if (addrs[addr].pid == 0) {
+                    while ((addr = get_next_member(procs[proc].lib_arefs, addr)) >= 0)
+                    {
+                        if (addrs[addr].pid == 0)
+                        {
                             bit_on(procs[proc].global_defs, addrs[addr].id);
                         }
                     }
@@ -689,20 +753,26 @@ void close_gdefs(void)
             }
     }
     more = 1;
-    while (more) {
+    while (more)
+    {
         more = 0;
-        for (proc = 1; proc <= n_procs; proc++) {
-            if (!is_lib_proc(proc)) {
+        for (proc = 1; proc <= n_procs; proc++)
+        {
+            if (!is_lib_proc(proc))
+            {
                 call = procs[proc].called_by;
-                while (call) {
-                    if (procs[proc].global_defs) {
+                while (call)
+                {
+                    if (procs[proc].global_defs)
+                    {
                         if (!procs[call->pid].global_defs)
                             procs[call->pid].global_defs = create_bit_set(n_globals + 1);
                         result =
                             cunion_bit_set(procs[call->pid].global_defs, procs[proc].global_defs);
                         more += result;
                         non_local_defs = procs[proc].other_defs;
-                        while (non_local_defs) {
+                        while (non_local_defs)
+                        {
                             if (non_local_defs->pid != call->pid)
                                 more += add_to_id_set(&procs[call->pid].other_defs,
                                     non_local_defs->pid,
@@ -723,22 +793,28 @@ void close_gdefs(void)
 * structures declared within other structures                       *
 *********************************************************************
 */
-void scan_structs(void) 
+void
+scan_structs(void)
 {
     int i;
     int proc;
     id_ptr locals;
 
-    for (i = 1; i <= n_globals; i += 1 + globals[i].offset) {
-        if (globals[i].offset) {
+    for (i = 1; i <= n_globals; i += 1 + globals[i].offset)
+    {
+        if (globals[i].offset)
+        {
             mark_sub_structs(globals, n_globals, i, globals[i].offset);
         }
     }
 
-    for (proc = 1; proc <= n_procs; proc++) {
+    for (proc = 1; proc <= n_procs; proc++)
+    {
         locals = procs[proc].locals;
-        for (i = 1; i <= procs[proc].n_locals; i += 1 + locals[i].offset) {
-            if (locals[i].offset) {
+        for (i = 1; i <= procs[proc].n_locals; i += 1 + locals[i].offset)
+        {
+            if (locals[i].offset)
+            {
                 mark_sub_structs(locals, procs[proc].n_locals, i, locals[i].offset);
             }
         }
@@ -753,7 +829,8 @@ void scan_structs(void)
 *                                                                   *
 *********************************************************************
 */
-int read_link_file(char *name) 
+int
+read_link_file(char *name)
 {
     char l_file_name[2000];
     FILE *l_file;
@@ -773,13 +850,16 @@ int read_link_file(char *name)
     l_file = fopen(l_file_name, "r");
     if (!l_file)
         return 1;
-    while (fgets(buff, 2000, l_file)) {
+    while (fgets(buff, 2000, l_file))
+    {
         sscanf(buff, "%d", &code);
-        switch (code) {
+        switch (code)
+        {
         case LIF_PROC_START:
             sscanf(buff, "%*d(%*d,%d", &cur_proc);
             procs[cur_proc].file_id = cur_file;
-            for (i = procs[cur_proc].entry; i <= procs[cur_proc].exit; i++) {
+            for (i = procs[cur_proc].entry; i <= procs[cur_proc].exit; i++)
+            {
                 files[cur_file].stmts[i].active_local =
                     create_bit_set(procs[cur_proc].n_locals + 1);
             }
@@ -831,39 +911,53 @@ int read_link_file(char *name)
             n = sscanf(buff, "%*d(%d,%d,%d", &stmt, &id, &level);
             if (n == 2)
                 level = 0;
-            if (top_call) {
-                if (!call->actuals) {
+            if (top_call)
+            {
+                if (!call->actuals)
+                {
                     actual                = (actual_ptr)call_malloc(sizeof(actual_rec), "actual");
                     actual->next          = NULL;
                     actual->actuals       = NULL;
                     call->actuals         = actual;
                     actual->actual_number = 1;
-                } else
+                }
+                else
                     actual = call->actuals;
                 actual->actuals = add_to_var_set(actual->actuals, id, level, code);
-                if ((code == LIF_AREF) && is_lib_proc(call->pid)) {
+                if ((code == LIF_AREF) && is_lib_proc(call->pid))
+                {
                     if (procs[cur_proc].lib_arefs == NULL)
                         procs[cur_proc].lib_arefs = create_bit_set(n_addrs + 1);
                     bit_on(procs[cur_proc].lib_arefs, id);
                 }
-            } else {
-                if (code == LIF_GDEF) {
+            }
+            else
+            {
+                if (code == LIF_GDEF)
+                {
                     if (procs[cur_proc].global_defs == NULL)
                         procs[cur_proc].global_defs = create_bit_set(n_globals + 1);
-                    if (level) {
+                    if (level)
+                    {
                         if (procs[cur_proc].global_idefs == NULL)
                             procs[cur_proc].global_idefs = create_bit_set(n_globals + 1);
                         bit_on(procs[cur_proc].global_idefs, id);
-                    } else
+                    }
+                    else
                         bit_on(procs[cur_proc].global_defs, id);
-                } else if (code == LIF_DEF) {
-                    if (level) {
+                }
+                else if (code == LIF_DEF)
+                {
+                    if (level)
+                    {
                         if (procs[cur_proc].local_idefs == NULL)
                             procs[cur_proc].local_idefs =
                                 create_bit_set(procs[cur_proc].n_locals + 1);
                         bit_on(procs[cur_proc].local_idefs, id);
                     }
-                } else if (code == LIF_CDEF) {
+                }
+                else if (code == LIF_CDEF)
+                {
                     if (procs[cur_proc].cdefs == NULL)
                         procs[cur_proc].cdefs = create_bit_set(n_chains + 1);
                     bit_on(procs[cur_proc].cdefs, id);
@@ -897,13 +991,16 @@ int read_link_file(char *name)
             sscanf(buff, "%*d(%d,%d,%d,%[^)]", &chain, &field_seq, &offset, id_name);
             field       = (field_ptr)call_malloc(sizeof(field_rec), "allocating field");
             field->next = chains[chain].fields;
-            if (chains[chain].fields && (chains[chain].fields->fid < field_seq)) {
+            if (chains[chain].fields && (chains[chain].fields->fid < field_seq))
+            {
                 at_field = chains[chain].fields;
                 while (at_field->next && (at_field->next->fid < field_seq))
                     at_field = at_field->next;
                 field->next    = at_field->next;
                 at_field->next = field;
-            } else {
+            }
+            else
+            {
                 field->next          = chains[chain].fields;
                 chains[chain].fields = field;
             }
@@ -921,7 +1018,8 @@ int read_link_file(char *name)
             n = sscanf(buff, "%*d(%d,%d,%d", &stmt, &from, &to);
             if (n == 2)
                 to = from;
-            for (i = from; i <= to; i++) {
+            for (i = from; i <= to; i++)
+            {
                 files[cur_file].stmts[i].requires =
                     add_to_set(files[cur_file].stmts[i].requires, stmt);
             }
@@ -980,16 +1078,19 @@ int read_link_file(char *name)
     return 0;
 }
 
-void print_var_set(proc_ptr p, var_ptr s)
+void
+print_var_set(proc_ptr p, var_ptr s)
 {
     field_ptr at_field;
     int i;
 
-    while (s) {
+    while (s)
+    {
         /*
         printf ("  [code %d] ",s->code);
         */
-        switch (s->code) {
+        switch (s->code)
+        {
         case LIF_REF:
         case LIF_DEF:
             for (i = 0; i < s->level; i++)
@@ -1008,7 +1109,8 @@ void print_var_set(proc_ptr p, var_ptr s)
             break;
         case LIF_CREF:
         case LIF_CDEF:
-            if (chains[s->id].pid && (&procs[chains[s->id].pid] != p)) {
+            if (chains[s->id].pid && (&procs[chains[s->id].pid] != p))
+            {
                 fprintf(stderr,
                     "local chain %d on %s of %s used in %s\n",
                     s->id,
@@ -1024,7 +1126,8 @@ void print_var_set(proc_ptr p, var_ptr s)
                                   */
                     globals[chains[s->id].id].name);
             at_field = chains[s->id].fields;
-            while (at_field) {
+            while (at_field)
+            {
                 printf("->%s", at_field->name);
                 at_field = at_field->next;
             }
@@ -1037,65 +1140,80 @@ void print_var_set(proc_ptr p, var_ptr s)
     }
 }
 
-void print_set(set_ptr s)
+void
+print_set(set_ptr s)
 {
-    while (s) {
+    while (s)
+    {
         printf("%d ", s->id);
         s = s->next;
     }
 }
 
-void print_proc_defs(int nc, int proc) 
+void
+print_proc_defs(int nc, int proc)
 {
     int i = proc;
     int at;
     id_set_ptr others;
 
-    if (procs[i].global_defs) {
+    if (procs[i].global_defs)
+    {
         at = -1;
-        while ((at = get_next_member(procs[i].global_defs, at)) >= 0) {
+        while ((at = get_next_member(procs[i].global_defs, at)) >= 0)
+        {
             if (nc == 0)
                 printf("\t\t");
             nc += printf("%s ", globals[at].name);
-            if (nc > 60) {
+            if (nc > 60)
+            {
                 nc = 0;
                 printf("\n");
             }
         }
     }
-    if (procs[i].other_defs) {
+    if (procs[i].other_defs)
+    {
         printf(" others ");
         others = procs[i].other_defs;
-        while (others) {
+        while (others)
+        {
             if (nc == 0)
                 printf("\t\t");
             nc += printf("%s ", procs[others->pid].locals[others->id].name);
-            if (nc > 60) {
+            if (nc > 60)
+            {
                 nc = 0;
                 printf("\n");
             }
             others = others->next;
         }
     }
-    if (procs[i].global_idefs) {
+    if (procs[i].global_idefs)
+    {
         at = -1;
-        while ((at = get_next_member(procs[i].global_idefs, at)) >= 0) {
+        while ((at = get_next_member(procs[i].global_idefs, at)) >= 0)
+        {
             if (nc == 0)
                 printf("\t\t");
             nc += printf("*%s ", globals[at].name);
-            if (nc > 60) {
+            if (nc > 60)
+            {
                 nc = 0;
                 printf("\n");
             }
         }
     }
-    if (procs[i].local_idefs) {
+    if (procs[i].local_idefs)
+    {
         at = -1;
-        while ((at = get_next_member(procs[i].local_idefs, at)) >= 0) {
+        while ((at = get_next_member(procs[i].local_idefs, at)) >= 0)
+        {
             if (nc == 0)
                 printf("\t\t");
             nc += printf("*%s ", procs[i].locals[at].name);
-            if (nc > 60) {
+            if (nc > 60)
+            {
                 nc = 0;
                 printf("\n");
             }
@@ -1103,7 +1221,8 @@ void print_proc_defs(int nc, int proc)
     }
 }
 
-void verify_input(int l_opt) 
+void
+verify_input(int l_opt)
 {
     int nc, i, j, fid;
     char *line;
@@ -1112,7 +1231,8 @@ void verify_input(int l_opt)
     field_ptr f;
 
     printf("Files\n");
-    for (i = 0; i < n_files; i++) {
+    for (i = 0; i < n_files; i++)
+    {
         printf("\t%-15s %3d %3d %5d %7d\n",
             files[i].name,
             files[i].n_procs,
@@ -1122,7 +1242,8 @@ void verify_input(int l_opt)
     }
     printf("Procs\n");
     for (i = 1; i <= n_procs; i++)
-        if (procs[i].entry != -1) {
+        if (procs[i].entry != -1)
+        {
             printf("\t%-20s %3d  %3d %c [%d..%d] (%s)\n",
                 procs[i].proc_name,
                 i,
@@ -1134,7 +1255,8 @@ void verify_input(int l_opt)
         }
     printf("Procs global/non-local defs\n");
     for (i = 1; i <= n_procs; i++)
-        if (procs[i].entry != -1) {
+        if (procs[i].entry != -1)
+        {
             nc = printf("\t%-20s ", procs[i].proc_name);
             print_proc_defs(nc, i);
             if (!procs[i].global_defs && !procs[i].other_defs && !procs[i].global_idefs &&
@@ -1145,7 +1267,8 @@ void verify_input(int l_opt)
         }
     printf("Calls\n");
     for (i = 1; i <= n_procs; i++)
-        if ((procs[i].entry != -1) && procs[i].calls) {
+        if ((procs[i].entry != -1) && procs[i].calls)
+        {
             printf("\t%-20s %3d  %3d %c [%d..%d] (%s)\n",
                 procs[i].proc_name,
                 i,
@@ -1155,10 +1278,12 @@ void verify_input(int l_opt)
                 procs[i].exit,
                 files[procs[i].file_id].name);
             call = procs[i].calls;
-            while (call) {
+            while (call)
+            {
                 printf("\t%4d %s: (", call->stmt, procs[call->pid].proc_name);
                 actual = call->actuals;
-                while (actual) {
+                while (actual)
+                {
                     print_var_set(&procs[i], actual->actuals);
                     actual = actual->next;
                     if (actual)
@@ -1170,11 +1295,13 @@ void verify_input(int l_opt)
         }
     printf("Library Functions\n");
     for (i = 1; i <= n_procs; i++)
-        if (procs[i].entry == -1) {
+        if (procs[i].entry == -1)
+        {
             printf("\t%-20s %3d\n", procs[i].proc_name, i);
         }
     printf("Globals\n");
-    for (i = 1; i <= n_globals; i++) {
+    for (i = 1; i <= n_globals; i++)
+    {
         printf("\t%3d %c %c %c %s",
             i,
             globals[i].is_formal ? 'F' : ' ',
@@ -1188,9 +1315,11 @@ void verify_input(int l_opt)
     }
     printf("Locals\n");
     for (i = 1; i <= n_procs; i++)
-        if (procs[i].entry != -1) {
+        if (procs[i].entry != -1)
+        {
             printf("\t%-20s \n", procs[i].proc_name);
-            for (j = 1; j <= procs[i].n_locals; j++) {
+            for (j = 1; j <= procs[i].n_locals; j++)
+            {
                 printf("\t\t%3d %c %c %c %s",
                     j,
                     procs[i].locals[j].is_formal ? 'F' : ' ',
@@ -1204,7 +1333,8 @@ void verify_input(int l_opt)
             }
         }
     printf("Addrs\n");
-    for (i = 1; i <= n_addrs; i++) {
+    for (i = 1; i <= n_addrs; i++)
+    {
         printf("%4d ==> %s.%s (%d,%d)\n",
             i,
             addrs[i].pid ? procs[addrs[i].pid].proc_name : "global",
@@ -1213,7 +1343,8 @@ void verify_input(int l_opt)
             addrs[i].id);
     }
     printf("Chains\n");
-    for (i = 1; i <= n_chains; i++) {
+    for (i = 1; i <= n_chains; i++)
+    {
         printf("%4d ==> (%d,%d) (%s) %s",
             i,
             chains[i].pid,
@@ -1222,7 +1353,8 @@ void verify_input(int l_opt)
             chains[i].pid ? procs[chains[i].pid].locals[chains[i].id].name
                           : globals[chains[i].id].name);
         f = chains[i].fields;
-        while (f) {
+        while (f)
+        {
             printf("->%s", f->name);
             f = f->next;
         }
@@ -1232,7 +1364,8 @@ void verify_input(int l_opt)
         return;
     printf("Statements\n");
     for (i = 1; i <= n_procs; i++)
-        if (procs[i].entry != -1) {
+        if (procs[i].entry != -1)
+        {
             printf("\t%-20s %3d  %3d %c [%d..%d] (%s)\n",
                 procs[i].proc_name,
                 i,
@@ -1242,7 +1375,8 @@ void verify_input(int l_opt)
                 procs[i].exit,
                 files[procs[i].file_id].name);
             fid = procs[i].file_id;
-            for (j = procs[i].entry; j <= procs[i].exit; j++) {
+            for (j = procs[i].entry; j <= procs[i].exit; j++)
+            {
                 nc = printf("\t%4d @ %d  ", j, files[fid].stmts[j].froml);
                 for (; nc < 12; nc++)
                     printf(" ");
@@ -1254,7 +1388,8 @@ void verify_input(int l_opt)
                 if (files[fid].stmts[j].calls)
                     printf("\n\t     Calls:");
                 cp = files[fid].stmts[j].calls;
-                while (cp) {
+                while (cp)
+                {
                     printf(" %s", procs[cp->pid].proc_name);
                     cp = cp->next_this_stmt;
                 }
@@ -1283,12 +1418,15 @@ void verify_input(int l_opt)
 * procs declared static could be a problem?????                     *
 *********************************************************************
 */
-int find_proc(char *name) 
+int
+find_proc(char *name)
 {
     int ix;
 
-    for (ix = 1; ix <= n_procs; ix++) {
-        if (0 == strcmp(procs[ix].proc_name, name)) {
+    for (ix = 1; ix <= n_procs; ix++)
+    {
+        if (0 == strcmp(procs[ix].proc_name, name))
+        {
             return ix;
         }
     }
@@ -1300,12 +1438,15 @@ int find_proc(char *name)
 * Translate a file name to a file_id                                *
 *********************************************************************
 */
-int find_file(char *name) 
+int
+find_file(char *name)
 {
     int ix;
 
-    for (ix = 0; ix < n_files; ix++) {
-        if (0 == strcmp(files[ix].name, name)) {
+    for (ix = 0; ix < n_files; ix++)
+    {
+        if (0 == strcmp(files[ix].name, name))
+        {
             return ix;
         }
     }
@@ -1321,33 +1462,35 @@ int find_file(char *name)
 *                                                                   *
 *********************************************************************
 */
-int find_var(int pid, char *name)
+int
+find_var(int pid, char *name)
 {
     int n, ix;
     id_ptr vars;
 
-    if (pid) {
+    if (pid)
+    {
         vars = procs[pid].locals;
         n    = procs[pid].n_locals;
-    } else {
+    }
+    else
+    {
         vars = globals;
         n    = n_globals;
     }
-    for (ix = 1; ix <= n; ix++) {
-        if (0 == strcmp(vars[ix].name, name)) {
+    for (ix = 1; ix <= n; ix++)
+    {
+        if (0 == strcmp(vars[ix].name, name))
+        {
             return ix;
         }
     }
     return -1;
 }
 
-int make_criterion(char *file_name, 
-                   int   line_number, 
-                   char *var_spec, 
-                   int  *file, 
-                   int  *stmt, 
-                   int  *proc, 
-                   int  *var) 
+int
+make_criterion(
+    char *file_name, int line_number, char *var_spec, int *file, int *stmt, int *proc, int *var)
 {
     int len;
     int n;
@@ -1359,26 +1502,33 @@ int make_criterion(char *file_name,
     /*
     printf ("find file %s => %d\n",file_name,*file);
     */
-    if (*file == -1) {
+    if (*file == -1)
+    {
         fprintf(stderr, "file %sc not part of %sc system\n", file_name, files[0].name);
         return 1;
     }
 
-    if (var_spec[0] == '\'') {
+    if (var_spec[0] == '\'')
+    {
         *proc = 0;
         n     = sscanf(var_spec, "'%s", var_name);
-    } else {
+    }
+    else
+    {
         n = sscanf(var_spec, "%[^']'%s", proc_name, var_name);
-        if (n == 1) {
+        if (n == 1)
+        {
             *proc = 0;
             strcpy(var_name, proc_name);
-        } else
+        }
+        else
             *proc = find_proc(proc_name);
     }
     /*
     printf ("find proc %s => %d\n",*proc?proc_name:"global",*proc);
     */
-    if (*proc == -1) {
+    if (*proc == -1)
+    {
         fprintf(stderr, "proc %s not part of %sc system\n", proc_name, files[0].name);
         return 1;
     }
@@ -1397,20 +1547,25 @@ int make_criterion(char *file_name,
 *  If the line has no stmt (e.g., is blank) find a close stmt.      *
 *********************************************************************
 */
-int line_to_stmt(int file, int line) 
+int
+line_to_stmt(int file, int line)
 {
     int i;
     int best_stmt, best_line;
 
-    for (i = 1; i <= files[file].n_stmts; i++) {
+    for (i = 1; i <= files[file].n_stmts; i++)
+    {
         if (files[file].stmts[i].froml == line)
             return i;
     }
     best_line = -1;
     best_stmt = 1;
-    for (i = 1; i <= files[file].n_stmts; i++) {
-        if (files[file].stmts[i].froml < line) {
-            if (files[file].stmts[i].froml > best_line) {
+    for (i = 1; i <= files[file].n_stmts; i++)
+    {
+        if (files[file].stmts[i].froml < line)
+        {
+            if (files[file].stmts[i].froml > best_line)
+            {
                 best_stmt = i;
                 best_line = files[file].stmts[i].froml;
             }
@@ -1418,4 +1573,3 @@ int line_to_stmt(int file, int line)
     }
     return best_stmt;
 }
-

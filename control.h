@@ -1,7 +1,7 @@
 #ifndef _control_h
 #define _control_h
-# define CONTROL_SCCS_ID "	@(#)control.h	1.1  8/10/95 "
-# include <stdio.h>
+#define CONTROL_SCCS_ID "	@(#)control.h	1.1  8/10/95 "
+#include <stdio.h>
 /*
 ***********************************************************************
 *                                                                     *
@@ -19,17 +19,21 @@
 ***********************************************************************
 */
 
-#define IF_CTRL				1
-#define IF_THEN_ELSE_CTRL	2
-#define DO_CTRL				3
-#define WHILE_CTRL			4
-#define FOR_CTRL			5
-#define SWITCH_CTRL			6
+#define IF_CTRL 1
+#define IF_THEN_ELSE_CTRL 2
+#define DO_CTRL 3
+#define WHILE_CTRL 4
+#define FOR_CTRL 5
+#define SWITCH_CTRL 6
 
-FILE	*ctrl_file;
+FILE *ctrl_file;
 
-void control (int code, int ctrl_entry, int ctrl_exit, int stmt_entry, int stmt_exit, int else_entry,
-	int else_exit);
-
+void control(int code,
+    int ctrl_entry,
+    int ctrl_exit,
+    int stmt_entry,
+    int stmt_exit,
+    int else_entry,
+    int else_exit);
 
 #endif /* _control_h */

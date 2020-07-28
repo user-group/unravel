@@ -1,43 +1,42 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "MultiSliceP.h"
 #include <X11/IntrinsicP.h>
 #include <X11/StringDefs.h>
 #include <X11/Xaw/Command.h>
 #include <X11/Xaw/Form.h>
 #include <X11/Xaw/Scrollbar.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
 static char sccsid[]    = "@(#)MultiSlice.c	1.5  8/14/95";
@@ -111,7 +110,8 @@ int DEBUG = 0;
 
 static void SliceResize(MultiSliceWidget w);
 
-void dojump(Widget w, XtPointer x, XtPointer y)
+void
+dojump(Widget w, XtPointer x, XtPointer y)
 {
     float *p;
 
@@ -125,7 +125,8 @@ void dojump(Widget w, XtPointer x, XtPointer y)
     */
 }
 
-static void fakeexpose(MultiSliceWidget w) 
+static void
+fakeexpose(MultiSliceWidget w)
 {
     XAnyEvent e;
 
@@ -134,7 +135,8 @@ static void fakeexpose(MultiSliceWidget w)
     doexpose(w, &e, NULL);
 }
 
-void doscroll(XtPointer x, MultiSliceWidget w, XtPointer y) 
+void
+doscroll(XtPointer x, MultiSliceWidget w, XtPointer y)
 {
     int i;
     int page = 1;
@@ -161,12 +163,14 @@ void doscroll(XtPointer x, MultiSliceWidget w, XtPointer y)
     fakeexpose(w);
 }
 
-static void SliceSetThumb(MultiSliceWidget w, Widget sb) 
-{ 
-    w->slicetext.scrollbar = sb; 
+static void
+SliceSetThumb(MultiSliceWidget w, Widget sb)
+{
+    w->slicetext.scrollbar = sb;
 }
 
-static void reset_top_line(MultiSliceWidget w, int delta)
+static void
+reset_top_line(MultiSliceWidget w, int delta)
 {
     int page, top;
 
@@ -184,26 +188,29 @@ static void reset_top_line(MultiSliceWidget w, int delta)
     fakeexpose(w);
 }
 
-static void up_a_line(XtPointer x, MultiSliceWidget w, XtPointer y) 
-{ 
-    reset_top_line(w, -1); 
+static void
+up_a_line(XtPointer x, MultiSliceWidget w, XtPointer y)
+{
+    reset_top_line(w, -1);
 }
 
-static void down_a_line(XtPointer x,MultiSliceWidget w, XtPointer y) 
-{ 
-    reset_top_line(w, 1); 
+static void
+down_a_line(XtPointer x, MultiSliceWidget w, XtPointer y)
+{
+    reset_top_line(w, 1);
 }
 
 #include "down.xbm"
 #include "up.xbm"
-Widget CreateSliceBox(char *name, Widget parent) 
+Widget
+CreateSliceBox(char *name, Widget parent)
 {
     Widget bar;
     Widget frame;
     Widget slicewin;
     Widget up, dn;
     Arg args[9];
-    int na;   
+    int na;
     int sb_left = 0;
     Pixmap up_bitmap, dn_bitmap;
     Display *d;
@@ -215,7 +222,8 @@ Widget CreateSliceBox(char *name, Widget parent)
         XtDisplay(parent), RootWindow(d, DefaultScreen(d)), down_bits, down_width, down_height);
     frame = XtCreateManagedWidget(name, formWidgetClass, parent, NULL, 0);
 
-    if (sb_left) {
+    if (sb_left)
+    {
         na = 0;
         XtSetArg(args[na], XtNlength, 600);
         na++;
@@ -244,7 +252,9 @@ Widget CreateSliceBox(char *name, Widget parent)
         XtSetArg(args[na], XtNright, XtChainRight);
         na++;
         slicewin = XtCreateManagedWidget("slicewin", multisliceWidgetClass, frame, args, na);
-    } else {
+    }
+    else
+    {
         na = 0;
         XtSetArg(args[na], XtNresizable, True);
         na++;
@@ -331,7 +341,8 @@ Widget CreateSliceBox(char *name, Widget parent)
     return slicewin;
 }
 
-static void doinit(MultiSliceWidget r, MultiSliceWidget nw, ArgList a, Cardinal *n)
+static void
+doinit(MultiSliceWidget r, MultiSliceWidget nw, ArgList a, Cardinal *n)
 {
     XGCValues values;
     Window root = RootWindowOfScreen(XtScreen(nw));
@@ -390,7 +401,8 @@ static void doinit(MultiSliceWidget r, MultiSliceWidget nw, ArgList a, Cardinal 
         printf("Tabstop %d\n", nw->slicetext.tabstop);
 }
 
-static void buildline(char *buff, char *line, int n, int tabstop, int *linemap) 
+static void
+buildline(char *buff, char *line, int n, int tabstop, int *linemap)
 {
     int in_at, out_at, add_tabs, n_spaces;
     int i;
@@ -403,13 +415,16 @@ static void buildline(char *buff, char *line, int n, int tabstop, int *linemap)
     if (DEBUG)
         printf("[%d,%lu]\n", n, strlen(line));
     out_at = 0;
-    for (in_at = 0; in_at < n; in_at++) {
+    for (in_at = 0; in_at < n; in_at++)
+    {
         linemap[in_at] = out_at;
-        if (line[in_at] == '\t') {
+        if (line[in_at] == '\t')
+        {
             n_spaces = tabstop - (out_at % tabstop);
             for (add_tabs = 0; add_tabs < n_spaces; add_tabs++)
                 buff[out_at++] = ' ';
-        } else
+        }
+        else
             buff[out_at++] = line[in_at];
     }
     buff[out_at] = '\0';
@@ -428,8 +443,15 @@ static void buildline(char *buff, char *line, int n, int tabstop, int *linemap)
                         w, line_buff, lineoffset,base,at
                  );
 */
-static void drawline(Display *d, Window win, MultiSliceWidget w, 
-                     char *buff, int offset, int base, int at, int *linemap) 
+static void
+drawline(Display *d,
+    Window win,
+    MultiSliceWidget w,
+    char *buff,
+    int offset,
+    int base,
+    int at,
+    int *linemap)
 {
     int highlight[Max_line_length];
     int i, chunk, from, to, pos, last;
@@ -439,7 +461,8 @@ static void drawline(Display *d, Window win, MultiSliceWidget w,
         highlight[i] = 0;
     if (DEBUG)
         printf("chunks(%d) ", w->slicetext.slicesrc.line[at].n_highlight);
-    for (chunk = 0; chunk < w->slicetext.slicesrc.line[at].n_highlight; chunk++) {
+    for (chunk = 0; chunk < w->slicetext.slicesrc.line[at].n_highlight; chunk++)
+    {
         if (DEBUG)
             printf("[%d,%d] ",
                 w->slicetext.slicesrc.line[at].start[chunk],
@@ -454,7 +477,8 @@ static void drawline(Display *d, Window win, MultiSliceWidget w,
     }
     pos  = 1;
     last = w->slicetext.slicesrc.line[at].length;
-    while (pos <= last) {
+    while (pos <= last)
+    {
         to = pos + 1;
         while ((to <= last) && (highlight[pos] == highlight[to]))
             to++;
@@ -496,19 +520,22 @@ static void drawline(Display *d, Window win, MultiSliceWidget w,
         printf("\n");
 }
 
-int adjust_line(MultiSliceWidget w, int line) 
+int
+adjust_line(MultiSliceWidget w, int line)
 {
     int *off, i;
 
     off = w->slicetext.slicesrc.offset;
-    for (i = 1; i < w->slicetext.slicesrc.n_files; i++) {
+    for (i = 1; i < w->slicetext.slicesrc.n_files; i++)
+    {
         if (off[i] >= line)
             return line - off[i - 1];
     }
     return line - off[w->slicetext.slicesrc.n_files - 1];
 }
 
-static void doexpose(MultiSliceWidget w, XAnyEvent *e, Region r) 
+static void
+doexpose(MultiSliceWidget w, XAnyEvent *e, Region r)
 {
     int base, ascent, descent, h, line, linemap[Max_line_length];
     GC gc_to_use;
@@ -527,10 +554,12 @@ static void doexpose(MultiSliceWidget w, XAnyEvent *e, Region r)
 
     Nvisible = 0.5 + w->core.height / ((float)h);
     LastLine = w->slicetext.top + Nvisible;
-    if (LastLine > w->slicetext.slicesrc.n_lines) {
+    if (LastLine > w->slicetext.slicesrc.n_lines)
+    {
         LastLine  = w->slicetext.slicesrc.n_lines;
         FirstLine = w->slicetext.slicesrc.n_lines - Nvisible + 1;
-    } else
+    }
+    else
         FirstLine = w->slicetext.top;
     if (FirstLine < 1)
         FirstLine = 1;
@@ -541,7 +570,8 @@ static void doexpose(MultiSliceWidget w, XAnyEvent *e, Region r)
         printf("Expose %d lines %d - %d\n", Nvisible, FirstLine, LastLine);
     sprintf(format, " %%%dd ", w->slicetext.log);
     lineoffset = (w->slicetext.log + 3) * w->slicetext.font->max_bounds.width;
-    for (line = FirstLine; line <= LastLine; line++) {
+    for (line = FirstLine; line <= LastLine; line++)
+    {
         /*
 if (DEBUG)printf ("Expose %d\n",turn);
 if (DEBUG)fflush(stdout);
@@ -594,7 +624,8 @@ if (DEBUG)fflush(stdout);
         0);
 }
 
-void side_set(MultiSliceWidget w, int line_from) 
+void
+side_set(MultiSliceWidget w, int line_from)
 {
     int ix, at, h;
 
@@ -605,7 +636,8 @@ void side_set(MultiSliceWidget w, int line_from)
         XDrawLine(XtDisplay(w), w->slicetext.sidebar, w->slicetext.side_gc, 0, at, 100, at);
 }
 
-static void SliceResize(MultiSliceWidget w) 
+static void
+SliceResize(MultiSliceWidget w)
 {
     float top, shown;
     int win, line;
@@ -642,7 +674,8 @@ static void SliceResize(MultiSliceWidget w)
             side_set(w, line);
 }
 
-void SliceSetTop(MultiSliceWidget w, float pc)
+void
+SliceSetTop(MultiSliceWidget w, float pc)
 {
     int old_top;
 
@@ -652,18 +685,21 @@ void SliceSetTop(MultiSliceWidget w, float pc)
     w->slicetext.top = (int)(w->slicetext.slicesrc.n_lines * pc);
     if ((pc < 0.0) || (pc > 1.0))
         w->slicetext.top = 1;
-    if (w->slicetext.top != old_top) {
+    if (w->slicetext.top != old_top)
+    {
         XawScrollbarSetThumb(w->slicetext.scrollbar, pc, -1.0);
         fakeexpose(w);
     }
 }
 
-void SliceRedraw(MultiSliceWidget w) 
-{ 
-    fakeexpose(w); 
+void
+SliceRedraw(MultiSliceWidget w)
+{
+    fakeexpose(w);
 }
 
-void SliceSet(MultiSliceWidget w, int line_from, int col_from, int line_to, int col_to, int redraw)
+void
+SliceSet(MultiSliceWidget w, int line_from, int col_from, int line_to, int col_to, int redraw)
 {
     int line, ix;
 
@@ -682,9 +718,11 @@ void SliceSet(MultiSliceWidget w, int line_from, int col_from, int line_to, int 
             line_to,
             col_to,
             w->slicetext.slicesrc.line[line_from].length);
-    if (line_from != line_to) {
+    if (line_from != line_to)
+    {
         for (line = line_from; line <= line_to; line++)
-            if ((line <= w->slicetext.slicesrc.n_lines) && (line > 0)) {
+            if ((line <= w->slicetext.slicesrc.n_lines) && (line > 0))
+            {
                 ix = w->slicetext.slicesrc.line[line].n_highlight;
                 if (ix + 5 < MAXHL)
                     w->slicetext.slicesrc.line[line].n_highlight++;
@@ -697,7 +735,9 @@ void SliceSet(MultiSliceWidget w, int line_from, int col_from, int line_to, int 
         line                                       = line_to;
         ix = w->slicetext.slicesrc.line[line].n_highlight - 1;
         w->slicetext.slicesrc.line[line].stop[ix] = col_to;
-    } else {
+    }
+    else
+    {
         line = line_from;
         ix   = w->slicetext.slicesrc.line[line].n_highlight;
         if (ix < MAXHL)
@@ -714,14 +754,16 @@ void SliceSet(MultiSliceWidget w, int line_from, int col_from, int line_to, int 
         fakeexpose(w);
 }
 
-void SliceClearAll(MultiSliceWidget w) 
+void
+SliceClearAll(MultiSliceWidget w)
 {
     int line;
 
     if (DEBUG)
         printf("Clear %d lines\n", w->slicetext.slicesrc.n_lines);
 
-    for (line = 1; line <= w->slicetext.slicesrc.n_lines; line++) {
+    for (line = 1; line <= w->slicetext.slicesrc.n_lines; line++)
+    {
         if (DEBUG)
             printf("Clear Line %d\n", line);
         fflush(stdout);
@@ -737,20 +779,24 @@ void SliceClearAll(MultiSliceWidget w)
     fakeexpose(w);
 }
 
-void MultiSliceSetHook(MultiSliceWidget w, void (*h)())
+void
+MultiSliceSetHook(MultiSliceWidget w, void (*h)())
 {
     w->slicetext.hook = h;
 }
 
-void find_line_and_file(MultiSliceWidget w, int line, int *fid, int *line_in_file) 
+void
+find_line_and_file(MultiSliceWidget w, int line, int *fid, int *line_in_file)
 {
     int *off, i;
 
     off = w->slicetext.slicesrc.offset;
     if (line > off[w->slicetext.slicesrc.n_files])
         line = off[w->slicetext.slicesrc.n_files];
-    for (i = 1; i < w->slicetext.slicesrc.n_files; i++) {
-        if (off[i] >= line) {
+    for (i = 1; i < w->slicetext.slicesrc.n_files; i++)
+    {
+        if (off[i] >= line)
+        {
             *fid          = i - 1;
             *line_in_file = line - off[i - 1];
             return;
@@ -762,7 +808,9 @@ void find_line_and_file(MultiSliceWidget w, int line, int *fid, int *line_in_fil
 }
 
 /* static */
-void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n) {
+void
+MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n)
+{
     static int line = 0;
     int y;
     int fid, f_line;
@@ -784,12 +832,14 @@ void MultiSliceHook(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n
         printf("y (%d) line (%d)\n", y, line);
     find_line_and_file(w, line, &fid, &f_line);
     printf("Click on line %d of display (%d of fid %d)\n", line, f_line, fid);
-    if (w->slicetext.hook) {
+    if (w->slicetext.hook)
+    {
         (*w->slicetext.hook)(fid, f_line);
     }
 }
 
-static void MultiSliceSelect(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n) 
+static void
+MultiSliceSelect(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n)
 {
     static int line = 0;
     static MultiSliceReturn r;
@@ -809,13 +859,16 @@ static void MultiSliceSelect(MultiSliceWidget w, XEvent *event, String *parm, Ca
         r.message = NULL;
     else
         r.message = parm[0];
-    if (event->xbutton.x >= (w->core.width - w->slicetext.side_width)) {
+    if (event->xbutton.x >= (w->core.width - w->slicetext.side_width))
+    {
         SliceSetTop(w, ((float)y) / ((float)(w->core.height ? w->core.height : 1)));
-    } else
+    }
+    else
         XtCallCallbacks((Widget)w, XtNcallback, (XtPointer)&r);
 }
 
-static void MultiSliceAction(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n)
+static void
+MultiSliceAction(MultiSliceWidget w, XEvent *event, String *parm, Cardinal *n)
 {
     static int line = 0;
     int y;
@@ -888,7 +941,8 @@ MultiSliceClassRec multisliceClassRec = {{/* core fields */
 
 WidgetClass multisliceWidgetClass = (WidgetClass)&multisliceClassRec;
 
-void BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines) 
+void
+BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines)
 {
     int at_line = 1;
     char *old, *at;
@@ -901,23 +955,27 @@ void BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines)
     src          = &w->slicetext.slicesrc;
     src->n_lines = 0;
     src->line    = (Line *)malloc((nlines + 2) * sizeof(Line));
-    if (src->line == NULL) {
+    if (src->line == NULL)
+    {
         fprintf(stderr, "Not enough memory for %d lines\n", nlines);
         exit(1);
     }
     src->n_files = n;
     src->offset  = (int *)malloc((n + 1) * sizeof(int));
-    if (src->offset == NULL) {
+    if (src->offset == NULL)
+    {
         fprintf(stderr, "Not enough memory for %d lines\n", nlines);
         exit(1);
     }
     src->n_files = n;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++)
+    {
         at             = f[i].text;
         src->offset[i] = at_line - 1;
         if (!at)
             return;
-        while (*at) {
+        while (*at)
+        {
             src->line[at_line].text        = at;
             src->line[at_line].n_highlight = 0;
             old                            = at;
@@ -936,20 +994,23 @@ void BuildSliceSrc(MultiSliceWidget w, int n, MultiSliceFilesPtr f, int nlines)
     src->longest     = longest_line;
     lines            = src->n_lines;
     w->slicetext.log = 0;
-    while (lines > 0) {
+    while (lines > 0)
+    {
         lines = lines / 10;
         w->slicetext.log++;
     }
     SliceResize(w);
     if (DEBUG)
         printf(" %d lines, longest %d\n", src->n_lines, longest_line);
-    if (longest_line >= Max_line_length) {
+    if (longest_line >= Max_line_length)
+    {
         fprintf(stderr, "Longest line %d is too long (limit %d)\n", longest_line, Max_line_length);
         exit(1);
     }
 }
 
-void PrintSliceSrc(MultiSliceWidget w) 
+void
+PrintSliceSrc(MultiSliceWidget w)
 {
     int i, l;
     char *at;
@@ -958,7 +1019,8 @@ void PrintSliceSrc(MultiSliceWidget w)
     src = &w->slicetext.slicesrc;
     if (DEBUG)
         printf("%d lines, longest is %d\n", src->n_lines, src->longest);
-    for (i = 1; i <= src->n_lines; i++) {
+    for (i = 1; i <= src->n_lines; i++)
+    {
         at = src->line[i].text;
         for (l = 0; l < src->line[i].length; l++)
             if (DEBUG)

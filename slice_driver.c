@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -35,7 +35,7 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdlib.h>
 #include <string.h>
 
-/* 
+/*
 static  char    sccsid[] = "@(#)slice_driver.c	1.4  8/16/95";
 */
 static bit_set *slices, active;
@@ -49,55 +49,69 @@ extern int read_link_file(char *name);
 extern void verify_input(int i);
 extern void print_all_active(bit_set slices[], bit_set active);
 
-int make_criterion(char *file_name, int line_number, char *var_spec, 
-                   int *file, int *stmt, int *proc, int *var);
+int make_criterion(
+    char *file_name, int line_number, char *var_spec, int *file, int *stmt, int *proc, int *var);
 
-void trace(int proc, int stmt) 
-{ 
-    printf("at stmt %d (line %d) in %s\n", stmt, 0, procs[proc].proc_name); 
+void
+trace(int proc, int stmt)
+{
+    printf("at stmt %d (line %d) in %s\n", stmt, 0, procs[proc].proc_name);
 }
 
-void verify_criterion(int file, int stmt, int proc, int var)
+void
+verify_criterion(int file, int stmt, int proc, int var)
 {
-    if ((file < 0) || (file >= n_files)) {
+    if ((file < 0) || (file >= n_files))
+    {
         fprintf(stderr, "file %d is out of range [0..%d]", file, n_files - 1);
         exit(1);
     }
-    if ((proc < 0) || (proc > n_procs)) {
+    if ((proc < 0) || (proc > n_procs))
+    {
         fprintf(stderr, "proc %d is out of range [1..%d]", proc, n_procs);
         exit(1);
     }
-    if (proc) {
-        if ((var <= 0) || (var > procs[proc].n_locals)) {
+    if (proc)
+    {
+        if ((var <= 0) || (var > procs[proc].n_locals))
+        {
             fprintf(stderr, "var %d is out of range [1..%d]", var, procs[proc].n_locals);
             exit(1);
         }
-    } else {
-        if ((var <= 0) || (var > n_globals)) {
+    }
+    else
+    {
+        if ((var <= 0) || (var > n_globals))
+        {
             fprintf(stderr, "var %d is out of range [1..%d]", var, n_globals);
             exit(1);
         }
     }
-    if ((stmt < 0) || (stmt > files[file].n_stmts)) {
+    if ((stmt < 0) || (stmt > files[file].n_stmts))
+    {
         fprintf(stderr, "stmt %d is out of range [1..%d]", stmt, files[file].n_stmts);
         exit(1);
     }
 }
 
-void do_slice(int file, int stmt, int proc, int var) 
+void
+do_slice(int file, int stmt, int proc, int var)
 {
     int i;
     int stmt_proc;
 
     clear_active();
-    for (i = 1; i <= n_procs; i++) {
+    for (i = 1; i <= n_procs; i++)
+    {
         if (procs[i].file_id == file)
-            if ((stmt >= procs[i].entry) && (stmt <= procs[i].exit)) {
+            if ((stmt >= procs[i].entry) && (stmt <= procs[i].exit))
+            {
                 stmt_proc = i;
                 break;
             }
     }
-    if ((stmt_proc < 1) || (stmt_proc > n_procs)) {
+    if ((stmt_proc < 1) || (stmt_proc > n_procs))
+    {
         printf("stmt %d not found for file %s\n", stmt, files[file].name);
         return;
     }
@@ -123,7 +137,8 @@ void do_slice(int file, int stmt, int proc, int var)
         print_all_active(slices, active);
 }
 
-int main(int np, char **p) 
+int
+main(int np, char **p)
 {
     int status;
     int i, fx;
@@ -137,8 +152,10 @@ int main(int np, char **p)
     if (np < 2)
         exit(1);
     fx = 0;
-    for (i = 1; i < np; i++) {
-        if (p[i][0] == '-') {
+    for (i = 1; i < np; i++)
+    {
+        if (p[i][0] == '-')
+        {
             if (strcmp("-v", p[i]) == 0)
                 v_opt = 1;
             else if (strcmp("-n", p[i]) == 0)
@@ -151,7 +168,8 @@ int main(int np, char **p)
                 c_opt = 1;
             else
                 fprintf(stderr, "%s: option %s not recognized\n", p[0], p[i]);
-        } else
+        }
+        else
             fx = i;
     }
     i            = strlen(p[fx]);
@@ -174,10 +192,14 @@ int main(int np, char **p)
     /*
     while (scanf ("%d%d%d%d",&file,&stmt,&proc,&var) != EOF){
     */
-    while (scanf("%s%d%s", file_name, &line_number, var_spec) != EOF) {
+    while (scanf("%s%d%s", file_name, &line_number, var_spec) != EOF)
+    {
         is_err = make_criterion(file_name, line_number, var_spec, &file, &stmt, &proc, &var);
-        if (is_err) {
-        } else {
+        if (is_err)
+        {
+        }
+        else
+        {
             verify_criterion(file, stmt, proc, var);
             do_slice(file, stmt, proc, var);
         }
@@ -185,4 +207,3 @@ int main(int np, char **p)
     }
     return 0;
 }
-

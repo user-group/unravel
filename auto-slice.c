@@ -1,44 +1,42 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
 
-
+#include "sets.h"
+#include "slice.h"
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include "sets.h"
-#include "slice.h"
-
 
 /*
 static char sccsid[] = "@(#)auto-slice.c	1.4  9/23/94";
@@ -55,26 +53,30 @@ extern void print_all_active(bit_set slices[], bit_set active);
 void verify_criterion(int file, int stmt, int proc, int var);
 void do_slice(int file, int stmt, int proc, int var);
 
-void time_out(int sig, int code, struct sigcontext *scp, char *addr)
-{ 
-    abandon_slice = 1; 
+void
+time_out(int sig, int code, struct sigcontext *scp, char *addr)
+{
+    abandon_slice = 1;
 }
 
-int find_main(void) {
+int
+find_main(void)
+{
     int p;
-    for (p = 1; p <= n_procs; p++) {
+    for (p = 1; p <= n_procs; p++)
+    {
         if (strcmp(procs[p].proc_name, "main") == 0)
             return p;
     }
     return 0;
 }
 
-float        f_stmts  = 0.0;
-int          hours    = 0, 
-             mins     = 0;
+float f_stmts = 0.0;
+int hours = 0, mins = 0;
 unsigned int max_time;
 
-int main(int np, char **p) 
+int
+main(int np, char **p)
 {
     int status;
     int i, fx;
@@ -92,8 +94,10 @@ int main(int np, char **p)
     if (np < 2)
         exit(1);
     fx = 0;
-    for (i = 1; i < np; i++) {
-        if (p[i][0] == '-') {
+    for (i = 1; i < np; i++)
+    {
+        if (p[i][0] == '-')
+        {
             if (strcmp("-v", p[i]) == 0)
                 v_opt = 1;
             else if (strcmp("-n", p[i]) == 0)
@@ -104,16 +108,20 @@ int main(int np, char **p)
                 g_opt = 1;
             else if (strcmp("-s", p[i]) == 0)
                 s_opt = 1;
-            else if (strcmp("-h", p[i]) == 0) {
+            else if (strcmp("-h", p[i]) == 0)
+            {
                 i++;
                 if (i < np)
                     hours = atoi(p[i]);
-            } else if (strcmp("-m", p[i]) == 0) {
+            }
+            else if (strcmp("-m", p[i]) == 0)
+            {
                 i++;
                 if (i < np)
                     mins = atoi(p[i]);
             }
-        } else
+        }
+        else
             fx = i;
     }
     max_time = 60 * (60 * hours + mins);
@@ -139,7 +147,8 @@ int main(int np, char **p)
     sprintf(message, "%sc: %d globals  %d locals  %d stmts", p[fx], n_globals, t_locals, t_stmts);
     printf("%s\n", message);
     proc = find_main();
-    if (!proc) {
+    if (!proc)
+    {
         fprintf(stderr, "no main procedure in %sc\n", p[fx]);
         exit(1);
     }
@@ -149,13 +158,16 @@ int main(int np, char **p)
     sprintf(cmd, "echo \"%s\" >>AUTO", message);
     system(cmd);
     if (g_opt)
-        for (var = 1; var <= n_globals; var++) {
+        for (var = 1; var <= n_globals; var++)
+        {
             verify_criterion(file, stmt, 0, var);
             do_slice(file, stmt, 0, var);
         }
     if (l_opt)
-        for (proc = 1; proc <= n_procs; proc++) {
-            for (var = 1; var <= procs[proc].n_locals; var++) {
+        for (proc = 1; proc <= n_procs; proc++)
+        {
+            for (var = 1; var <= procs[proc].n_locals; var++)
+            {
                 file = procs[proc].file_id;
                 stmt = procs[proc].exit;
                 verify_criterion(file, stmt, proc, var);
@@ -163,56 +175,69 @@ int main(int np, char **p)
             }
         }
     system("date >>AUTO");
-    
+
     return 0;
 }
 
-void verify_criterion(int file, int stmt, int proc, int var) 
+void
+verify_criterion(int file, int stmt, int proc, int var)
 {
-    if ((file < 0) || (file >= n_files)) {
+    if ((file < 0) || (file >= n_files))
+    {
         fprintf(stderr, "file %d is out of range [0..%d]", file, n_files - 1);
         exit(1);
     }
-    if ((proc < 0) || (proc > n_procs)) {
+    if ((proc < 0) || (proc > n_procs))
+    {
         fprintf(stderr, "proc %d is out of range [1..%d]", proc, n_procs);
         exit(1);
     }
-    if (proc) {
-        if ((var <= 0) || (var > procs[proc].n_locals)) {
+    if (proc)
+    {
+        if ((var <= 0) || (var > procs[proc].n_locals))
+        {
             fprintf(stderr, "local var %d is out of range [1..%d]", var, procs[proc].n_locals);
             exit(1);
         }
-    } else {
-        if ((var <= 0) || (var > n_globals)) {
+    }
+    else
+    {
+        if ((var <= 0) || (var > n_globals))
+        {
             fprintf(stderr, "global var %d is out of range [1..%d]", var, n_globals);
             exit(1);
         }
     }
-    if ((stmt < 0) || (stmt > files[file].n_stmts)) {
+    if ((stmt < 0) || (stmt > files[file].n_stmts))
+    {
         fprintf(stderr, "stmt %d is out of range [1..%d]", stmt, files[file].n_stmts);
         exit(1);
     }
 }
 
-void do_slice(int file, int stmt, int proc, int var) 
+void
+do_slice(int file, int stmt, int proc, int var)
 {
-    int    f, i, at;
-    int    stmt_proc;
-    int    size = 0;
+    int f, i, at;
+    int stmt_proc;
+    int size = 0;
     time_t start, finish;
-    int    elapsed;
-    char   cmd[1000];
-    float  pcent;
+    int elapsed;
+    char cmd[1000];
+    float pcent;
 
     clear_active();
-    for (i = 1; i <= n_procs; i++) {
+    for (i = 1; i <= n_procs; i++)
+    {
         if (procs[i].file_id == file)
-            if ((stmt >= procs[i].entry) && (stmt <= procs[i].exit)) {
+            if ((stmt >= procs[i].entry) && (stmt <= procs[i].exit))
+            {
                 stmt_proc = i;
                 break;
             }
     }
-    if ((stmt_proc < 1) || (stmt_proc > n_procs)) {
+    if ((stmt_proc < 1) || (stmt_proc > n_procs))
+    {
         fprintf(stderr, "stmt %d not found for file %s\n", stmt, files[file].name);
         return;
     }
@@ -241,9 +266,11 @@ void do_slice(int file, int stmt, int proc, int var)
         alarm(0);
     if (elapsed <= 0)
         elapsed = 1;
-    for (f = 0; f < n_files; f++) {
+    for (f = 0; f < n_files; f++)
+    {
         at = -1;
-        while ((at = get_next_member(slices[f], at)) >= 0) {
+        while ((at = get_next_member(slices[f], at)) >= 0)
+        {
             size++;
         }
     }
@@ -275,4 +302,3 @@ void do_slice(int file, int stmt, int proc, int var)
     if (v_opt)
         print_all_active(slices, active);
 }
-

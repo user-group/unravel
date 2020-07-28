@@ -124,4 +124,3 @@ typedef struct
 
 Widget CreateSliceBox();
 #endif /* _MultiSlice_h */
-

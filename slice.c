@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -34,7 +34,7 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <stdlib.h>
 #include <string.h>
 
-/* 
+/*
 static  char    sccsid[] = "@(#)slice.c	1.7  8/16/95";
 static char *sccs_h_id = SLICE_SCCS_ID;
 */
@@ -54,11 +54,13 @@ int bit_set_equal(bit_set a, bit_set b);
 void bit_off(bit_set b, int at);
 void print_proc_defs(int nc, int proc);
 
-int stmt_to_proc(int file, int stmt) 
+int
+stmt_to_proc(int file, int stmt)
 {
     int i;
 
-    for (i = 1; i <= n_procs; i++) {
+    for (i = 1; i <= n_procs; i++)
+    {
         if (procs[i].file_id == file)
             if ((stmt >= procs[i].entry) && (stmt <= procs[i].exit))
                 return i;
@@ -66,21 +68,28 @@ int stmt_to_proc(int file, int stmt)
     return 0; /* no proc found */
 }
 
-int is_id_valid(int pid, int id) 
+int
+is_id_valid(int pid, int id)
 {
-    if ((pid < 0) || (pid > n_procs)) {
+    if ((pid < 0) || (pid > n_procs))
+    {
         fprintf(stderr, "proc %d out of range %d\n", pid, n_procs);
         fflush(stderr);
         return 0;
     }
-    if (pid) {
-        if ((id < 0) || (id > procs[pid].n_locals)) {
+    if (pid)
+    {
+        if ((id < 0) || (id > procs[pid].n_locals))
+        {
             fprintf(stderr, "local id %d out of range %d\n", id, procs[pid].n_locals);
             fflush(stderr);
             return 0;
         }
-    } else {
-        if ((id < 0) || (id > n_globals)) {
+    }
+    else
+    {
+        if ((id < 0) || (id > n_globals))
+        {
             fprintf(stderr, "global id %d out of range %d\n", id, n_globals);
             fflush(stderr);
             return 0;
@@ -89,36 +98,46 @@ int is_id_valid(int pid, int id)
     return 1;
 }
 
-void set_criteria(int file, int stmt_proc, int stmt, int var_proc, int var)
+void
+set_criteria(int file, int stmt_proc, int stmt, int var_proc, int var)
 {
     int var_max, var_n;
 
-    if (var_proc) { /* get all members of a structure */
+    if (var_proc)
+    { /* get all members of a structure */
         var_n   = procs[var_proc].n_locals;
         var_max = procs[var_proc].locals[var].offset + var;
-    } else {
+    }
+    else
+    {
         var_n   = n_globals;
         var_max = globals[var].offset + var;
     }
-    for (; var <= var_max; var++) {
+    for (; var <= var_max; var++)
+    {
         is_id_valid(var_proc, var);
-        if (var_proc) {
+        if (var_proc)
+        {
             if (stmt_proc == var_proc)
                 bit_on(files[file].stmts[stmt].active_local, var);
-            else {
+            else
+            {
                 add_to_id_set(&files[file].stmts[stmt].active_other, var_proc, var);
             }
-        } else
+        }
+        else
             bit_on(files[file].stmts[stmt].active_global, var);
     }
 }
 
-void clear_active_proc(int proc) 
+void
+clear_active_proc(int proc)
 {
     int file, stmt;
 
     file = procs[proc].file_id;
-    for (stmt = procs[proc].entry; stmt <= procs[proc].exit; stmt++) {
+    for (stmt = procs[proc].entry; stmt <= procs[proc].exit; stmt++)
+    {
         clear_bit_set(files[file].stmts[stmt].active_global);
         clear_bit_set(files[file].stmts[stmt].active_local);
         clear_id_set(files[file].stmts[stmt].active_other);
@@ -126,11 +145,14 @@ void clear_active_proc(int proc)
     }
 }
 
-void clear_active(void) {
+void
+clear_active(void)
+{
     int file, stmt;
 
     for (file = 0; file < n_files; file++)
-        for (stmt = 1; stmt <= files[file].n_stmts; stmt++) {
+        for (stmt = 1; stmt <= files[file].n_stmts; stmt++)
+        {
             clear_bit_set(files[file].stmts[stmt].active_global);
             clear_bit_set(files[file].stmts[stmt].active_local);
             clear_id_set(files[file].stmts[stmt].active_other);
@@ -138,7 +160,8 @@ void clear_active(void) {
         }
 }
 
-int lib_defs(stmt_ptr stmt, int id, int is_local) 
+int
+lib_defs(stmt_ptr stmt, int id, int is_local)
 {
     call_ptr calls;
     var_ptr var;
@@ -146,15 +169,19 @@ int lib_defs(stmt_ptr stmt, int id, int is_local)
     int cx, ax;
 
     calls = stmt->calls;
-    while (calls) {
+    while (calls)
+    {
         cx = calls->pid;
         if (v_opt)
             printf("call to %s\n", procs[cx].proc_name);
         act = calls->actuals;
-        while (act) {
+        while (act)
+        {
             var = act->actuals;
-            while (var) {
-                if (var->code == LIF_AREF) {
+            while (var)
+            {
+                if (var->code == LIF_AREF)
+                {
                     ax = var->id;
                     if ((addrs[ax].id == id) &&
                         ((is_local && addrs[ax].pid) || (!is_local && !addrs[ax].pid)))
@@ -169,15 +196,18 @@ int lib_defs(stmt_ptr stmt, int id, int is_local)
     return 0;
 }
 
-int is_var_defed(stmt_ptr stmt, int id, int is_local) 
+int
+is_var_defed(stmt_ptr stmt, int id, int is_local)
 {
     var_ptr defs;
     int result;
 
     defs = stmt->defs;
-    while (defs) {
+    while (defs)
+    {
         if (defs->level == 0)
-            switch (defs->code) {
+            switch (defs->code)
+            {
             case LIF_DEF:
                 if (!is_local)
                     break;
@@ -204,11 +234,13 @@ int is_var_defed(stmt_ptr stmt, int id, int is_local)
     */
 }
 
-void print_addr(set_ptr addr_set) 
+void
+print_addr(set_ptr addr_set)
 {
     int addr, id, pid;
 
-    if (addr_set) {
+    if (addr_set)
+    {
         addr = addr_set->id;
         id   = addrs[addr].id;
         pid  = addrs[addr].pid;
@@ -220,25 +252,31 @@ static var_ptr base;
 static set_ptr base_addrs[200];
 static int base_off[200];
 
-int offset_check(int pid, int id, int off)
+int
+offset_check(int pid, int id, int off)
 {
     id_ptr ids;
     int n;
     static id_set_ptr trouble = NULL;
 
-    if (pid) {
+    if (pid)
+    {
         ids = procs[pid].locals;
         n   = procs[pid].n_locals;
-    } else {
+    }
+    else
+    {
         n   = n_globals;
         ids = globals;
     }
-    if (id > n) {
+    if (id > n)
+    {
         if (add_to_id_set(&trouble, pid, id))
             fprintf(stderr, "id %d out of range (%d)\n", id, n);
         return 0;
     }
-    if ((off > ids[id].offset) || (off + id > n)) {
+    if ((off > ids[id].offset) || (off + id > n))
+    {
         if (add_to_id_set(&trouble, pid, id))
             fprintf(stderr,
                 "offset on %s is too large %d (%d)\n",
@@ -250,7 +288,8 @@ int offset_check(int pid, int id, int off)
     return 1;
 }
 
-void print_field_resolve(int ptr, field_ptr f)
+void
+print_field_resolve(int ptr, field_ptr f)
 {
     set_ptr addr;
     int id, pid, p;
@@ -258,7 +297,8 @@ void print_field_resolve(int ptr, field_ptr f)
     if (!f)
         return;
     addr = ptr_points_to(ptr);
-    while (addr) {
+    while (addr)
+    {
         print_addr(addr);
         printf(" ");
         printf("field %d %s +%d: ", f->fid, f->name, f->offset);
@@ -273,7 +313,8 @@ void print_field_resolve(int ptr, field_ptr f)
     }
 }
 
-void chain_resolve_set(int def, int proc) 
+void
+chain_resolve_set(int def, int proc)
 {
     int chain_id, head_id, head_pid, ptr;
     int id, pid;
@@ -297,25 +338,32 @@ void chain_resolve_set(int def, int proc)
     addr                   = ptr_points_to(ptr);
     base_level             = 0;
     base_addrs[base_level] = addr;
-    while (f) {
+    while (f)
+    {
         base_off[base_level] = f->offset;
         base_level++;
-        if (addr) {
+        if (addr)
+        {
             id  = addrs[addr->id].id;
             pid = addrs[addr->id].pid;
-            if (offset_check(pid, id, f->offset)) {
+            if (offset_check(pid, id, f->offset))
+            {
                 id += f->offset;
                 ptr                    = pid ? procs[pid].locals[id].ptr_id : globals[id].ptr_id;
                 addr                   = ptr_points_to(ptr);
                 base_addrs[base_level] = addr;
-            } else {
+            }
+            else
+            {
                 base_addrs[base_level] = NULL;
             }
-        } else
+        }
+        else
             base_addrs[base_level] = NULL;
         f = f->next;
     }
-    if (v_opt) {
+    if (v_opt)
+    {
         printf("base level %d\n", base_level);
         printf("base off %d %d %d %d\n", base_off[0], base_off[1], base_off[2], base_off[3]);
 
@@ -328,7 +376,8 @@ void chain_resolve_set(int def, int proc)
     }
 }
 
-int chain_resolve_get(int *id, int *pid) 
+int
+chain_resolve_get(int *id, int *pid)
 {
     int level, addr;
     int idx, pidx, ptr;
@@ -384,39 +433,51 @@ int chain_resolve_get(int *id, int *pid)
     objs = base_addrs[level];
     if (!objs)
         level--;
-    while ((level >= 0) && (level < (base_level - 1))) {
+    while ((level >= 0) && (level < (base_level - 1)))
+    {
         if (v_opt)
             printf("level %d\n", level);
-        if (base_addrs[level]) {
+        if (base_addrs[level])
+        {
             base_addrs[level] = base_addrs[level]->next;
             objs              = base_addrs[level];
             if (v_opt)
                 printf("\tlevel %d\n", level);
-            if (base_addrs[level]) {
+            if (base_addrs[level])
+            {
                 addr = base_addrs[level]->id;
                 idx  = addrs[addr].id;
                 pidx = addrs[addr].pid;
-                if (offset_check(pidx, idx, base_off[level])) {
+                if (offset_check(pidx, idx, base_off[level]))
+                {
                     idx += base_off[level];
                     ptr = pidx ? procs[pidx].locals[idx].ptr_id : globals[idx].ptr_id;
                     level++;
                     if (ptr)
                         base_addrs[level] = ptr_points_to(ptr);
-                    else {
+                    else
+                    {
                         level--;
                     }
-                } else {
+                }
+                else
+                {
                     base_addrs[level] = base_addrs[level]->next;
                 }
-            } else {
+            }
+            else
+            {
                 level--;
             }
-        } else
+        }
+        else
             level--;
     }
-    if (base_addrs[level] && (level == (base_level - 1))) {
+    if (base_addrs[level] && (level == (base_level - 1)))
+    {
         addr = base_addrs[level]->id;
-        if (offset_check(addrs[addr].pid, addrs[addr].id, base_off[level])) {
+        if (offset_check(addrs[addr].pid, addrs[addr].id, base_off[level]))
+        {
             *id               = addrs[addr].id + base_off[level];
             *pid              = addrs[addr].pid;
             base_addrs[level] = base_addrs[level]->next;
@@ -426,7 +487,8 @@ int chain_resolve_get(int *id, int *pid)
     return 0;
 }
 
-void var_resolve_set(var_ptr def, int proc) 
+void
+var_resolve_set(var_ptr def, int proc)
 {
     int i, id, pid, ptr, addr;
 
@@ -440,8 +502,10 @@ void var_resolve_set(var_ptr def, int proc)
         base_pid = proc;
     base_ptr      = base_pid ? procs[proc].locals[base_id].ptr_id : globals[base_id].ptr_id;
     base_addrs[0] = ptr_points_to(base_ptr);
-    for (i = 1; i < base_level; i++) {
-        if (base_addrs[i - 1] != NULL) {
+    for (i = 1; i < base_level; i++)
+    {
+        if (base_addrs[i - 1] != NULL)
+        {
             addr = base_addrs[i - 1]->id;
             pid  = addrs[addr].pid;
             id   = addrs[addr].id;
@@ -450,12 +514,15 @@ void var_resolve_set(var_ptr def, int proc)
                 base_addrs[i] = ptr_points_to(ptr);
             else
                 base_addrs[i] = NULL;
-        } else
+        }
+        else
             base_addrs[i] = NULL;
     }
 }
 
-void print_base_state(void) {
+void
+print_base_state(void)
+{
     int i;
 
     set_ptr objs;
@@ -463,11 +530,14 @@ void print_base_state(void) {
     printf("resolve %s at level %d\n",
         base_pid ? procs[base_pid].locals[base_id].name : globals[base_id].name,
         base_level);
-    for (i = 0; i < base_level; i++) {
-        if (base_addrs[i]) {
+    for (i = 0; i < base_level; i++)
+    {
+        if (base_addrs[i])
+        {
             printf("level %d is:", i);
             objs = base_addrs[i];
-            while (objs) {
+            while (objs)
+            {
                 printf(" %d", objs->id);
                 objs = objs->next;
             }
@@ -481,7 +551,8 @@ void print_base_state(void) {
 /* var_resolve_get does a depth first traversal of the pointer state*/
 /*                                                                  */
 /********************************************************************/
-int var_resolve_get(int *id, int *pid) 
+int
+var_resolve_get(int *id, int *pid)
 {
     int top;
     int ptr, addr;
@@ -489,14 +560,18 @@ int var_resolve_get(int *id, int *pid)
 
     top  = base_level - 1;
     objs = base_addrs[top];
-    while ((!objs) && (top >= 0)) {
+    while ((!objs) && (top >= 0))
+    {
         /*	top--; */
-        if (base_addrs[top]) {
+        if (base_addrs[top])
+        {
             base_addrs[top] = base_addrs[top]->next;
             objs            = base_addrs[top];
             if (objs)
-                while (((top < (base_level - 1)) && (top >= 0))) {
-                    if (base_addrs[top]) {
+                while (((top < (base_level - 1)) && (top >= 0)))
+                {
+                    if (base_addrs[top])
+                    {
                         int id, pid; /* D E C L */
                         addr = base_addrs[top]->id;
                         top++;
@@ -505,15 +580,19 @@ int var_resolve_get(int *id, int *pid)
                         ptr = pid ? procs[pid].locals[id].ptr_id : globals[id].ptr_id;
                         if (ptr)
                             base_addrs[top] = ptr_points_to(ptr);
-                        else {
+                        else
+                        {
                             top--;
                             base_addrs[top] = base_addrs[top]->next;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         top--;
                     }
                 }
-        } else
+        }
+        else
             top--;
 
         if (top == (base_level - 1))
@@ -521,10 +600,12 @@ int var_resolve_get(int *id, int *pid)
         else
             objs = NULL;
     }
-    if (objs) {
+    if (objs)
+    {
         base_addrs[top] = base_addrs[top]->next;
         addr            = objs->id;
-        if ((addr > 0) && (addr <= n_addrs)) {
+        if ((addr > 0) && (addr <= n_addrs))
+        {
             *id  = addrs[addr].id;
             *pid = addrs[addr].pid;
             return 1;
@@ -533,48 +614,59 @@ int var_resolve_get(int *id, int *pid)
     return 0;
 }
 
-void chain_resolve_path(int f, int n, int proc) 
+void
+chain_resolve_path(int f, int n, int proc)
 {
     int i, id, pid, addr;
 
     if (base_level < 2)
         return;
     for (i = 0; i < (base_level - 1); i++)
-        if (base_addrs[i]) {
+        if (base_addrs[i])
+        {
             addr = base_addrs[i]->id;
-            if (offset_check(addrs[addr].pid, addrs[addr].id, base_off[i])) {
+            if (offset_check(addrs[addr].pid, addrs[addr].id, base_off[i]))
+            {
                 id  = addrs[addr].id + base_off[i];
                 pid = addrs[addr].pid;
-                if ((pid == 0) || (pid == proc)) {
+                if ((pid == 0) || (pid == proc))
+                {
                     bit_on(
                         pid ? files[f].stmts[n].active_local : files[f].stmts[n].active_global, id);
-                } else
+                }
+                else
                     add_to_id_set(&files[f].stmts[n].active_other, pid, id);
             }
         }
 }
 
-void var_resolve_path(int f, int n, int proc) 
+void
+var_resolve_path(int f, int n, int proc)
 {
     int i, id, pid, addr;
 
     if (base_level < 2)
         return;
     for (i = 0; i < (base_level - 1); i++)
-        if (base_addrs[i]) {
+        if (base_addrs[i])
+        {
             addr = base_addrs[i]->id;
             id   = addrs[addr].id;
             pid  = addrs[addr].pid;
-            if ((pid == 0) || (pid == proc)) {
+            if ((pid == 0) || (pid == proc))
+            {
                 bit_on(pid ? files[f].stmts[n].active_local : files[f].stmts[n].active_global, id);
-            } else
+            }
+            else
                 add_to_id_set(&files[f].stmts[n].active_other, pid, id);
         }
 }
 
-int is_other_active(id_set_ptr set, int pid, int id) 
+int
+is_other_active(id_set_ptr set, int pid, int id)
 {
-    while (set) {
+    while (set)
+    {
         if ((set->id == id) && (set->pid == pid))
             return 1;
         set = set->next;
@@ -582,86 +674,111 @@ int is_other_active(id_set_ptr set, int pid, int id)
     return 0;
 }
 
-int active_defed(int f, int n, int succ, int proc) 
+int
+active_defed(int f, int n, int succ, int proc)
 {
     int match = 0;
 
     if (!files[f].stmts[n].defs)
         return 0;
-    if (files[f].stmts[n].defs->level == 0) {
-        switch (files[f].stmts[n].defs->code) {
+    if (files[f].stmts[n].defs->level == 0)
+    {
+        switch (files[f].stmts[n].defs->code)
+        {
         case LIF_DEF:
-            if (is_bit_on(files[f].stmts[succ].active_local, files[f].stmts[n].defs->id)) {
+            if (is_bit_on(files[f].stmts[succ].active_local, files[f].stmts[n].defs->id))
+            {
                 return 1;
             }
             break;
         case LIF_GDEF:
-            if (is_bit_on(files[f].stmts[succ].active_global, files[f].stmts[n].defs->id)) {
+            if (is_bit_on(files[f].stmts[succ].active_global, files[f].stmts[n].defs->id))
+            {
                 return 1;
             }
             break;
-        case LIF_CDEF: {
+        case LIF_CDEF:
+        {
             int id, pid;
             if (v_opt)
                 printf("\ndef to chain %d\n", files[f].stmts[n].defs->id);
             chain_resolve_set(files[f].stmts[n].defs->id, proc);
-            while (chain_resolve_get(&id, &pid)) {
+            while (chain_resolve_get(&id, &pid))
+            {
                 if (v_opt)
                     printf("chain resolves to: %s\n",
                         pid ? procs[pid].locals[id].name : globals[id].name);
-                if (!pid || (pid == proc)) {
+                if (!pid || (pid == proc))
+                {
                     if (is_bit_on(pid ? files[f].stmts[succ].active_local
                                       : files[f].stmts[succ].active_global,
-                            id)) {
+                            id))
+                    {
 
                         match = 1;
                         chain_resolve_path(f, n, proc);
                     }
-                } else {
-                    if (is_other_active(files[f].stmts[succ].active_other, pid, id)) {
+                }
+                else
+                {
+                    if (is_other_active(files[f].stmts[succ].active_other, pid, id))
+                    {
                         match += add_to_id_set(&files[f].stmts[n].active_other, pid, id);
                         chain_resolve_path(f, n, proc);
                     }
                 }
             }
 
-            if (match) {
+            if (match)
+            {
                 id  = chains[files[f].stmts[n].defs->id].id;
                 pid = chains[files[f].stmts[n].defs->id].pid;
                 if (pid == 0)
                     bit_on(files[f].stmts[n].active_global, id);
                 else if (pid == proc)
                     bit_on(files[f].stmts[n].active_local, id);
-            } else {
-                if (is_other_active(files[f].stmts[succ].active_other, pid, id)) {
+            }
+            else
+            {
+                if (is_other_active(files[f].stmts[succ].active_other, pid, id))
+                {
                     match += add_to_id_set(&files[f].stmts[n].active_other, pid, id);
                     return match;
                 }
             }
-        } break;
+        }
+        break;
         default:;
         }
-    } else {
+    }
+    else
+    {
         int id, pid;
 
         if (v_opt)
             print_base_state();
         var_resolve_set(files[f].stmts[n].defs, proc);
-        while (var_resolve_get(&id, &pid)) {
+        while (var_resolve_get(&id, &pid))
+        {
             /*
             printf ("resolves to: %s\n",pid?
                     procs[proc].locals[id].name: globals[id].name);
             */
-            if ((pid == 0) || (pid == proc)) {
+            if ((pid == 0) || (pid == proc))
+            {
                 if (is_bit_on(pid ? files[f].stmts[succ].active_local
                                   : files[f].stmts[succ].active_global,
-                        id)) {
+                        id))
+                {
 
                     var_resolve_path(f, n, proc);
                     match = 1;
                 }
-            } else {
-                if (is_other_active(files[f].stmts[succ].active_other, pid, id)) {
+            }
+            else
+            {
+                if (is_other_active(files[f].stmts[succ].active_other, pid, id))
+                {
                     match += add_to_id_set(&files[f].stmts[n].active_other, pid, id);
                     return match;
                 }
@@ -676,7 +793,8 @@ int active_defed(int f, int n, int succ, int proc)
     return match;
 }
 
-void add_to_active(int f, int n, int pid, int id, int proc_id)
+void
+add_to_active(int f, int n, int pid, int id, int proc_id)
 {
     bit_set active;
 
@@ -689,15 +807,18 @@ void add_to_active(int f, int n, int pid, int id, int proc_id)
             procs[proc_id].proc_name);
     if (proc_id == pid)
         active = files[f].stmts[n].active_local;
-    else if (pid) {
+    else if (pid)
+    {
         add_to_id_set(&files[f].stmts[n].active_other, pid, id);
         return;
-    } else
+    }
+    else
         active = files[f].stmts[n].active_global;
     bit_on(active, id);
 }
 
-void de_ref_chain(int f, int pid, var_ptr refs, int n) 
+void
+de_ref_chain(int f, int pid, var_ptr refs, int n)
 {
     int id, proc_id;
     stmt_ptr stmt;
@@ -707,7 +828,8 @@ void de_ref_chain(int f, int pid, var_ptr refs, int n)
     chain_resolve_set(refs->id, pid);
     chain_id = refs->id;
     add_to_active(f, n, pid, chains[chain_id].id, chains[chain_id].pid);
-    while (chain_resolve_get(&id, &proc_id)) {
+    while (chain_resolve_get(&id, &proc_id))
+    {
         if (v_opt)
             printf("chain resolve to %d %d %s \n", id, proc_id, var_name(proc_id, id));
         if (v_opt)
@@ -717,7 +839,8 @@ void de_ref_chain(int f, int pid, var_ptr refs, int n)
     }
 }
 
-void de_ref_ref(int f, int pid, var_ptr refs, int n)
+void
+de_ref_ref(int f, int pid, var_ptr refs, int n)
 {
     int id, proc_id;
     stmt_ptr stmt;
@@ -733,7 +856,8 @@ void de_ref_ref(int f, int pid, var_ptr refs, int n)
     if (v_opt)
         fflush(stdout);
     var_resolve_set(refs, pid);
-    while (var_resolve_get(&id, &proc_id)) {
+    while (var_resolve_get(&id, &proc_id))
+    {
         if (v_opt)
             printf("resolve to %d %d %s \n", id, proc_id, var_name(proc_id, id));
         fflush(stdout);
@@ -742,7 +866,8 @@ void de_ref_ref(int f, int pid, var_ptr refs, int n)
     }
 }
 
-int add_stmt_to_slice(int pid, int f, int stmt, bit_set slice, stmt_ptr succ) 
+int
+add_stmt_to_slice(int pid, int f, int stmt, bit_set slice, stmt_ptr succ)
 {
     int already_in_slice = 0;
     int change           = 0;
@@ -763,10 +888,13 @@ int add_stmt_to_slice(int pid, int f, int stmt, bit_set slice, stmt_ptr succ)
             printf("already in ");
     if (v_opt)
         printf("\n");
-    if (!already_in_slice) {
+    if (!already_in_slice)
+    {
         refs = files[f].stmts[stmt].refs;
-        while (refs) {
-            switch (refs->code) {
+        while (refs)
+        {
+            switch (refs->code)
+            {
             case LIF_REF:
                 bit_on(files[f].stmts[stmt].active_local, refs->id);
                 if (refs->level != 0)
@@ -785,8 +913,10 @@ int add_stmt_to_slice(int pid, int f, int stmt, bit_set slice, stmt_ptr succ)
             refs = refs->next;
         }
         control = files[f].stmts[stmt].requires;
-        while (control) {
-            if (!is_bit_on(slice, control->id)) {
+        while (control)
+        {
+            if (!is_bit_on(slice, control->id))
+            {
                 add_stmt_to_slice(pid, f, control->id, slice, (stmt_ptr)NULL);
                 if (v_opt)
                     printf("add %d required by %d\n", control->id, stmt);
@@ -794,27 +924,35 @@ int add_stmt_to_slice(int pid, int f, int stmt, bit_set slice, stmt_ptr succ)
             control = control->next;
         }
     }
-    if (succ) {
+    if (succ)
+    {
         at = -1;
-        while ((at = get_next_member(succ->active_local, at)) >= 0) {
-            if (!is_var_defed(&files[f].stmts[stmt], at, 1)) {
-                if (!is_bit_on(files[f].stmts[stmt].active_local, at)) {
+        while ((at = get_next_member(succ->active_local, at)) >= 0)
+        {
+            if (!is_var_defed(&files[f].stmts[stmt], at, 1))
+            {
+                if (!is_bit_on(files[f].stmts[stmt].active_local, at))
+                {
                     bit_on(files[f].stmts[stmt].active_local, at);
                     change += 1;
                 }
             }
         }
         at = -1;
-        while ((at = get_next_member(succ->active_global, at)) >= 0) {
-            if (!is_var_defed(&files[f].stmts[stmt], at, 0)) {
-                if (!is_bit_on(files[f].stmts[stmt].active_global, at)) {
+        while ((at = get_next_member(succ->active_global, at)) >= 0)
+        {
+            if (!is_var_defed(&files[f].stmts[stmt], at, 0))
+            {
+                if (!is_bit_on(files[f].stmts[stmt].active_global, at))
+                {
                     bit_on(files[f].stmts[stmt].active_global, at);
                     change += 1;
                 }
             }
         }
         others = succ->active_other;
-        while (others) {
+        while (others)
+        {
             change += add_to_id_set(&files[f].stmts[stmt].active_other, others->pid, others->id);
             others = others->next;
         }
@@ -823,22 +961,26 @@ int add_stmt_to_slice(int pid, int f, int stmt, bit_set slice, stmt_ptr succ)
     return change + 1 - already_in_slice;
 }
 
-int pass_criteria(int f, int stmt, int succ) 
+int
+pass_criteria(int f, int stmt, int succ)
 {
     int change, c;
     id_set_ptr active;
 
     change = 0;
-    if (!bit_set_equal(files[f].stmts[stmt].active_global, files[f].stmts[succ].active_global)) {
+    if (!bit_set_equal(files[f].stmts[stmt].active_global, files[f].stmts[succ].active_global))
+    {
         change =
             cunion_bit_set(files[f].stmts[stmt].active_global, files[f].stmts[succ].active_global);
     }
-    if (!bit_set_equal(files[f].stmts[stmt].active_local, files[f].stmts[succ].active_local)) {
+    if (!bit_set_equal(files[f].stmts[stmt].active_local, files[f].stmts[succ].active_local))
+    {
         c = cunion_bit_set(files[f].stmts[stmt].active_local, files[f].stmts[succ].active_local);
         change += c;
     }
     active = files[f].stmts[succ].active_other;
-    while (active) {
+    while (active)
+    {
         change += add_to_id_set(&files[f].stmts[stmt].active_other, active->pid, active->id);
         active = active->next;
     }
@@ -846,7 +988,8 @@ int pass_criteria(int f, int stmt, int succ)
 }
 
 #define LINE 60
-void print_active_stmt(int f, int proc, int stmt, int mark)
+void
+print_active_stmt(int f, int proc, int stmt, int mark)
 {
     stmt_ptr s;
     int k, var, n;
@@ -859,101 +1002,122 @@ void print_active_stmt(int f, int proc, int stmt, int mark)
     /*
     n = printf ("%3d%c:",stmt,is_bit_on(slice,stmt)?'*':' ');
     */
-    while ((var = get_next_member(s->active_global, var)) >= 0) {
+    while ((var = get_next_member(s->active_global, var)) >= 0)
+    {
         sprintf(buff, " %s", globals[var].name);
         k = strlen(buff);
-        if (k + n > LINE) {
+        if (k + n > LINE)
+        {
             printf("\n");
             n = printf("    %s", buff);
-        } else
+        }
+        else
             n += printf("%s", buff);
     }
     var = -1;
     n += printf(" & ");
-    while ((var = get_next_member(s->active_local, var)) >= 0) {
+    while ((var = get_next_member(s->active_local, var)) >= 0)
+    {
         sprintf(buff, " %s", procs[proc].locals[var].name);
         k = strlen(buff);
-        if (k + n > LINE) {
+        if (k + n > LINE)
+        {
             printf("\n");
             n = printf("    %s", buff);
-        } else
+        }
+        else
             n += printf("%s", buff);
     }
     n += printf(" &+ ");
     active = s->active_other;
-    while (active) {
+    while (active)
+    {
         sprintf(buff, " %s", var_name(active->pid, active->id));
         /*
         sprintf (buff," %s",procs[active->pid].locals[
                 active->id].name);
                 */
         k = strlen(buff);
-        if (k + n > LINE) {
+        if (k + n > LINE)
+        {
             printf("\n");
             n = printf("    %s", buff);
-        } else
+        }
+        else
             n += printf("%s", buff);
         active = active->next;
     }
     printf("\n");
 }
 
-void active_hook(int fid, int line) 
+void
+active_hook(int fid, int line)
 {
     int stmt, proc;
 
     stmt = line_to_stmt(fid, line);
     proc = stmt_to_proc(fid, stmt);
-    if (proc) {
+    if (proc)
+    {
         printf("\nProcedure %s may define: ", procs[proc].proc_name);
         print_proc_defs(0, proc);
         printf("\nline %d in %s ", line, procs[proc].proc_name);
         print_active_stmt(fid, proc, stmt, 0);
-    } else {
+    }
+    else
+    {
         printf("can't find proc for file %d line %d\n", fid, line);
     }
 }
 
-void print_active(int proc, bit_set  slice) 
+void
+print_active(int proc, bit_set slice)
 {
     int stmt;
     int f;
 
     printf("active sets for proc %s\n", procs[proc].proc_name);
     f = procs[proc].file_id;
-    for (stmt = procs[proc].entry; stmt <= procs[proc].exit; stmt++) {
+    for (stmt = procs[proc].entry; stmt <= procs[proc].exit; stmt++)
+    {
         print_active_stmt(f, proc, stmt, is_bit_on(slice, stmt));
     }
 }
 
-void print_all_active(bit_set slices[], bit_set active) 
+void
+print_all_active(bit_set slices[], bit_set active)
 {
     int file, proc;
 
     proc = -1;
-    while ((proc = get_next_member(active, proc)) >= 0) {
+    while ((proc = get_next_member(active, proc)) >= 0)
+    {
         file = procs[proc].file_id;
         print_active(proc, slices[file]);
     }
 }
 
-void add_ptr_to_active(int f, int pid, int ptr_id, int stmt) 
+void
+add_ptr_to_active(int f, int pid, int ptr_id, int stmt)
 {
     int ptr, var_id, proc_id;
     set_ptr a;
     bit_set active;
 
     a = ptr_points_to(ptr_id);
-    while (a) {
+    while (a)
+    {
         var_id  = addrs[a->id].id;
         proc_id = addrs[a->id].pid;
-        if (proc_id) {
+        if (proc_id)
+        {
             if (proc_id == pid)
                 active = files[f].stmts[stmt].active_local;
             /* else add to other active */
             else
                 active = NULL;
-        } else
+        }
+        else
             active = files[f].stmts[stmt].active_global;
         if (active)
             bit_on(active, var_id);
@@ -964,7 +1128,8 @@ void add_ptr_to_active(int f, int pid, int ptr_id, int stmt)
     }
 }
 
-void add_an_actual(int from_pid, call_ptr call, actual_ptr act) 
+void
+add_an_actual(int from_pid, call_ptr call, actual_ptr act)
 {
     int pid, stmt, f;
     var_ptr refs;
@@ -973,8 +1138,10 @@ void add_an_actual(int from_pid, call_ptr call, actual_ptr act)
     f    = procs[from_pid].file_id;
     pid  = from_pid;
     refs = act->actuals;
-    while (refs) {
-        switch (refs->code) {
+    while (refs)
+    {
+        switch (refs->code)
+        {
         case LIF_AREF:
             if (addrs[refs->id].pid)
                 bit_on(files[f].stmts[stmt].active_local, addrs[refs->id].id);
@@ -1002,7 +1169,8 @@ void add_an_actual(int from_pid, call_ptr call, actual_ptr act)
     }
 }
 
-void add_actuals(int from_pid, call_ptr call) 
+void
+add_actuals(int from_pid, call_ptr call)
 {
     int pid, stmt, f;
     actual_ptr act;
@@ -1012,10 +1180,13 @@ void add_actuals(int from_pid, call_ptr call)
     f    = procs[from_pid].file_id;
     pid  = from_pid;
     act  = call->actuals;
-    while (act) {
+    while (act)
+    {
         refs = act->actuals;
-        while (refs) {
-            switch (refs->code) {
+        while (refs)
+        {
+            switch (refs->code)
+            {
             case LIF_AREF:
                 if (addrs[refs->id].pid)
                     bit_on(files[f].stmts[stmt].active_local, addrs[refs->id].id);
@@ -1043,12 +1214,14 @@ void add_actuals(int from_pid, call_ptr call)
     }
 }
 
-actual_ptr find_actual(call_ptr call, int n)
+actual_ptr
+find_actual(call_ptr call, int n)
 {
     actual_ptr act;
 
     act = call->actuals;
-    while (act) {
+    while (act)
+    {
         if (act->actual_number == n)
             return act;
         act = act->next;
@@ -1056,7 +1229,8 @@ actual_ptr find_actual(call_ptr call, int n)
     return NULL;
 }
 
-void export_called_active(call_ptr call, int called_proc, int calling_proc, int calling_stmt) 
+void
+export_called_active(call_ptr call, int called_proc, int calling_proc, int calling_stmt)
 {
     int f, fs, start;
     int at;
@@ -1069,7 +1243,8 @@ void export_called_active(call_ptr call, int called_proc, int calling_proc, int 
     fs    = procs[called_proc].file_id;
     union_bit_set(files[f].stmts[calling_stmt].active_global, files[fs].stmts[start].active_global);
     at = -1;
-    while ((at = get_next_member(files[fs].stmts[start].active_local, at)) >= 0) {
+    while ((at = get_next_member(files[fs].stmts[start].active_local, at)) >= 0)
+    {
         if (v_opt)
             printf("in call to %s need id %d (%s)\n",
                 procs[called_proc].proc_name,
@@ -1080,10 +1255,14 @@ void export_called_active(call_ptr call, int called_proc, int calling_proc, int 
             add_an_actual(calling_proc, call, act);
     }
     others = files[fs].stmts[start].active_other;
-    while (others) {
-        if (others->pid == calling_proc) {
+    while (others)
+    {
+        if (others->pid == calling_proc)
+        {
             bit_on(files[f].stmts[calling_stmt].active_local, others->id);
-        } else {
+        }
+        else
+        {
             change =
                 add_to_id_set(&files[f].stmts[calling_stmt].active_other, others->pid, others->id);
         }
@@ -1091,7 +1270,8 @@ void export_called_active(call_ptr call, int called_proc, int calling_proc, int 
     }
 }
 
-void slice_across_call(bit_set final[], bit_set slice_sets[], call_ptr call, int proc, bit_set active)
+void
+slice_across_call(bit_set final[], bit_set slice_sets[], call_ptr call, int proc, bit_set active)
 {
     int pid;
     int f, fs;
@@ -1114,7 +1294,8 @@ void slice_across_call(bit_set final[], bit_set slice_sets[], call_ptr call, int
         add_stmt_to_slice(pid, f, procs[pid].entry, slice_sets[f], (stmt_ptr)NULL);
         add_stmt_to_slice(pid, f, procs[pid].exit, slice_sets[f], (stmt_ptr)NULL);
         r = procs[pid].return_stmts;
-        while (r) {
+        while (r)
+        {
             add_stmt_to_slice(pid, f, r->id, slice_sets[f], (stmt_ptr)NULL);
             r = r->next;
         }
@@ -1124,7 +1305,8 @@ void slice_across_call(bit_set final[], bit_set slice_sets[], call_ptr call, int
     union_bit_set(
         files[f].stmts[procs[pid].exit].active_global, files[fs].stmts[call->stmt].active_global);
     others = files[fs].stmts[call->stmt].active_other;
-    while (others) {
+    while (others)
+    {
         if (others->pid == pid)
             bit_on(files[f].stmts[procs[pid].exit].active_local, others->id);
         else
@@ -1132,14 +1314,16 @@ void slice_across_call(bit_set final[], bit_set slice_sets[], call_ptr call, int
         others = others->next;
     }
     at = -1;
-    while ((at = get_next_member(files[fs].stmts[call->stmt].active_local, at)) >= 0) {
+    while ((at = get_next_member(files[fs].stmts[call->stmt].active_local, at)) >= 0)
+    {
         change = add_to_id_set(&files[f].stmts[procs[pid].exit].active_other, proc, at);
     }
     slice_proc(final, slice_sets, pid, active);
     export_called_active(call, pid, proc, call->stmt);
 }
 
-int globals_defed(call_ptr call, int succ, int pid) 
+int
+globals_defed(call_ptr call, int succ, int pid)
 {
     int stmt, f;
     int at;
@@ -1157,16 +1341,20 @@ int globals_defed(call_ptr call, int succ, int pid)
     }
     */
     at = -1;
-    while ((at = get_next_member(procs[call->pid].global_defs, at)) >= 0) {
+    while ((at = get_next_member(procs[call->pid].global_defs, at)) >= 0)
+    {
         if (v_opt)
             printf("%s\n", var_name(0, at));
         if (is_bit_on(files[f].stmts[succ].active_global, at))
             return 1;
     }
     others = procs[call->pid].other_defs;
-    while (others) {
-        if (others->pid == pid) {
-            if (is_bit_on(files[f].stmts[succ].active_local, others->id)) {
+    while (others)
+    {
+        if (others->pid == pid)
+        {
+            if (is_bit_on(files[f].stmts[succ].active_local, others->id))
+            {
                 if (v_opt)
                     printf("var %s defed in call to %s from %s\n",
                         var_name(pid, others->id),
@@ -1174,14 +1362,16 @@ int globals_defed(call_ptr call, int succ, int pid)
                         procs[pid].proc_name);
                 return 1;
             }
-        } else if (is_in_id_set(files[f].stmts[succ].active_other, others->pid, others->id))
+        }
+        else if (is_in_id_set(files[f].stmts[succ].active_other, others->pid, others->id))
             return 1;
         others = others->next;
     }
     return 0;
 }
 
-int active_actuals(call_ptr call, int succ, int pid)
+int
+active_actuals(call_ptr call, int succ, int pid)
 {
     int stmt, f;
     actual_ptr act;
@@ -1194,10 +1384,13 @@ int active_actuals(call_ptr call, int succ, int pid)
     stmt = call->stmt;
     f    = procs[pid].file_id;
     act  = call->actuals;
-    while (act) {
+    while (act)
+    {
         refs = act->actuals;
-        while (refs) {
-            switch (refs->code) {
+        while (refs)
+        {
+            switch (refs->code)
+            {
             case LIF_AREF:
                 proc_id = addrs[refs->id].pid;
                 var_id  = addrs[refs->id].id;
@@ -1228,7 +1421,8 @@ int active_actuals(call_ptr call, int succ, int pid)
     }
     return 0;
 }
-int lib_def_active(int calling_proc, int f, int stmt, int succ, call_ptr call) 
+int
+lib_def_active(int calling_proc, int f, int stmt, int succ, call_ptr call)
 {
     int called_proc;
     actual_ptr act;
@@ -1239,10 +1433,13 @@ int lib_def_active(int calling_proc, int f, int stmt, int succ, call_ptr call)
 
     called_proc = call->pid;
     act         = call->actuals;
-    while (act) {
+    while (act)
+    {
         var = act->actuals;
-        while (var) {
-            switch (var->code) {
+        while (var)
+        {
+            switch (var->code)
+            {
             case LIF_AREF:
                 id  = addrs[var->id].id;
                 pid = addrs[var->id].pid;
@@ -1252,7 +1449,8 @@ int lib_def_active(int calling_proc, int f, int stmt, int succ, call_ptr call)
                     active = files[f].stmts[succ].active_global;
                 else
                     active = NULL;
-                if (active && is_bit_on(active, id)) {
+                if (active && is_bit_on(active, id))
+                {
                     add_to_active(f, stmt, pid, id, calling_proc);
                     status = 1;
                 }
@@ -1272,18 +1470,21 @@ int lib_def_active(int calling_proc, int f, int stmt, int succ, call_ptr call)
     return status;
 }
 
-void add_req_set(int f, int pid, int s, bit_set slice) 
+void
+add_req_set(int f, int pid, int s, bit_set slice)
 {
     set_ptr r;
 
     r = files[f].stmts[s].requires;
-    while (r) {
+    while (r)
+    {
         add_stmt_to_slice(pid, f, r->id, slice, (stmt_ptr)NULL);
         r = r->next;
     }
 }
 
-int check_calls(bit_set fs[], bit_set slices[], int proc, int stmt, set_ptr succ, bit_set active) 
+int
+check_calls(bit_set fs[], bit_set slices[], int proc, int stmt, set_ptr succ, bit_set active)
 {
     call_ptr calls;
     int status;
@@ -1296,26 +1497,35 @@ int check_calls(bit_set fs[], bit_set slices[], int proc, int stmt, set_ptr succ
         return status;
     if (v_opt)
         printf("\ncheck calls at %d (succ %d)\n", stmt, succ->id);
-    while (calls) {
+    while (calls)
+    {
         if (procs[calls->pid].entry == -1)
             if (v_opt)
                 printf("Library ");
         if (v_opt)
             printf("call %s at %d\n", procs[calls->pid].proc_name, calls->stmt);
-        if (procs[calls->pid].entry == -1) {
-            if (lib_def_active(proc, f, stmt, succ->id, calls)) {
+        if (procs[calls->pid].entry == -1)
+        {
+            if (lib_def_active(proc, f, stmt, succ->id, calls))
+            {
                 bit_on(slices[f], stmt);
                 add_req_set(f, proc, stmt, slices[f]);
             }
             if (is_bit_on(slices[f], stmt))
                 add_actuals(proc, calls);
-        } else {
-            if (active_actuals(calls, succ->id, proc)) {
-                bit_on(slices[f], stmt);
-            } else if (globals_defed(calls, succ->id, proc)) {
+        }
+        else
+        {
+            if (active_actuals(calls, succ->id, proc))
+            {
                 bit_on(slices[f], stmt);
             }
-            if (is_bit_on(slices[f], stmt)) {
+            else if (globals_defed(calls, succ->id, proc))
+            {
+                bit_on(slices[f], stmt);
+            }
+            if (is_bit_on(slices[f], stmt))
+            {
                 add_req_set(f, proc, stmt, slices[f]);
                 slice_across_call(fs, slices, calls, proc, active);
                 /*
@@ -1328,7 +1538,8 @@ int check_calls(bit_set fs[], bit_set slices[], int proc, int stmt, set_ptr succ
     return status;
 }
 
-int slice_pass(bit_set fs[], bit_set slices[], int proc, int up, bit_set active) 
+int
+slice_pass(bit_set fs[], bit_set slices[], int proc, int up, bit_set active)
 {
     bit_set slice;
     int from, to, delta, file, stmt;
@@ -1337,26 +1548,34 @@ int slice_pass(bit_set fs[], bit_set slices[], int proc, int up, bit_set active)
 
     file  = procs[proc].file_id;
     slice = slices[file];
-    if (up) {
+    if (up)
+    {
         from  = procs[proc].entry;
         to    = procs[proc].exit + 1;
         delta = 1;
-    } else {
+    }
+    else
+    {
         to    = procs[proc].entry - 1;
         from  = procs[proc].exit;
         delta = -1;
     }
     stmt = from;
-    while ((stmt >= procs[proc].entry) && (stmt <= procs[proc].exit)) {
+    while ((stmt >= procs[proc].entry) && (stmt <= procs[proc].exit))
+    {
         if (slice_hook)
             (*slice_hook)(proc, stmt);
         succ = files[file].stmts[stmt].succ;
-        while (succ) {
-            if (active_defed(file, stmt, succ->id, proc)) {
+        while (succ)
+        {
+            if (active_defed(file, stmt, succ->id, proc))
+            {
                 inc = add_stmt_to_slice(proc, file, stmt, slice, &files[file].stmts[succ->id]);
                 change += inc;
                 change += check_calls(fs, slices, proc, stmt, succ, active);
-            } else {
+            }
+            else
+            {
                 inc = pass_criteria(file, stmt, succ->id);
                 change += inc;
                 change += check_calls(fs, slices, proc, stmt, succ, active);
@@ -1372,7 +1591,8 @@ int slice_pass(bit_set fs[], bit_set slices[], int proc, int up, bit_set active)
     return change;
 }
 
-void slice_tree(bit_set slices[], int proc, bit_set active) 
+void
+slice_tree(bit_set slices[], int proc, bit_set active)
 {
     int p, caller_pid, caller_file;
     int change;
@@ -1387,15 +1607,19 @@ void slice_tree(bit_set slices[], int proc, bit_set active)
     add_stmt_to_slice(
         caller_pid, caller_file, procs[caller_pid].exit, slices[caller_file], (stmt_ptr)NULL);
     change = 1;
-    while (change) {
+    while (change)
+    {
         change = 0;
         p      = -1;
-        while ((p = get_next_member(active, p)) >= 0) {
+        while ((p = get_next_member(active, p)) >= 0)
+        {
             caller = procs[p].called_by;
-            while (caller) {
+            while (caller)
+            {
                 caller_pid  = caller->pid;
                 caller_file = procs[caller_pid].file_id;
-                if (!is_bit_on(slices[caller_file], caller->stmt)) {
+                if (!is_bit_on(slices[caller_file], caller->stmt))
+                {
                     change = 1;
                     add_stmt_to_slice(
                         caller_pid, caller_file, caller->stmt, slices[caller_file], (stmt_ptr)NULL);
@@ -1418,24 +1642,29 @@ void slice_tree(bit_set slices[], int proc, bit_set active)
     }
 }
 
-void add_call_to_slice(bit_set slice_sets[], int proc, call_ptr call)
+void
+add_call_to_slice(bit_set slice_sets[], int proc, call_ptr call)
 {
     set_ptr return_at;
 
-    if (procs[call->pid].entry == -1) {
+    if (procs[call->pid].entry == -1)
+    {
         /* undefined function: should look for library info */
         /* add actuals to active set */
-    } else { /* defined proc */
-             /*
-             if (procs[proc].returns_xpr)
-             */
+    }
+    else
+    {   /* defined proc */
+        /*
+        if (procs[proc].returns_xpr)
+        */
         if (v_opt)
             printf("returns %d ", procs[call->pid].returns_xpr);
         return_at = procs[call->pid].return_stmts;
         if (return_at)
             if (v_opt)
                 printf("(");
-        while (return_at) {
+        while (return_at)
+        {
             if (v_opt)
                 printf("%d", return_at->id);
             return_at = return_at->next;
@@ -1448,7 +1677,9 @@ void add_call_to_slice(bit_set slice_sets[], int proc, call_ptr call)
     }
 }
 
-void slice_up(bit_set final_slice_sets[], bit_set slice_sets[], int proc, bit_set active, bit_set dont_slice) 
+void
+slice_up(
+    bit_set final_slice_sets[], bit_set slice_sets[], int proc, bit_set active, bit_set dont_slice)
 {
     call_ptr calls;
 
@@ -1461,14 +1692,16 @@ void slice_up(bit_set final_slice_sets[], bit_set slice_sets[], int proc, bit_se
         return;
     calls = procs[proc].called_by;
     bit_on(dont_slice, proc);
-    while (calls) {
+    while (calls)
+    {
         export_called_active(calls, proc, calls->pid, calls->stmt);
         slice_up(final_slice_sets, slice_sets, calls->pid, active, dont_slice);
         calls = calls->next;
     }
 }
 
-int call_pass(bit_set slice_sets[], int proc) /* d e a d    c o d e */
+int
+call_pass(bit_set slice_sets[], int proc) /* d e a d    c o d e */
 {
     int status = 0;
     call_ptr calls;
@@ -1476,8 +1709,10 @@ int call_pass(bit_set slice_sets[], int proc) /* d e a d    c o d e */
 
     calls = procs[proc].calls;
     file  = procs[proc].file_id;
-    while (calls) {
-        if (is_bit_on(slice_sets[file], calls->stmt)) {
+    while (calls)
+    {
+        if (is_bit_on(slice_sets[file], calls->stmt))
+        {
             add_call_to_slice(slice_sets, proc, calls);
             if (v_opt)
                 printf("in slice ");
@@ -1492,7 +1727,8 @@ int call_pass(bit_set slice_sets[], int proc) /* d e a d    c o d e */
     return status;
 }
 
-void slice_proc(bit_set  final_slice_sets[], bit_set slice_sets[], int proc, bit_set  active)
+void
+slice_proc(bit_set final_slice_sets[], bit_set slice_sets[], int proc, bit_set active)
 {
     int i, status;
 
@@ -1504,7 +1740,8 @@ void slice_proc(bit_set  final_slice_sets[], bit_set slice_sets[], int proc, bit
     if (v_opt)
         printf("start slice proc on %s\n", procs[proc].proc_name);
     status = 1;
-    while (status) {
+    while (status)
+    {
         if (abandon_slice)
             return;
         /*		printf ("pass start %s\n",procs[proc].proc_name); */
@@ -1537,22 +1774,27 @@ void slice_proc(bit_set  final_slice_sets[], bit_set slice_sets[], int proc, bit
 *********************************************************************
 */
 
-void slice(int file, int proc, int stmt, int var_proc, int var, bit_set final_slice_sets[], bit_set active)
+void
+slice(
+    int file, int proc, int stmt, int var_proc, int var, bit_set final_slice_sets[], bit_set active)
 {
     int i;
     static bit_set *slice_sets, dont_slice = NULL;
     static int need = 1;
 
     abandon_slice = 0;
-    if (!dont_slice) {
+    if (!dont_slice)
+    {
         dont_slice   = create_bit_set(n_procs + 1);
         dont_descend = create_bit_set(n_procs + 1);
     }
     clear_bit_set(dont_slice);
-    if (need) {
+    if (need)
+    {
         need       = 0;
         slice_sets = (bit_set *)malloc(n_files * sizeof(bit_set));
-        if (!slice_sets) {
+        if (!slice_sets)
+        {
             fprintf(stderr, "Out of memory in slice\n");
             exit(1);
         }
@@ -1581,27 +1823,33 @@ void slice(int file, int proc, int stmt, int var_proc, int var, bit_set final_sl
 }
 
 #define LINE_LENGTH 67
-void print_slices(int print_nodes, bit_set slices[], bit_set active) 
+void
+print_slices(int print_nodes, bit_set slices[], bit_set active)
 {
     int file, proc;
     int stmt, count;
     int line;
 
     proc = -1;
-    while ((proc = get_next_member(active, proc)) >= 0) {
-        if (procs[proc].entry > 0) {
+    while ((proc = get_next_member(active, proc)) >= 0)
+    {
+        if (procs[proc].entry > 0)
+        {
             file = procs[proc].file_id;
             printf("\n%s'%s\n", files[file].name, procs[proc].proc_name);
             count = 0;
             stmt  = -1;
-            while ((stmt = get_next_member(slices[file], stmt)) >= 0) {
+            while ((stmt = get_next_member(slices[file], stmt)) >= 0)
+            {
                 if (print_nodes)
                     count += printf("%4d ", stmt);
-                else {
+                else
+                {
                     line = files[file].stmts[stmt].froml;
                     count += printf("%4d ", line);
                 }
-                if (count > LINE_LENGTH) {
+                if (count > LINE_LENGTH)
+                {
                     printf("\n");
                     count = 0;
                 }
@@ -1612,7 +1860,8 @@ void print_slices(int print_nodes, bit_set slices[], bit_set active)
     }
 }
 
-void print_slices1(int print_nodes, bit_set slices[], bit_set active) 
+void
+print_slices1(int print_nodes, bit_set slices[], bit_set active)
 {
     int file;
     int stmt, count;
@@ -1620,37 +1869,45 @@ void print_slices1(int print_nodes, bit_set slices[], bit_set active)
     int max            = 0, f;
     static bit_set map = NULL;
 
-    if (!print_nodes && !map) {
+    if (!print_nodes && !map)
+    {
         for (f = 0; f < n_files; f++)
             if (max < files[f].n_lines)
                 max = files[f].n_lines;
         map = create_bit_set(max + 1);
     }
-    for (file = 0; file < n_files; file++) {
+    for (file = 0; file < n_files; file++)
+    {
         count = printf("    %sc: ", files[file].name);
         stmt  = -1;
         if (!print_nodes)
             clear_bit_set(map);
-        while ((stmt = get_next_member(slices[file], stmt)) >= 0) {
+        while ((stmt = get_next_member(slices[file], stmt)) >= 0)
+        {
             if (print_nodes)
                 count += printf("%4d ", stmt);
-            else {
+            else
+            {
                 from = files[file].stmts[stmt].froml;
                 to   = files[file].stmts[stmt].tol;
                 bit_on(map, from);
                 for (line = from + 1; line <= to; line++)
                     bit_on(map, line);
             }
-            if (count > LINE_LENGTH) {
+            if (count > LINE_LENGTH)
+            {
                 printf("\n");
                 count = 0;
             }
         }
-        if (!print_nodes) {
+        if (!print_nodes)
+        {
             line = -1;
-            while ((line = get_next_member(map, line)) >= 0) {
+            while ((line = get_next_member(map, line)) >= 0)
+            {
                 count += printf("%4d ", line);
-                if (count > LINE_LENGTH) {
+                if (count > LINE_LENGTH)
+                {
                     printf("\n");
                     count = 0;
                 }
@@ -1660,4 +1917,3 @@ void print_slices1(int print_nodes, bit_set slices[], bit_set active)
             printf("\n");
     }
 }
-

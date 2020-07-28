@@ -1,30 +1,30 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
@@ -32,8 +32,8 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "lif.h"
 #include "sets.h"
 #include "slice.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /*
@@ -41,7 +41,8 @@ static char sccsid[] = "@(#)pss.c	1.4  4/26/95";
 */
 typedef struct ptr_struct ptr_rec, *ptr_ptr;
 
-struct ptr_struct {
+struct ptr_struct
+{
     int id; /* index in ids array */
     int proc_id;
     set_ptr addrs;
@@ -49,16 +50,17 @@ struct ptr_struct {
 
 int v_opt = 0;
 int n_vars, n_ptrs;
-id_ptr  *ids;
-ptr_ptr  ptrs;
-bit_set  ptrs_in, ptrs_out, ptrs_refed;
+id_ptr *ids;
+ptr_ptr ptrs;
+bit_set ptrs_in, ptrs_out, ptrs_refed;
 set_ptr *proc_ret_ptrs;
 
 void bit_on(bit_set b, int at);
 int offset_check(int pid, int id, int off);
 int is_lib_proc(int id);
 
-set_ptr ptr_points_to(int base_ptr) 
+set_ptr
+ptr_points_to(int base_ptr)
 {
     if (base_ptr)
         return ptrs[base_ptr].addrs;
@@ -68,20 +70,24 @@ set_ptr ptr_points_to(int base_ptr)
 
 #define LINE 70
 
-void print_pvs(void) 
+void
+print_pvs(void)
 {
     int i, idx;
     int a_ix, a_id, a_pid;
     set_ptr to;
 
     printf("\n");
-    for (i = 1; i <= n_procs; i++) {
-        if (procs[i].returns_xpr) {
+    for (i = 1; i <= n_procs; i++)
+    {
+        if (procs[i].returns_xpr)
+        {
             printf("%d %s returns: ", i, procs[i].proc_name);
             to = proc_ret_ptrs[i];
             if (!to)
                 printf("<NULL>");
-            while (to) {
+            while (to)
+            {
                 a_ix  = to->id;
                 a_id  = addrs[a_ix].id;
                 a_pid = addrs[a_ix].pid;
@@ -92,7 +98,8 @@ void print_pvs(void)
         }
     }
     printf("\n");
-    for (i = 1; i <= n_ptrs; i++) {
+    for (i = 1; i <= n_ptrs; i++)
+    {
         idx = ptrs[i].id;
         printf("%s (%s) -> ",
             ids[idx]->name,
@@ -100,7 +107,8 @@ void print_pvs(void)
         to = ptrs[i].addrs;
         if (!to)
             printf("<NULL>");
-        while (to) {
+        while (to)
+        {
             a_ix  = to->id;
             a_id  = addrs[a_ix].id;
             a_pid = addrs[a_ix].pid;
@@ -111,18 +119,22 @@ void print_pvs(void)
     }
 }
 
-void print_ptr_map(void) 
+void
+print_ptr_map(void)
 {
     int ptr, lx, i, id, z;
     char buff[1000];
 
     lx = printf("Pointers to vars: ");
-    for (i = 1; i <= n_ptrs; i++) {
+    for (i = 1; i <= n_ptrs; i++)
+    {
         id = ptrs[i].id;
-        if (id) {
+        if (id)
+        {
             sprintf(buff, " %s(%d)->(%d)", ids[id]->name, i, id);
             z = strlen(buff);
-            if (z + lx > LINE) {
+            if (z + lx > LINE)
+            {
                 printf("\n");
                 lx = 0;
             }
@@ -132,14 +144,18 @@ void print_ptr_map(void)
     if (lx)
         printf("\n");
     lx = printf("Variables to pointers: ");
-    for (i = 1; i <= n_vars; i++) {
-        if (ids[i] && ids[i]->ptr_id) {
+    for (i = 1; i <= n_vars; i++)
+    {
+        if (ids[i] && ids[i]->ptr_id)
+        {
             ptr = ids[i]->ptr_id;
             id  = ptrs[ptr].id;
-            if (id) {
+            if (id)
+            {
                 sprintf(buff, " %s(%d)->(%d)", ids[id]->name, id, ptr);
                 z = strlen(buff);
-                if (z + lx > LINE) {
+                if (z + lx > LINE)
+                {
                     printf("\n");
                     lx = 0;
                 }
@@ -151,13 +167,16 @@ void print_ptr_map(void)
         printf("\n");
 }
 
-void count_vars(void) {
+void
+count_vars(void)
+{
     int ptr_id, i, proc, var;
 
     n_vars = n_globals;
     n_ptrs = 0;
 
-    for (proc = 1; proc <= n_procs; proc++) {
+    for (proc = 1; proc <= n_procs; proc++)
+    {
         n_vars += procs[proc].n_locals;
     }
     /*
@@ -166,23 +185,30 @@ void count_vars(void) {
             */
     ids    = (id_ptr *)malloc((1 + n_vars) * sizeof(id_ptr));
     n_ptrs = 0;
-    for (var = 1; var <= n_globals; var++) {
+    for (var = 1; var <= n_globals; var++)
+    {
         ids[var] = &globals[var];
-        if (ids[var]->is_pointer) {
+        if (ids[var]->is_pointer)
+        {
             n_ptrs++;
             ids[var]->ptr_id = n_ptrs;
-        } else
+        }
+        else
             ids[var]->ptr_id = 0;
     }
     var = n_globals;
-    for (proc = 1; proc <= n_procs; proc++) {
-        for (i = 1; i <= procs[proc].n_locals; i++) {
+    for (proc = 1; proc <= n_procs; proc++)
+    {
+        for (i = 1; i <= procs[proc].n_locals; i++)
+        {
             var++;
             ids[var] = &procs[proc].locals[i];
-            if (ids[var]->is_pointer) {
+            if (ids[var]->is_pointer)
+            {
                 n_ptrs++;
                 ids[var]->ptr_id = n_ptrs;
-            } else
+            }
+            else
                 ids[var]->ptr_id = 0;
         }
     }
@@ -190,22 +216,28 @@ void count_vars(void) {
     printf ("%d pointers\n",n_ptrs);
     */
     ptrs = (ptr_ptr)malloc((n_ptrs + 1) * sizeof(ptr_rec));
-    for (i = 1; i <= n_ptrs; i++) {
+    for (i = 1; i <= n_ptrs; i++)
+    {
         ptrs[i].id      = 0;
         ptrs[i].proc_id = 0;
         ptrs[i].addrs   = NULL;
     }
-    for (i = 1; i <= n_vars; i++) {
+    for (i = 1; i <= n_vars; i++)
+    {
         if (ids[i] && ids[i]->ptr_id)
-            if (ptr_id = ids[i]->ptr_id) { /* assignment (= [sic]) */
+            if (ptr_id = ids[i]->ptr_id)
+            { /* assignment (= [sic]) */
                 ptrs[ptr_id].id = i;
             }
     }
     proc_ret_ptrs = (set_ptr *)malloc((n_procs + 1) * sizeof(set_ptr));
-    for (proc = 1; proc <= n_procs; proc++) {
+    for (proc = 1; proc <= n_procs; proc++)
+    {
         proc_ret_ptrs[proc] = NULL;
-        for (i = 1; i <= procs[proc].n_locals; i++) {
-            if (ptr_id = procs[proc].locals[i].ptr_id) {
+        for (i = 1; i <= procs[proc].n_locals; i++)
+        {
+            if (ptr_id = procs[proc].locals[i].ptr_id)
+            {
                 ptrs[ptr_id].proc_id = proc;
             }
         }
@@ -214,14 +246,17 @@ void count_vars(void) {
         print_ptr_map();
 }
 
-char *ptr_to_name(int ptr) {
+char *
+ptr_to_name(int ptr)
+{
     int var_ix;
 
     var_ix = ptrs[ptr].id;
     return ids[var_ix]->name;
 }
 
-char *addr_to_name(int addr)
+char *
+addr_to_name(int addr)
 {
     int pid, id;
 
@@ -233,7 +268,8 @@ char *addr_to_name(int addr)
         return globals[id].name;
 }
 
-char *addr_to_scope(int addr)
+char *
+addr_to_scope(int addr)
 {
     int pid;
 
@@ -244,10 +280,12 @@ char *addr_to_scope(int addr)
         return "global";
 }
 
-void print_ptr_set(int ptr, set_ptr s) 
+void
+print_ptr_set(int ptr, set_ptr s)
 {
     printf("#### Addr set %d (%s): ", ptr, ptr_to_name(ptr));
-    while (s) {
+    while (s)
+    {
         printf(" %d(%s)", s->id, s->id ? addr_to_name(s->id) : "???");
         s = s->next;
     }
@@ -255,7 +293,8 @@ void print_ptr_set(int ptr, set_ptr s)
     fflush(stdout);
 }
 
-int add_aref_to_var(var_ptr r, int id)
+int
+add_aref_to_var(var_ptr r, int id)
 {
     set_ptr old;
 
@@ -273,15 +312,18 @@ int add_aref_to_var(var_ptr r, int id)
         return 1;
 }
 
-int call_assign(int dix, int pid) 
+int
+call_assign(int dix, int pid)
 {
     set_ptr old;
     set_ptr addrs;
 
     old = ptrs[dix].addrs;
-    if (dix) {
+    if (dix)
+    {
         addrs = proc_ret_ptrs[pid];
-        while (addrs) {
+        while (addrs)
+        {
             ptrs[dix].addrs = add_to_set(ptrs[dix].addrs, addrs->id);
             addrs           = addrs->next;
         }
@@ -292,15 +334,18 @@ int call_assign(int dix, int pid)
         return 1;
 }
 
-int ret_assign(int pid, int rix)
+int
+ret_assign(int pid, int rix)
 {
     set_ptr old;
     set_ptr addrs;
 
     old = proc_ret_ptrs[pid];
-    if (rix) {
+    if (rix)
+    {
         addrs = ptrs[rix].addrs;
-        while (addrs) {
+        while (addrs)
+        {
             proc_ret_ptrs[pid] = add_to_set(proc_ret_ptrs[pid], addrs->id);
             addrs              = addrs->next;
         }
@@ -311,14 +356,16 @@ int ret_assign(int pid, int rix)
         return 1;
 }
 
-int pointer_assign(int dix, int rix) 
+int
+pointer_assign(int dix, int rix)
 {
     set_ptr old;
     set_ptr addrs;
 
     old   = ptrs[dix].addrs;
     addrs = ptrs[rix].addrs;
-    while (addrs) {
+    while (addrs)
+    {
         /*
         print_ptr_set (dix,ptrs[dix].addrs);
         printf ("\nassign: add ***%d*** (%s of %s) to ptr %d (%s)\n",
@@ -334,7 +381,8 @@ int pointer_assign(int dix, int rix)
         return 1;
 }
 
-void resolve_chain(bit_set in, bit_set out, field_ptr f) 
+void
+resolve_chain(bit_set in, bit_set out, field_ptr f)
 {
     int new_id, a_id, ptr, new_ptr;
     set_ptr addr;
@@ -344,14 +392,17 @@ void resolve_chain(bit_set in, bit_set out, field_ptr f)
     printf ("resolve field %d %s at %d\n",f->fid,f->name,f->offset);
     */
     ptr = -1;
-    while ((ptr = get_next_member(in, ptr)) >= 0) {
+    while ((ptr = get_next_member(in, ptr)) >= 0)
+    {
         /*
         printf ("\tptr %d %s",ptr,ptr?ids[ptrs[ptr].id]->name:"???");
         printf ("\n");
         */
-        if (ptr) {
+        if (ptr)
+        {
             addr = ptrs[ptr].addrs;
-            while (addr) {
+            while (addr)
+            {
                 a_id = addr->id;
                 /*
                 printf ("\t\taddr %d",addr->id);
@@ -360,9 +411,11 @@ void resolve_chain(bit_set in, bit_set out, field_ptr f)
                         procs[addrs[a_id].pid].locals[addrs[a_id].id].name:
                         globals[addrs[a_id].id].name);
                 */
-                if (offset_check(addrs[a_id].pid, addrs[a_id].id, f->offset)) {
+                if (offset_check(addrs[a_id].pid, addrs[a_id].id, f->offset))
+                {
                     new_id = addrs[a_id].id + f->offset;
-                    if (new_id <= (addrs[a_id].pid ? procs[addrs[a_id].pid].n_locals : n_globals)) {
+                    if (new_id <= (addrs[a_id].pid ? procs[addrs[a_id].pid].n_locals : n_globals))
+                    {
                         /*
                         fflush(stdout);
                         printf (" (new %d) %s",
@@ -386,7 +439,8 @@ void resolve_chain(bit_set in, bit_set out, field_ptr f)
     }
 }
 
-void get_cdefs(int chain) 
+void
+get_cdefs(int chain)
 {
     int ptr, id, pid;
     bit_set in, out, swap;
@@ -406,7 +460,8 @@ void get_cdefs(int chain)
     clear_bit_set(out);
     bit_on(out, ptr);
     f = chains[chain].fields;
-    while (f) {
+    while (f)
+    {
         swap = in;
         in   = out;
         out  = swap;
@@ -422,14 +477,16 @@ void get_cdefs(int chain)
     }
     printf("\n");
     */
-    if (out != ptrs_out) {
+    if (out != ptrs_out)
+    {
         swap     = ptrs_in;
         ptrs_in  = ptrs_out;
         ptrs_out = swap;
     }
 }
 
-void get_crefs(int chain)
+void
+get_crefs(int chain)
 {
     bit_set swap;
 
@@ -440,7 +497,8 @@ void get_crefs(int chain)
     ptrs_out   = swap;
 }
 
-int capture_assigns(int pid, int fid, int sid) 
+int
+capture_assigns(int pid, int fid, int sid)
 {
     var_ptr r, d;
     int a_pid, a_id, var_defed, id;
@@ -448,19 +506,25 @@ int capture_assigns(int pid, int fid, int sid)
 
     /* printf ("%5d %5d %5d\n",pid,fid,sid); */
     r = files[fid].stmts[sid].refs;
-    while (r) {
-        if (r->code == LIF_AREF) {
+    while (r)
+    {
+        if (r->code == LIF_AREF)
+        {
             a_pid = addrs[r->id].pid;
             a_id  = addrs[r->id].id;
-            if (procs[pid].returns_xpr && files[fid].stmts[sid].is_return) {
+            if (procs[pid].returns_xpr && files[fid].stmts[sid].is_return)
+            {
                 proc_ret_ptrs[pid] = add_to_set(proc_ret_ptrs[pid], r->id);
             }
             d = files[fid].stmts[sid].defs;
-            while (d) {
+            while (d)
+            {
                 var_defed = d->id;
-                switch (d->code) {
+                switch (d->code)
+                {
                 case LIF_DEF:
-                    if (procs[pid].locals[var_defed].is_pointer) {
+                    if (procs[pid].locals[var_defed].is_pointer)
+                    {
                         id = procs[pid].locals[var_defed].ptr_id;
                         /*
                         printf ("assign to %d addr of %d: ",
@@ -478,7 +542,8 @@ int capture_assigns(int pid, int fid, int sid)
                     }
                     break;
                 case LIF_GDEF:
-                    if (globals[var_defed].is_pointer) {
+                    if (globals[var_defed].is_pointer)
+                    {
                         id = globals[var_defed].ptr_id;
                         /*
                         printf ("assign to %d addr of %d: ",
@@ -506,7 +571,8 @@ int capture_assigns(int pid, int fid, int sid)
                     /*
                     printf ("update ptrs (%d):",id);
                     */
-                    while ((ptr = get_next_member(ptrs_out, ptr)) >= 0) {
+                    while ((ptr = get_next_member(ptrs_out, ptr)) >= 0)
+                    {
                         /*
                                 printf (" %d",ptr);
                         */
@@ -527,7 +593,8 @@ int capture_assigns(int pid, int fid, int sid)
     return count;
 }
 
-int prop_call(int pid, int fid, int sid)
+int
+prop_call(int pid, int fid, int sid)
 {
     var_ptr d;
     int var_defed, id;
@@ -543,30 +610,38 @@ int prop_call(int pid, int fid, int sid)
     if (!files[fid].stmts[sid].calls)
         return 0;
     c = files[fid].stmts[sid].calls;
-    while (c) {
+    while (c)
+    {
         called_pid = c->pid;
-        if (proc_ret_ptrs[called_pid]) {
-            if (procs[pid].returns_xpr && files[fid].stmts[sid].is_return) {
+        if (proc_ret_ptrs[called_pid])
+        {
+            if (procs[pid].returns_xpr && files[fid].stmts[sid].is_return)
+            {
                 old       = proc_ret_ptrs[pid];
                 ret_addrs = proc_ret_ptrs[called_pid];
-                while (ret_addrs) {
+                while (ret_addrs)
+                {
                     proc_ret_ptrs[pid] = add_to_set(proc_ret_ptrs[pid], ret_addrs->id);
                     ret_addrs          = ret_addrs->next;
                 }
                 count += (old != proc_ret_ptrs[pid]);
             }
             d = files[fid].stmts[sid].defs;
-            while (d && (d->level == 0)) {
+            while (d && (d->level == 0))
+            {
                 var_defed = d->id;
                 id        = 0;
-                switch (d->code) {
+                switch (d->code)
+                {
                 case LIF_DEF:
-                    if (procs[pid].locals[var_defed].is_pointer) {
+                    if (procs[pid].locals[var_defed].is_pointer)
+                    {
                         id = procs[pid].locals[var_defed].ptr_id;
                     }
                     break;
                 case LIF_GDEF:
-                    if (globals[var_defed].is_pointer) {
+                    if (globals[var_defed].is_pointer)
+                    {
                         id = globals[var_defed].ptr_id;
                     }
                     break;
@@ -578,11 +653,15 @@ int prop_call(int pid, int fid, int sid)
                     break;
                 }
                 /* count += pointer_assign (id,rp); */
-                if (id) {
+                if (id)
+                {
                     count += call_assign(id, called_pid);
-                } else {
+                }
+                else
+                {
                     ptr = -1;
-                    while ((ptr = get_next_member(ptrs_out, ptr)) >= 0) {
+                    while ((ptr = get_next_member(ptrs_out, ptr)) >= 0)
+                    {
                         /*
                         if(rp)count += pointer_assign (ptr,rp);
                         */
@@ -596,7 +675,8 @@ int prop_call(int pid, int fid, int sid)
     return count;
 }
 
-int prop_stmt(int pid, int fid, int sid) 
+int
+prop_stmt(int pid, int fid, int sid)
 {
     var_ptr r, d;
     int rp, var_refed, rix, var_defed, id;
@@ -604,22 +684,29 @@ int prop_stmt(int pid, int fid, int sid)
 
     /* printf ("%5d %5d %5d\n",pid,fid,sid); */
     r = files[fid].stmts[sid].refs;
-    while (r) {
+    while (r)
+    {
         /*
         printf ("rcode %s\n",
                 r->code == LIF_AREF?"AREF":(r->code == LIF_CREF?
                         "chain ref":(r->code == LIF_REF?"local ref":
                         "global ref")));
         */
-        if (r->code != LIF_AREF) {
-            if (r->code != LIF_CREF) {
+        if (r->code != LIF_AREF)
+        {
+            if (r->code != LIF_CREF)
+            {
                 var_refed = r->id;
-                if (r->code == LIF_REF) {
+                if (r->code == LIF_REF)
+                {
                     rp = procs[pid].locals[var_refed].ptr_id;
-                } else {
+                }
+                else
+                {
                     rp = globals[var_refed].ptr_id;
                 }
-                if ((rp == 0) && (r->code != LIF_CREF)) {
+                if ((rp == 0) && (r->code != LIF_CREF))
+                {
                     r = r->next;
                     continue;
                 }
@@ -629,22 +716,28 @@ int prop_stmt(int pid, int fid, int sid)
                         rp,ptrs[rp].addrs,
                         rix,var_refed,r->code==LIF_REF?"local":"global");
                 */
-            } else {
+            }
+            else
+            {
                 get_crefs(r->id);
                 rp = 0;
             }
-            if (procs[pid].returns_xpr && files[fid].stmts[sid].is_return) {
+            if (procs[pid].returns_xpr && files[fid].stmts[sid].is_return)
+            {
                 count += ret_assign(pid, rp);
             }
             d = files[fid].stmts[sid].defs;
-            while (d && (d->level == 0)) {
+            while (d && (d->level == 0))
+            {
                 var_defed = d->id;
                 /*
                 printf ("def code %d\n",d->code);
                 */
-                switch (d->code) {
+                switch (d->code)
+                {
                 case LIF_DEF:
-                    if (procs[pid].locals[var_defed].is_pointer) {
+                    if (procs[pid].locals[var_defed].is_pointer)
+                    {
                         id = procs[pid].locals[var_defed].ptr_id;
                         /*
                         printf ("assign to ptr %d contents of ptr %d: ",
@@ -658,19 +751,22 @@ int prop_stmt(int pid, int fid, int sid)
                         */
                         if (rp)
                             count += pointer_assign(id, rp);
-                        else {
+                        else
+                        {
                             rp = -1;
                             /*
                             printf ("update ptrs (%d):",rp);
                             */
-                            while ((rp = get_next_member(ptrs_refed, rp)) >= 0) {
+                            while ((rp = get_next_member(ptrs_refed, rp)) >= 0)
+                            {
                                 count += pointer_assign(id, rp);
                             }
                         }
                     }
                     break;
                 case LIF_GDEF:
-                    if (globals[var_defed].is_pointer) {
+                    if (globals[var_defed].is_pointer)
+                    {
                         id = globals[var_defed].ptr_id;
                         /*
                         printf ("assign to %d contents of %d: ",
@@ -684,12 +780,14 @@ int prop_stmt(int pid, int fid, int sid)
                                 */
                         if (rp)
                             count += pointer_assign(id, rp);
-                        else {
+                        else
+                        {
                             rp = -1;
                             /*
                             printf ("update ptrs (%d):",rp);
                             */
-                            while ((rp = get_next_member(ptrs_refed, rp)) >= 0) {
+                            while ((rp = get_next_member(ptrs_refed, rp)) >= 0)
+                            {
                                 count += pointer_assign(id, rp);
                             }
                         }
@@ -706,16 +804,19 @@ int prop_stmt(int pid, int fid, int sid)
                     /*
                     printf ("update ptrs (%d):",rp);
                     */
-                    while ((ptr = get_next_member(ptrs_out, ptr)) >= 0) {
+                    while ((ptr = get_next_member(ptrs_out, ptr)) >= 0)
+                    {
                         /*
                         printf (" %d",ptr);
                         WHAT ABOUT RP == 0 ??????
                         */
                         if (rp)
                             count += pointer_assign(ptr, rp);
-                        else {
+                        else
+                        {
                             rp = -1;
-                            while ((rp = get_next_member(ptrs_refed, rp)) >= 0) {
+                            while ((rp = get_next_member(ptrs_refed, rp)) >= 0)
+                            {
                                 count += pointer_assign(ptr, rp);
                             }
                             rp = 0;
@@ -736,7 +837,8 @@ int prop_stmt(int pid, int fid, int sid)
     return count;
 }
 
-int do_a_call(int pid, int fid, call_ptr call)
+int
+do_a_call(int pid, int fid, call_ptr call)
 {
     int change = 0, called_pid, fp;
     int rix, a_id, a_pid, fpx;
@@ -752,11 +854,13 @@ int do_a_call(int pid, int fid, call_ptr call)
     printf ("call %s (%d formals)",procs[called_pid].proc_name,
             procs[called_pid].n_formals);
             */
-    for (fp = 1; fp <= procs[called_pid].n_formals; fp++) {
+    for (fp = 1; fp <= procs[called_pid].n_formals; fp++)
+    {
         /*
         printf ("  %s (%d)",formals[fp].name,fp);
         */
-        if (formals[fp].is_pointer) {
+        if (formals[fp].is_pointer)
+        {
             /*
             printf("*");
             */
@@ -764,13 +868,16 @@ int do_a_call(int pid, int fid, call_ptr call)
             act = call->actuals;
             while (act && act->actual_number != fp)
                 act = act->next;
-            if (act) {
+            if (act)
+            {
                 a_list = act->actuals;
-                while (a_list) {
+                while (a_list)
+                {
                     /*
                     printf ("actual code %d\n",a_list->code);
                     */
-                    if (a_list->code == LIF_AREF) {
+                    if (a_list->code == LIF_AREF)
+                    {
                         change += add_aref_to_var(a_list, fpx);
                         a_pid = addrs[a_list->id].pid;
                         a_id  = addrs[a_list->id].id;
@@ -779,22 +886,32 @@ int do_a_call(int pid, int fid, call_ptr call)
                                 procs[a_pid].locals[a_id].name:
                                 globals[a_id].name);
                         */
-                    } else {
-                        if (a_list->code == LIF_REF) {
+                    }
+                    else
+                    {
+                        if (a_list->code == LIF_REF)
+                        {
                             rix = procs[pid].locals[a_list->id].ptr_id;
-                        } else if (a_list->code == LIF_GREF) {
+                        }
+                        else if (a_list->code == LIF_GREF)
+                        {
                             rix = globals[a_list->id].ptr_id;
-                        } else
+                        }
+                        else
                             rix = 0;
-                        if (rix) {
+                        if (rix)
+                        {
                             change += pointer_assign(fpx, rix);
-                        } else if (a_list->code == LIF_CREF) {
+                        }
+                        else if (a_list->code == LIF_CREF)
+                        {
                             get_cdefs(a_list->id);
                             rix = -1;
                             /*
                             printf ("update call ptrs (%d):",rix);
                             */
-                            while ((rix = get_next_member(ptrs_out, rix)) >= 0) {
+                            while ((rix = get_next_member(ptrs_out, rix)) >= 0)
+                            {
                                 change += pointer_assign(fpx, rix);
                             }
                             /*
@@ -813,7 +930,8 @@ int do_a_call(int pid, int fid, call_ptr call)
     return change;
 }
 
-int direct_assigns(void) 
+int
+direct_assigns(void)
 {
     int pid, fid, sid;
     int change = 0;
@@ -821,10 +939,13 @@ int direct_assigns(void)
     /*
     printf ("get direct assigns\n");
     */
-    for (pid = 1; pid <= n_procs; pid++) {
-        if (procs[pid].entry != -1) {
+    for (pid = 1; pid <= n_procs; pid++)
+    {
+        if (procs[pid].entry != -1)
+        {
             fid = procs[pid].file_id;
-            for (sid = procs[pid].entry; sid <= procs[pid].exit; sid++) {
+            for (sid = procs[pid].entry; sid <= procs[pid].exit; sid++)
+            {
                 change += capture_assigns(pid, fid, sid);
             }
         }
@@ -832,7 +953,8 @@ int direct_assigns(void)
     return change;
 }
 
-int propagate(void) 
+int
+propagate(void)
 {
     int pid, fid, sid;
     int change = 0;
@@ -840,13 +962,16 @@ int propagate(void)
     /*
     printf ("propagate\n");
     */
-    for (pid = 1; pid <= n_procs; pid++) {
-        if (procs[pid].entry != -1) {
+    for (pid = 1; pid <= n_procs; pid++)
+    {
+        if (procs[pid].entry != -1)
+        {
             /*
             printf ("prop %s (%d)\n",procs[pid].proc_name,pid);
             */
             fid = procs[pid].file_id;
-            for (sid = procs[pid].entry; sid <= procs[pid].exit; sid++) {
+            for (sid = procs[pid].entry; sid <= procs[pid].exit; sid++)
+            {
                 change += prop_call(pid, fid, sid);
                 change += prop_stmt(pid, fid, sid);
             }
@@ -855,20 +980,24 @@ int propagate(void)
     return change;
 }
 
-int do_calls(void) 
+int
+do_calls(void)
 {
-    int      pid, fid;
-    int      change = 0;
+    int pid, fid;
+    int change = 0;
     call_ptr call_list;
 
     /*
     printf ("do_calls\n");
     */
-    for (pid = 1; pid <= n_procs; pid++) {
-        if (procs[pid].entry != -1) {
+    for (pid = 1; pid <= n_procs; pid++)
+    {
+        if (procs[pid].entry != -1)
+        {
             fid       = procs[pid].file_id;
             call_list = procs[pid].calls;
-            while (call_list) {
+            while (call_list)
+            {
                 change += do_a_call(pid, fid, call_list);
                 call_list = call_list->next;
             }
@@ -877,7 +1006,8 @@ int do_calls(void)
     return change;
 }
 
-void flow(void) 
+void
+flow(void)
 {
     int change;
 
@@ -885,7 +1015,8 @@ void flow(void)
     ptrs_out   = create_bit_set(n_ptrs + 1);
     ptrs_refed = create_bit_set(n_ptrs + 1);
     change     = 1;
-    while (change) {
+    while (change)
+    {
         change = 0;
         change += direct_assigns();
         change += do_calls();
@@ -896,4 +1027,3 @@ void flow(void)
     if (v_opt)
         print_pvs();
 }
-

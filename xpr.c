@@ -1,41 +1,41 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
 
 #include "ansi_parse.h"
 #include "lif.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-/* 
+/*
 static char sccsid[] = "@(#)xpr.c	1.4  4/26/95";
 */
 #define MAX_MALLOC 100
@@ -51,12 +51,14 @@ void source_map(int n, token_ptr from, token_ptr to);
 void assemble_actuals(tree_ptr t, int node_id, int *from, int *upto, int *to);
 void connect_nodes(int from, int to);
 
-int current_addr(void) 
-{ 
-    return max_addr; 
+int
+current_addr(void)
+{
+    return max_addr;
 }
 
-int is_malloc(char * name) 
+int
+is_malloc(char *name)
 {
     int i;
     for (i = 0; i < n_malloc; i++)
@@ -65,19 +67,22 @@ int is_malloc(char * name)
     return 0;
 }
 
-void print_malloc(void) 
+void
+print_malloc(void)
 {
     int i;
     for (i = 0; i < n_malloc; i++)
         printf("\t%s\n", malloc_funs[i]);
 }
 
-void add_malloc(char *name) 
-{ 
-    malloc_funs[n_malloc++] = name; 
+void
+add_malloc(char *name)
+{
+    malloc_funs[n_malloc++] = name;
 }
 
-addr_tab_ptr addr_of(token_ptr t) 
+addr_tab_ptr
+addr_of(token_ptr t)
 {
     var_ste_ptr var;
     int scope;
@@ -88,7 +93,8 @@ addr_tab_ptr addr_of(token_ptr t)
     var = look_up_id((var_ste_ptr)NULL, t->text, &scope);
     if (!var)
         return 0;
-    if (var->addr == NULL) {
+    if (var->addr == NULL)
+    {
         new          = alloc_addr_tab();
         new->addr    = ++max_addr;
         new->next    = addr_tab;
@@ -97,7 +103,8 @@ addr_tab_ptr addr_of(token_ptr t)
         new->var_id  = var->id;
         var->addr    = new;
         fprintf(outfile, "%d(%d,%d,%d)", LIF_ADDRESS, new->addr, new->proc_id, new->var_id);
-        if (z_opt) {
+        if (z_opt)
+        {
             fprintf(outfile,
                 "    address %d is var %d (%s) of proc %d",
                 new->addr,
@@ -110,23 +117,27 @@ addr_tab_ptr addr_of(token_ptr t)
     return var->addr;
 }
 
-void make_malloc(int node_id, tree_ptr t)
+void
+make_malloc(int node_id, tree_ptr t)
 {
     token_ptr var_token;
     addr_tab_ptr addr;
 
     var_token = fake_var_decl(t ? t->token : NULL);
     addr      = addr_of(var_token);
-    if (addr) {
+    if (addr)
+    {
         fprintf(outfile, "%d(%d,%d)", LIF_AREF, node_id, addr->addr);
-        if (z_opt) {
+        if (z_opt)
+        {
             fprintf(outfile, "    address %d refed at node %d", addr->addr, node_id);
         }
         fprintf(outfile, "\n");
     }
 }
 
-tree_ptr make_leaf(int code, token_ptr token) 
+tree_ptr
+make_leaf(int code, token_ptr token)
 {
     tree_ptr new;
 
@@ -138,7 +149,8 @@ tree_ptr make_leaf(int code, token_ptr token)
     return new;
 }
 
-tree_ptr make_tree(int code, tree_ptr left, tree_ptr right) 
+tree_ptr
+make_tree(int code, tree_ptr left, tree_ptr right)
 {
     tree_ptr new;
 
@@ -150,7 +162,8 @@ tree_ptr make_tree(int code, tree_ptr left, tree_ptr right)
     return new;
 }
 
-void print_tree(tree_ptr t) 
+void
+print_tree(tree_ptr t)
 {
     if (!x_opt)
         return;
@@ -160,7 +173,8 @@ void print_tree(tree_ptr t)
 }
 
 /*static*/
-void print_trees(tree_ptr t)
+void
+print_trees(tree_ptr t)
 {
     static char *ops[] = {"!?",
         "-",
@@ -180,8 +194,10 @@ void print_trees(tree_ptr t)
         "K",
         "{",
         "}"};
-    if (t) {
-        switch (t->op_code) {
+    if (t)
+    {
+        switch (t->op_code)
+        {
         case UN_OP:
         case ADDR_OP:
         case DEREF_OP:
@@ -246,7 +262,8 @@ void print_trees(tree_ptr t)
 #define REF 0
 #define DEF 1
 
-void cref_def(int is_def, int node, int chain) 
+void
+cref_def(int is_def, int node, int chain)
 {
     int code;
 
@@ -261,16 +278,20 @@ void cref_def(int is_def, int node, int chain)
     fprintf(outfile, "\n");
 }
 
-void ref_def_id(int is_def, int node, int id, int scope)
+void
+ref_def_id(int is_def, int node, int id, int scope)
 {
     int code, level;
 
-    if (is_def) {
+    if (is_def)
+    {
         if (scope > 1)
             code = LIF_DEF;
         else
             code = LIF_GDEF;
-    } else {
+    }
+    else
+    {
         if (scope > 1)
             code = LIF_REF;
         else
@@ -292,7 +313,8 @@ void ref_def_id(int is_def, int node, int id, int scope)
     fprintf(outfile, "\n");
 }
 
-void ref_def_var(int is_def, int node, token_ptr t, int used_as_array) 
+void
+ref_def_var(int is_def, int node, token_ptr t, int used_as_array)
 {
     int scope, code, id, level;
     var_ste_ptr var;
@@ -304,33 +326,43 @@ void ref_def_var(int is_def, int node, token_ptr t, int used_as_array)
     if (!t)
         return; /* empty */
     var = look_up_id((var_ste_ptr)NULL, t->text, &scope);
-    if (is_var_array(var) && (!used_as_array)) {
+    if (is_var_array(var) && (!used_as_array))
+    {
         /* printf ("var %s is an array %s\n",t->text,
         used_as_array?"with subscript":"address"); */
         addr = addr_of(t);
-        if (addr) {
+        if (addr)
+        {
             fprintf(outfile, "%d(%d,%d)", LIF_AREF, node, addr->addr);
-            if (z_opt) {
+            if (z_opt)
+            {
                 fprintf(outfile, "    array address %d refed at node %d", addr->addr, node);
             }
             fprintf(outfile, "\n");
         }
-    } else {
-        if (var) {
+    }
+    else
+    {
+        if (var)
+        {
             id = var->id;
-            if (is_def) {
+            if (is_def)
+            {
                 if (scope > 1)
                     code = LIF_DEF;
                 else
                     code = LIF_GDEF;
-            } else {
+            }
+            else
+            {
                 if (scope > 1)
                     code = LIF_REF;
                 else
                     code = LIF_GREF;
             }
             level = t->deref_level;
-        } else
+        }
+        else
             return; /* oops */
 
         fprintf(outfile, "%d(%d,%d", code, node, id);
@@ -350,17 +382,20 @@ void ref_def_var(int is_def, int node, token_ptr t, int used_as_array)
     }
 }
 
-token_ptr leftmost(tree_ptr t)
+token_ptr
+leftmost(tree_ptr t)
 {
     token_ptr left, right;
 
-    if (t) {
+    if (t)
+    {
         right = leftmost(t->right);
         if (t->op_code == COMMA_OP)
             left = right;
         else
             left = leftmost(t->left);
-        if (!t->token) {
+        if (!t->token)
+        {
             if (!left)
                 return right;
             if (!right)
@@ -370,16 +405,21 @@ token_ptr leftmost(tree_ptr t)
                 return left;
             else
                 return right;
-        } else {
+        }
+        else
+        {
             if (!left && !right)
                 return t->token;
-            else if (left) {
+            else if (left)
+            {
                 if (left->at.line_start * 1000 + left->at.col_start <
                     t->token->at.line_start * 1000 + t->token->at.col_start)
                     return left;
                 else
                     return t->token;
-            } else {
+            }
+            else
+            {
                 return t->token;
             }
         }
@@ -387,17 +427,20 @@ token_ptr leftmost(tree_ptr t)
     return NULL;
 }
 
-static token_ptr rightmost(tree_ptr t)
+static token_ptr
+rightmost(tree_ptr t)
 {
     token_ptr left, right;
 
-    if (t) {
+    if (t)
+    {
         right = rightmost(t->right);
         if (t->op_code == COMMA_OP)
             left = right;
         else
             left = rightmost(t->left);
-        if (!t->token) {
+        if (!t->token)
+        {
             if (!left)
                 return right;
             if (!right)
@@ -407,16 +450,21 @@ static token_ptr rightmost(tree_ptr t)
                 return right;
             else
                 return left;
-        } else {
+        }
+        else
+        {
             if (!left && !right)
                 return t->token;
-            else if (left) {
+            else if (left)
+            {
                 if (left->at.line_end * 1000 + left->at.col_end >
                     t->token->at.line_end * 1000 + t->token->at.col_end)
                     return left;
                 else
                     return t->token;
-            } else {
+            }
+            else
+            {
                 return t->token;
             }
         }
@@ -426,7 +474,8 @@ static token_ptr rightmost(tree_ptr t)
 
 #define ID_LVALUE 1
 #define PTR_LVALUE 2
-static int get_lvalue(tree_ptr t, token_ptr *tk, int *chain_id, int *array_seen)
+static int
+get_lvalue(tree_ptr t, token_ptr *tk, int *chain_id, int *array_seen)
 {
     int lvalue, scope;
     var_ste_ptr var;
@@ -434,11 +483,13 @@ static int get_lvalue(tree_ptr t, token_ptr *tk, int *chain_id, int *array_seen)
     token_ptr new, left, right;
     chain_rec c;
 
-    if (t) {
+    if (t)
+    {
         /*
         printf ("get lvalue op(%d)\n",t->op_code);
         */
-        switch (t->op_code) {
+        switch (t->op_code)
+        {
         case ID_OP:
             t->token->deref_level = 0;
             *tk                   = t->token;
@@ -462,12 +513,14 @@ static int get_lvalue(tree_ptr t, token_ptr *tk, int *chain_id, int *array_seen)
             c.chain_id  = -1;
             c.no_output = 0;
             assemble_dot(name, t, &c);
-            if (c.chain_id != -1) {
+            if (c.chain_id != -1)
+            {
                 var = c.fields;
                 if (x_opt)
                     printf("\n\nField search\n");
                 if (x_opt)
-                    while (var) {
+                    while (var)
+                    {
                         printf("\t%s\n", var->token->text);
                         var = var->next;
                     }
@@ -533,7 +586,8 @@ static int get_lvalue(tree_ptr t, token_ptr *tk, int *chain_id, int *array_seen)
     return 0;
 }
 
-static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, int *to_node)
+static void
+scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, int *to_node)
 {
     static tree_ptr recent_typename = NULL;
     int new_from, new_to, new_upto;
@@ -543,12 +597,14 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
     int is_array = 0;
     addr_tab_ptr addr;
 
-    if (t) {
+    if (t)
+    {
         /*
         printf ("scan %d op %d left %d right %d\n",t,
                 t->op_code,t->left,t->right);
         */
-        switch (t->op_code) {
+        switch (t->op_code)
+        {
         case CON_OP:
         case ID_OP:
             return;
@@ -565,7 +621,8 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
                 ref_def_var(REF, new_node, tk, is_array);
             else if (lvalue == PTR_LVALUE)
                 cref_def(REF, new_node, chain_id);
-            if (t->left) {
+            if (t->left)
+            {
                 new_from = 0;
                 new_to   = 0;
                 new_upto = 0;
@@ -629,7 +686,8 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
                 ref_def_var(DEF, node_id, tk, is_array);
             else if (lvalue == PTR_LVALUE)
                 cref_def(DEF, node_id, chain_id);
-            if (is_array) {
+            if (is_array)
+            {
                 if (lvalue == ID_LVALUE)
                     ref_def_var(REF, node_id, tk, is_array);
                 else if (lvalue == PTR_LVALUE)
@@ -660,19 +718,25 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
             return;
         case PRE_OP:
             new_node = get_stmt_no();
-            if (*upto_node) {
+            if (*upto_node)
+            {
                 connect_nodes(*upto_node, new_node);
-            } else {
+            }
+            else
+            {
                 *from_node = new_node;
             }
             *upto_node = new_node;
             source_map(new_node, leftmost(t), rightmost(t->left));
             lvalue = get_lvalue(t->left, &tk, &chain_id, &is_array);
-            if (lvalue == ID_LVALUE) {
+            if (lvalue == ID_LVALUE)
+            {
                 ref_def_var(REF, new_node, tk, is_array);
                 ref_def_var(DEF, new_node, tk, is_array);
                 ref_def_var(REF, node_id, tk, is_array);
-            } else if (lvalue == PTR_LVALUE) {
+            }
+            else if (lvalue == PTR_LVALUE)
+            {
                 cref_def(REF, node_id, chain_id);
                 cref_def(REF, new_node, chain_id);
                 cref_def(DEF, new_node, chain_id);
@@ -692,11 +756,14 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
             *to_node = new_node;
             source_map(new_node, leftmost(t->left), rightmost(t));
             lvalue = get_lvalue(t->left, &tk, &chain_id, &is_array);
-            if (lvalue == ID_LVALUE) {
+            if (lvalue == ID_LVALUE)
+            {
                 ref_def_var(REF, new_node, tk, is_array);
                 ref_def_var(DEF, new_node, tk, is_array);
                 ref_def_var(REF, node_id, tk, is_array);
-            } else if (lvalue == PTR_LVALUE) {
+            }
+            else if (lvalue == PTR_LVALUE)
+            {
                 cref_def(REF, new_node, chain_id);
                 cref_def(DEF, new_node, chain_id);
                 cref_def(REF, node_id, chain_id);
@@ -706,10 +773,13 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
             return;
         case RELASGN_OP:
             lvalue = get_lvalue(t->left, &tk, &chain_id, &is_array);
-            if (lvalue == ID_LVALUE) {
+            if (lvalue == ID_LVALUE)
+            {
                 ref_def_var(DEF, node_id, tk, is_array);
                 ref_def_var(REF, node_id, tk, is_array);
-            } else if (lvalue == PTR_LVALUE) {
+            }
+            else if (lvalue == PTR_LVALUE)
+            {
                 cref_def(REF, node_id, chain_id);
                 cref_def(DEF, node_id, chain_id);
             }
@@ -725,11 +795,14 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
             return;
         case ADDR_OP:
             lvalue = get_lvalue(t->left, &tk, &chain_id, &is_array);
-            if ((lvalue == ID_LVALUE) && tk) {
+            if ((lvalue == ID_LVALUE) && tk)
+            {
                 addr = addr_of(tk);
-                if (addr) {
+                if (addr)
+                {
                     fprintf(outfile, "%d(%d,%d)", LIF_AREF, node_id, addr->addr);
-                    if (z_opt) {
+                    if (z_opt)
+                    {
                         fprintf(outfile, "    address %d refed at node %d", addr->addr, node_id);
                     }
                     fprintf(outfile, "\n");
@@ -759,18 +832,21 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
             /*
             printf ("call lvalue %d\n",lvalue);
             */
-            if (lvalue == ID_LVALUE) {
+            if (lvalue == ID_LVALUE)
+            {
                 proc_id = call_to(tk);
                 /*
                 printf ("call %s proc id %d\n",tk->text,proc_id);
                 */
                 if (!proc_id)
                     return;
-                if (is_malloc(tk->text)) {
+                if (is_malloc(tk->text))
+                {
                     make_malloc(node_id, recent_typename);
                 }
                 fprintf(outfile, "%d(%d,%d)", LIF_CALL_START, node_id, proc_id);
-                if (z_opt) {
+                if (z_opt)
+                {
                     fprintf(outfile, "     call to %s at %d", tk->text, node_id);
                 }
                 fprintf(outfile, "\n");
@@ -800,7 +876,8 @@ static void scan_tree(tree_ptr t, int node_id, int *from_node, int *upto_node, i
     return;
 }
 
-void make_arg(tree_ptr t, int node_id, int *from, int *upto, int* to)
+void
+make_arg(tree_ptr t, int node_id, int *from, int *upto, int *to)
 {
     token_ptr tk;
     int lvalue;
@@ -815,19 +892,23 @@ void make_arg(tree_ptr t, int node_id, int *from, int *upto, int* to)
     scan_tree(t, node_id, from, upto, to);
 }
 
-void assemble_actuals(tree_ptr t, int node_id, int *from, int *upto, int *to) 
+void
+assemble_actuals(tree_ptr t, int node_id, int *from, int *upto, int *to)
 {
     if (!t)
         return;
-    if (t->op_code == ARG_OP) {
+    if (t->op_code == ARG_OP)
+    {
         assemble_actuals(t->left, node_id, from, upto, to);
         fprintf(outfile, "%d%s\n", LIF_ACTUAL_SEP, z_opt ? "     Actual seperator" : "");
         make_arg(t->right, node_id, from, upto, to);
-    } else
+    }
+    else
         make_arg(t, node_id, from, upto, to);
 }
 
-int xpr_gen(tree_ptr t, int *from, int *to) 
+int
+xpr_gen(tree_ptr t, int *from, int *to)
 {
     token_ptr tk;
     int lvalue;
@@ -861,4 +942,3 @@ int xpr_gen(tree_ptr t, int *from, int *to)
         *to = node_id;
     return node_id; /* return the main stmt node */
 }
-

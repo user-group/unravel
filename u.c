@@ -1,34 +1,33 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
-
 
 #include "MultiSlice.h"
 #include "config.h"
@@ -56,7 +55,7 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <sys/stat.h>
 #include <time.h>
 
-/* 
+/*
 static  char    sccsid[] = "@(#)u.c	1.12  7/26/96";
 */
 #define WIDTH 450
@@ -64,14 +63,20 @@ static  char    sccsid[] = "@(#)u.c	1.12  7/26/96";
 #define XtNrunningFG "runningFG"
 #define XtNrunningBG "runningBG"
 
-typedef enum { select_action, show, tree } proc_action;
+typedef enum
+{
+    select_action,
+    show,
+    tree
+} proc_action;
 
 Widget QQQ;
 Widget top;
 Widget help_label;
 Widget progress;
 
-typedef struct {
+typedef struct
+{
     char *proc;
     char *var;
     Widget *state_label;
@@ -137,26 +142,29 @@ int update_progress(int old);
 int read_k_file(char *name);
 int read_link_file(char *name);
 
-
-
-int update_progress(int old) {
+int
+update_progress(int old)
+{
     int n, at, f;
     char label[1000];
 
     n = 0;
-    for (f = 0; f < n_files; f++) {
+    for (f = 0; f < n_files; f++)
+    {
         at = -1;
         while ((at = get_next_member(slice_set[f], at)) >= 0)
             n++;
     }
-    if (old != n) {
+    if (old != n)
+    {
         sprintf(label, "%5d nodes", n);
         XtVaSetValues(progress, XtNlabel, label, NULL);
     }
     return n;
 }
 
-void button_help(Widget w, char *mess, XEvent *e, Boolean *ok) 
+void
+button_help(Widget w, char *mess, XEvent *e, Boolean *ok)
 {
     /* printf ("%s\n",mess); */
     XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL);
@@ -170,12 +178,14 @@ char *mess;
     XtAddEventHandler(w, LeaveWindowMask, False, button_help, buff);
 }
 
-void update_label(proc_state_ptr state) 
+void
+update_label(proc_state_ptr state)
 {
     char buff[1000];
     char *at, *name;
 
-    if (state->pid) {
+    if (state->pid)
+    {
         name = files[procs[state->pid].file_id].name;
         at   = strrchr(name, '/');
         if (at)
@@ -191,7 +201,9 @@ void update_label(proc_state_ptr state)
             state->slice_var_index ? procs[state->pid].locals[state->slice_var_index].name
                                    : "<none>");
         XtVaSetValues(*(state->state_label), XtNlabel, (XtArgVal)buff, NULL);
-    } else {
+    }
+    else
+    {
         name = file_name_list[state->header];
         at   = strrchr(name, '/');
         if (at)
@@ -218,30 +230,39 @@ void update_label(proc_state_ptr state)
     */
 }
 
-void make_line_map(void) {
+void
+make_line_map(void)
+{
     int i, sum;
 
     line_map = (int *)malloc(n_files * sizeof(int));
-    if (!line_map) {
+    if (!line_map)
+    {
         fprintf(stderr, "out of memory\n");
         exit(1);
     }
     sum = 0;
-    for (i = 0; i < n_files; i++) {
+    for (i = 0; i < n_files; i++)
+    {
         line_map[i] = sum;
         sum += files[i].n_lines;
     }
 }
 
-void disp_to_file_and_line(int disp_line, int *filex, int *line) 
+void
+disp_to_file_and_line(int disp_line, int *filex, int *line)
 {
     int f, lx;
 
     lx = disp_line;
-    for (f = 0; f < n_files; f++) {
-        if (lx > files[f].n_lines) {
+    for (f = 0; f < n_files; f++)
+    {
+        if (lx > files[f].n_lines)
+        {
             lx -= files[f].n_lines;
-        } else {
+        }
+        else
+        {
             *filex = f;
             *line  = lx;
             return;
@@ -251,7 +272,9 @@ void disp_to_file_and_line(int disp_line, int *filex, int *line)
     *line  = 0;
 }
 
-void make_head_list(void) {
+void
+make_head_list(void)
+{
     int k, i, n;
 
     n                 = n_heads;
@@ -259,12 +282,14 @@ void make_head_list(void) {
     global_vars       = (char ***)malloc((n + 2) * sizeof(char **));
     global_ids        = (int **)malloc((n + 2) * sizeof(int *));
     file_name_list[0] = "No Selection";
-    for (i = 0; i < n_heads; i++) {
+    for (i = 0; i < n_heads; i++)
+    {
         file_name_list[i + 1] = headers[i].header_file;
         global_vars[i + 1]    = (char **)malloc(sizeof(char *) * (headers[i].n + 2));
         global_vars[i + 1][0] = "No Selection";
         global_ids[i + 1]     = headers[i].ids;
-        for (k = 0; k < headers[i].n; k++) {
+        for (k = 0; k < headers[i].n; k++)
+        {
             global_vars[i + 1][k + 1] = headers[i].names[k];
         }
         global_vars[i + 1][headers[i].n + 1] = NULL;
@@ -272,7 +297,9 @@ void make_head_list(void) {
     file_name_list[n_heads + 1] = NULL;
 }
 
-void make_proc_list(void) {
+void
+make_proc_list(void)
+{
     int k, i, n;
 
     n = 0;
@@ -286,7 +313,8 @@ void make_proc_list(void) {
     n                 = 1;
     proc_name_list[0] = "No Selection";
     for (i = 1; i <= n_procs; i++)
-        if (procs[i].entry != -1) {
+        if (procs[i].entry != -1)
+        {
             proc_name_list[n] = procs[i].proc_name;
             proc_ids[n]       = i;
             local_vars[n]     = (char **)malloc(sizeof(char *) * (procs[i].n_locals + 2));
@@ -299,7 +327,8 @@ void make_proc_list(void) {
     proc_name_list[n] = NULL;
 }
 
-char *get_file(int np, char *p[]) 
+char *
+get_file(int np, char *p[])
 {
     int status;
     int v_opt = 0;
@@ -308,22 +337,27 @@ char *get_file(int np, char *p[])
     if (np < 2)
         exit(1);
     fx = 0;
-    for (i = 1; i < np; i++) {
-        if (p[i][0] == '-') {
+    for (i = 1; i < np; i++)
+    {
+        if (p[i][0] == '-')
+        {
             if (strcmp("-v", p[i]) == 0)
                 v_opt = 1;
-        } else
+        }
+        else
             fx = i;
     }
     i            = strlen(p[fx]);
     p[fx][i - 1] = '\0';
     status       = read_k_file(p[fx]);
-    if (status) {
+    if (status)
+    {
         fprintf(stderr, "%sc: K file status %d\n", p[fx], status);
         exit(0);
     }
     status = read_link_file(p[fx]);
-    if (status) {
+    if (status)
+    {
         fprintf(stderr, "%sc: LINK file status %d\n", p[fx], status);
         exit(1);
     }
@@ -345,7 +379,8 @@ char *get_file(int np, char *p[])
     return p[fx];
 }
 
-void do_slice(Widget x, int file, int stmt, int proc, int var, int line) 
+void
+do_slice(Widget x, int file, int stmt, int proc, int var, int line)
 {
     int f, i;
     int file_proc;
@@ -358,9 +393,11 @@ void do_slice(Widget x, int file, int stmt, int proc, int var, int line)
     printf ("file %d stmt %d proc %d var %d\n",file,stmt,proc,var);
     */
 
-    for (i = 1; i <= n_procs; i++) {
+    for (i = 1; i <= n_procs; i++)
+    {
         if (procs[i].file_id == file)
-            if ((stmt >= procs[i].entry) && (stmt <= procs[i].exit)) {
+            if ((stmt >= procs[i].entry) && (stmt <= procs[i].exit))
+            {
                 file_proc = i;
                 break;
             }
@@ -375,9 +412,11 @@ void do_slice(Widget x, int file, int stmt, int proc, int var, int line)
     elapsed = finish - start;
     if (elapsed <= 0)
         elapsed = 1;
-    for (f = 0; f < n_files; f++) {
+    for (f = 0; f < n_files; f++)
+    {
         i = -1;
-        while ((i = get_next_member(slice_set[f], i)) >= 0) {
+        while ((i = get_next_member(slice_set[f], i)) >= 0)
+        {
             n++;
             SliceSet(x,
                 files[f].stmts[i].froml + line_map[f],
@@ -403,7 +442,8 @@ void do_slice(Widget x, int file, int stmt, int proc, int var, int line)
     SliceRedraw(x);
 }
 
-void adjust_popup_list(Widget list)
+void
+adjust_popup_list(Widget list)
 {
     Widget port, shell, bar;
     Dimension bar_w, list_w, list_h;
@@ -433,19 +473,22 @@ void adjust_popup_list(Widget list)
     XtVaGetValues(shell, XtNwidth, &list_w, XtNheight, &list_h, NULL);
 }
 
-void stop_slicing(Widget w, Widget  x, caddr_t y) 
-{ 
-    abandon_slice = 1; 
+void
+stop_slicing(Widget w, Widget x, caddr_t y)
+{
+    abandon_slice = 1;
 }
 
-void helpB(Widget w, Widget x, caddr_t y) 
+void
+helpB(Widget w, Widget x, caddr_t y)
 {
     char cmd[2000];
     sprintf(cmd, "%s/helpu %s/u.help &", home, home);
     system(cmd);
 }
 
-void quitB(Widget w, Widget x, caddr_t y)
+void
+quitB(Widget w, Widget x, caddr_t y)
 {
     char cmd[2000];
     sprintf(cmd, "cat HISTORY-S >> HISTORY");
@@ -453,7 +496,8 @@ void quitB(Widget w, Widget x, caddr_t y)
     exit(0);
 }
 
-void slicecall(Widget x, proc_state_ptr state, MultiSliceReturn *r) 
+void
+slicecall(Widget x, proc_state_ptr state, MultiSliceReturn *r)
 {
     int line, file, stmt;
     char *var_name;
@@ -498,11 +542,14 @@ void slicecall(Widget x, proc_state_ptr state, MultiSliceReturn *r)
         state->active_bg,
         NULL);
     found = find_slice(state->pid, state->slice_var_index, file, stmt);
-    if (found == -1) {
+    if (found == -1)
+    {
         do_slice(x, file, stmt, state->pid, state->slice_var_index, line);
         save_slice(
             state->pid, state->slice_var_index, file, stmt, abandon_slice, n_files, slice_set);
-    } else {
+    }
+    else
+    {
         load_slice(x, found, n_files, slice_set, line_map);
     }
     sprintf(label,
@@ -534,16 +581,20 @@ void slicecall(Widget x, proc_state_ptr state, MultiSliceReturn *r)
     update_progress(-1);
 }
 
-void dodicecall(Widget x, proc_state_ptr state, bit_set *primary_set, bit_set *secondary_set)
+void
+dodicecall(Widget x, proc_state_ptr state, bit_set *primary_set, bit_set *secondary_set)
 {
     int i;
     int f;
 
     SliceClearAll(state->slicewin);
-    for (f = 0; f < n_files; f++) {
+    for (f = 0; f < n_files; f++)
+    {
         i = -1;
-        while ((i = get_next_member(primary_set[f], i)) >= 0) {
-            if (!is_bit_on(secondary_set[f], i)) {
+        while ((i = get_next_member(primary_set[f], i)) >= 0)
+        {
+            if (!is_bit_on(secondary_set[f], i))
+            {
                 SliceSet(state->slicewin,
                     files[f].stmts[i].froml + line_map[f],
                     files[f].stmts[i].fromc,
@@ -556,7 +607,8 @@ void dodicecall(Widget x, proc_state_ptr state, bit_set *primary_set, bit_set *s
     SliceRedraw(state->slicewin);
 }
 
-void dicecallsp(Widget x, proc_state_ptr state, XtPointer r)
+void
+dicecallsp(Widget x, proc_state_ptr state, XtPointer r)
 {
     char buff[400];
 
@@ -565,7 +617,8 @@ void dicecallsp(Widget x, proc_state_ptr state, XtPointer r)
     dodicecall(x, state, secondary_set, primary_set);
 }
 
-void dicecall(Widget x, proc_state_ptr state, XtPointer r) 
+void
+dicecall(Widget x, proc_state_ptr state, XtPointer r)
 {
     char buff[400];
 
@@ -574,17 +627,21 @@ void dicecall(Widget x, proc_state_ptr state, XtPointer r)
     dodicecall(x, state, primary_set, secondary_set);
 }
 
-void bbcall(Widget x, proc_state_ptr state, XtPointer r)
+void
+bbcall(Widget x, proc_state_ptr state, XtPointer r)
 {
     int i;
     int f;
     char buff[400];
 
     SliceClearAll(state->slicewin);
-    for (f = 0; f < n_files; f++) {
+    for (f = 0; f < n_files; f++)
+    {
         i = -1;
-        while ((i = get_next_member(primary_set[f], i)) >= 0) {
-            if (is_bit_on(secondary_set[f], i)) {
+        while ((i = get_next_member(primary_set[f], i)) >= 0)
+        {
+            if (is_bit_on(secondary_set[f], i))
+            {
                 SliceSet(state->slicewin,
                     files[f].stmts[i].froml + line_map[f],
                     files[f].stmts[i].fromc,
@@ -599,16 +656,19 @@ void bbcall(Widget x, proc_state_ptr state, XtPointer r)
     SliceRedraw(state->slicewin);
 }
 
-void unioncall(Widget x, proc_state_ptr state, XtPointer r)
+void
+unioncall(Widget x, proc_state_ptr state, XtPointer r)
 {
     int i;
     int f;
     char buff[400];
 
     SliceClearAll(state->slicewin);
-    for (f = 0; f < n_files; f++) {
+    for (f = 0; f < n_files; f++)
+    {
         i = -1;
-        while ((i = get_next_member(primary_set[f], i)) >= 0) {
+        while ((i = get_next_member(primary_set[f], i)) >= 0)
+        {
             SliceSet(state->slicewin,
                 files[f].stmts[i].froml + line_map[f],
                 files[f].stmts[i].fromc,
@@ -617,7 +677,8 @@ void unioncall(Widget x, proc_state_ptr state, XtPointer r)
                 0);
         }
         i = -1;
-        while ((i = get_next_member(secondary_set[f], i)) >= 0) {
+        while ((i = get_next_member(secondary_set[f], i)) >= 0)
+        {
             SliceSet(state->slicewin,
                 files[f].stmts[i].froml + line_map[f],
                 files[f].stmts[i].fromc,
@@ -631,7 +692,8 @@ void unioncall(Widget x, proc_state_ptr state, XtPointer r)
     SliceRedraw(state->slicewin);
 }
 
-void clear_sliceB(Widget w, proc_state_ptr state, caddr_t y)
+void
+clear_sliceB(Widget w, proc_state_ptr state, caddr_t y)
 {
     char buff[2000];
     sprintf(buff, "/usr/bin/rm -f %sY", state->root_file);
@@ -639,7 +701,8 @@ void clear_sliceB(Widget w, proc_state_ptr state, caddr_t y)
     system(buff);
 }
 
-void clearB(Widget w, proc_state_ptr state, caddr_t y)
+void
+clearB(Widget w, proc_state_ptr state, caddr_t y)
 {
     char buff[2000];
     if (SliceTrace)
@@ -650,10 +713,11 @@ void clearB(Widget w, proc_state_ptr state, caddr_t y)
     SliceClearAll(state->slicewin);
 }
 
-void popup_selection(Widget a, proc_state_ptr state, XtPointer c)
+void
+popup_selection(Widget a, proc_state_ptr state, XtPointer c)
 {
-    Widget   p;
-    char   **list;  
+    Widget p;
+    char **list;
 
     p = XtParent(XtParent(state->history_list));
     /*
@@ -673,7 +737,8 @@ void popup_selection(Widget a, proc_state_ptr state, XtPointer c)
     XtPopup(p, XtGrabExclusive);
 }
 
-void proc_pop(Widget a, Widget p, XtPointer c)
+void
+proc_pop(Widget a, Widget p, XtPointer c)
 {
     Position x, y;
 
@@ -687,60 +752,68 @@ void proc_pop(Widget a, Widget p, XtPointer c)
     XtPopup(p, XtGrabExclusive);
 }
 
-void tree_pop(Widget w, proc_state_ptr state, XtPointer p)
+void
+tree_pop(Widget w, proc_state_ptr state, XtPointer p)
 {
 
     state->reason = tree;
     proc_pop(w, state->proc_popup, NULL);
 }
 
-void show_pop(Widget w, proc_state_ptr state, XtPointer p) 
+void
+show_pop(Widget w, proc_state_ptr state, XtPointer p)
 {
 
     state->reason = show;
     proc_pop(w, state->proc_popup, NULL);
 }
 
-void var_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
+void
+var_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
 {
     Widget parent;
-    int  ix;
+    int ix;
 
     parent = XtParent(a);
     while (!XtIsTransientShell(parent))
         parent = XtParent(parent);
     XtPopdown(parent);
-    if (list->list_index == 0) {
+    if (list->list_index == 0)
+    {
         return;
     }
-    if (state->pid) {
+    if (state->pid)
+    {
         state->slice_var_index = list->list_index;
-    } else {
+    }
+    else
+    {
         ix                     = global_ids[state->header][list->list_index - 1];
         state->slice_var_index = ix;
     }
     update_label(state);
 }
 
-void slice_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
+void
+slice_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
 {
     Widget parent;
-    char   label[2000];
+    char label[2000];
 
     parent = XtParent(a);
-    
+
     while (!XtIsTransientShell(parent))
         parent = XtParent(parent);
-    
+
     XtPopdown(parent);
-    
+
     if (list->list_index == 0)
         return;
     if (state->is_primary)
         slice_set = primary_set;
     else
         slice_set = secondary_set;
-        
+
     load_slice(state->slicewin, list->list_index - 1, n_files, slice_set, line_map);
     XtVaSetValues(state->display_label, XtNlabel, list->string, NULL);
     strcpy(state->is_primary ? state->ptext : state->stext, list->string);
@@ -749,7 +822,8 @@ void slice_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
     update_progress(-1);
 }
 
-void head_select(Widget a, proc_state_ptr state, XawListReturnStruct *list) 
+void
+head_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
 {
     Widget parent;
 
@@ -770,7 +844,8 @@ void head_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
     proc_pop(NULL, state->var_popup, NULL);
 }
 
-void mark_call_tree(Widget w, int proc) 
+void
+mark_call_tree(Widget w, int proc)
 {
     int i, p, f;
 
@@ -780,11 +855,13 @@ void mark_call_tree(Widget w, int proc)
         clear_bit_set(slice_set[i]);
     slice_tree(slice_set, proc, active);
     p = -1;
-    while ((p = get_next_member(active, p)) >= 0) {
+    while ((p = get_next_member(active, p)) >= 0)
+    {
         f = procs[p].file_id;
 
         i = -1;
-        while ((i = get_next_member(slice_set[f], i)) >= 0) {
+        while ((i = get_next_member(slice_set[f], i)) >= 0)
+        {
             SliceSet(w,
                 files[f].stmts[i].froml + line_map[f],
                 files[f].stmts[i].fromc,
@@ -796,7 +873,8 @@ void mark_call_tree(Widget w, int proc)
     SliceRedraw(w);
 }
 
-void proc_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
+void
+proc_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
 {
     Widget parent;
     int i, f;
@@ -828,7 +906,8 @@ void proc_select(Widget a, proc_state_ptr state, XawListReturnStruct *list)
         files[f].stmts[i].toc,
         1);
     update_label(state);
-    if (state->reason != select_action) {
+    if (state->reason != select_action)
+    {
         if (state->reason == tree)
             mark_call_tree(state->slicewin, state->pid);
         state->reason = select_action;
@@ -891,17 +970,20 @@ char *fall[] = {
     NULL};
 XtAppContext ac;
 
-void continue_events(int proc, int change) 
+void
+continue_events(int proc, int change)
 {
     XEvent e;
     static int pass = 0;
     static int n    = 0;
 
-    if (pass % 100 == 0) {
+    if (pass % 100 == 0)
+    {
         n = update_progress(n);
     }
     pass++;
-    if (XtAppPending(ac)) {
+    if (XtAppPending(ac))
+    {
         XtAppNextEvent(ac, &e);
         XtDispatchEvent(&e);
     }
@@ -909,14 +991,15 @@ void continue_events(int proc, int change)
 
 void active_hook();
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
     Widget create_widgets();
-    char   icon_res[2000];
+    char icon_res[2000];
     MultiSliceFiles f[100];
-    int    i;
-    int    t_lines = 0;
-    char  *root;
+    int i;
+    int t_lines = 0;
+    char *root;
     static XrmOptionDescRec opt[] = {{"-runningfg", "*runningFG", XrmoptionSepArg, NULL},
         {"-runningbg", "*runningBG", XrmoptionSepArg, NULL}};
 
@@ -930,7 +1013,8 @@ int main(int argc, char **argv)
     /*
     printf ("\nn files %d\n",n_files);
     */
-    for (i = 0; i < n_files; i++) {
+    for (i = 0; i < n_files; i++)
+    {
         f[i].text = files[i].text;
         t_lines += files[i].n_lines;
         /*
@@ -938,7 +1022,8 @@ int main(int argc, char **argv)
                 t_lines);
         */
     }
-    if (t_lines == 0) {
+    if (t_lines == 0)
+    {
         fprintf(stderr, "Could not find source code, no lines found\n");
         exit(1);
     }
@@ -951,11 +1036,12 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void strech(Widget goal, Widget w) 
+void
+strech(Widget goal, Widget w)
 {
     Dimension width, bw;
-    Position  x;
-    int       dist;
+    Position x;
+    int dist;
 
     XtUnmanageChild(w);
     XtVaGetValues(goal, XtNdefaultDistance, &dist, XtNwidth, &width, NULL);
@@ -964,7 +1050,8 @@ void strech(Widget goal, Widget w)
     XtManageChild(w);
 }
 
-Widget create_widgets(Widget top, char *file_name)
+Widget
+create_widgets(Widget top, char *file_name)
 {
     static Widget frame, quit;
     static Widget content;
@@ -986,7 +1073,6 @@ Widget create_widgets(Widget top, char *file_name)
     Position cx, hx, x, y;
     int at, dist;
     char buff[1000];
-   
 
     static char pbuff[500] = "<none>", sbuff[500] = "<none>";
     static XtResource res[] = {{XtNrunningFG,
@@ -1419,4 +1505,3 @@ Widget create_widgets(Widget top, char *file_name)
     ps.is_primary = 1;
     return slicewin;
 }
-
