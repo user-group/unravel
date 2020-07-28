@@ -30,7 +30,9 @@ int no_slice = 0;
 
 char *slicer = "u";
 Widget help_label;
+
 typedef struct id_struct id_rec, *id_ptr;
+
 struct id_struct
 {
     char *file_name;
@@ -39,8 +41,7 @@ struct id_struct
     char **progs;
 };
 
-int rescan_system(main_file_name, progs) char *main_file_name;
-char *progs[];
+int rescan_system(char *main_file_name, char *progs[])
 {
     int n = 0, k, j;
     FILE *sys;
@@ -78,7 +79,7 @@ char *progs[];
     return 0;
 }
 
-int clear_y(file) char *file;
+int clear_y(char *file)
 {
     char file_name[2000];
     int end;
@@ -90,7 +91,7 @@ int clear_y(file) char *file;
     return 1;
 }
 
-void cannot_link(main, file, fmt) char *main, *file, *fmt;
+void cannot_link(char *main, char *file, char *fmt)
 {
     printf("Link error (link failed)\n  ");
     printf(fmt, main, file);
@@ -98,7 +99,7 @@ void cannot_link(main, file, fmt) char *main, *file, *fmt;
     exit(1);
 }
 
-int need_to_link(main_file_name) char *main_file_name;
+int need_to_link(char *main_file_name)
 {
     /*
     ********************************************************************
@@ -168,7 +169,7 @@ int need_to_link(main_file_name) char *main_file_name;
     return 0;
 }
 
-void only_one(file_name) char *file_name;
+void only_one(char *file_name)
 {
     char buff[2000];
 
@@ -194,13 +195,13 @@ void only_one(file_name) char *file_name;
     exit(0);
 }
 
-int cmp(a, b) char **a, **b;
+int cmp(char **a, char **b)
 {
     return strcmp(*a, *b);
 }
 
 char **
-scan_system()
+scan_system(void)
 {
     int n   = 0, k, j;
     int dup = 0;
@@ -269,10 +270,7 @@ scan_system()
     *************/
 }
 
-void button_help(w, mess, e, ok) Widget w;
-char *mess;
-XEvent *e;
-Boolean *ok;
+void button_help(Widget w, char *mess, XEvent *e, Boolean *ok) 
 {
     XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL);
 }
@@ -432,7 +430,7 @@ void v_wrap(p, lw) Widget p, lw;
     XtManageChild(lw);
 }
 
-Widget make_list_box(parent, help, status, prefix, title, id) char *prefix, *title;
+Widget make_list_box(Widget parent, help, status, prefix, title, id) char *prefix, *title;
 Widget parent, help, status;
 id_ptr id;
 {
@@ -516,8 +514,7 @@ id_ptr id;
     return frame;
 }
 
-void make_windows(top, ac) Widget top;
-XtAppContext ac;
+void make_windows(Widget top, XtAppContext ac)
 {
     static Widget status, info, selected, frame;
     static Widget help, quit;
