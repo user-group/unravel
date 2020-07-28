@@ -37,15 +37,18 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 int main(int np, char **p) 
 {
-    int n_procs, n_nodes, start, stop;
-    int i;
+    int   n_procs, n_nodes, start, stop;
+    int   i;
     FILE *t_file;
 
     if (np != 2)
         exit(1);
+        
     t_file = fopen(p[1], "r");
+    
     if (!t_file)
         exit(1);
+    
     fscanf(t_file, "%d%d", &n_procs, &n_nodes);
     /*
     11 186

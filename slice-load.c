@@ -1,7 +1,36 @@
+/*
+
+This software was developed by employees of the National Institute 
+of Standards and Technology (NIST), an agency of the Federal 
+Government and is being made available as a public service. Pursuant 
+to title 17 United States Code Section 105, works of NIST employees 
+are not subject to copyright protection in the United States.  This 
+software may be subject to foreign copyright.  Permission in the 
+United States and in foreign countries, to the extent that NIST may 
+hold copyright, to use, copy, modify, create derivative works, and 
+distribute this software and its documentation without fee is hereby 
+granted on a non-exclusive basis, provided that this notice and 
+disclaimer of warranty appears in all copies. 
+
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+
+*/
 #include "lif.h"
 #include "slice.h"
 #include <fcntl.h>
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,10 +77,12 @@ id_ptr globals;
 *                                                                   *
 *********************************************************************
 */
-int is_lib_proc(pid) int pid;
-{ return procs[pid].entry == -1; }
+int is_lib_proc(int pid) 
+{ 
+    return procs[pid].entry == -1; 
+}
 
-char *var_name(pid, id) int pid, id;
+char *var_name(int pid, int id) 
 {
     if (id <= 0)
         return "<no name: id is zero>";
@@ -69,7 +100,7 @@ char *var_name(pid, id) int pid, id;
     }
 }
 
-set_ptr var_points_to(pid, id) int pid, id;
+set_ptr var_points_to(int pid, int id)
 {
     int ptr_id;
 
@@ -77,8 +108,10 @@ set_ptr var_points_to(pid, id) int pid, id;
         ptr_id = procs[pid].locals[id].ptr_id;
     else
         ptr_id = globals[id].ptr_id;
+        
     if (ptr_id)
         return ptr_points_to(ptr_id);
+        
     return NULL;
 }
 /*
@@ -86,8 +119,7 @@ set_ptr var_points_to(pid, id) int pid, id;
 *  malloc n bytes, print fail message if not enough space           *
 *********************************************************************
 */
-char *call_malloc(n, fail) int n;
-char *fail;
+char *call_malloc(int n, char *fail)
 {
     char *chunk;
     /*
@@ -101,16 +133,16 @@ char *fail;
     chunk = malloc(n);
     if (chunk)
         return chunk;
+        
     fprintf(stderr, "Slice file load out of memory: %s\n", fail);
     exit(1);
 }
 
-void get_visit_order(dir, file) char *dir;
-file_ptr file;
+void get_visit_order(char *dir, file_ptr file) 
 {
-    char mess[2000];
+    char  mess[2000];
     FILE *v_file;
-    int k, n, succ;
+    int   k, n, succ;
 
     sprintf(mess, "%s%sV", dir, file->name);
     v_file = fopen(mess, "r");
@@ -144,11 +176,10 @@ file_ptr file;
 */
 char mess[2000], dir[2000], *at, *start;
 
-void get_source(dir_main, file) char *dir_main;
-file_ptr file;
+void get_source(char *dir_main, file_ptr file) 
 {
     char mess[4000], dir[2000], *at, *start;
-    int fd, i;
+    int  fd, i;
 
     sprintf(mess, "allocating %s source", file->name);
     file->text = call_malloc(file->n_chars + 1, mess);
@@ -190,7 +221,7 @@ file_ptr file;
 *                                                                   *
 *********************************************************************
 */
-void create_stmts(file) file_ptr file;
+void create_stmts(file_ptr file) 
 {
     char mess[2000];
     int i;
@@ -219,12 +250,12 @@ void create_stmts(file) file_ptr file;
 *                                                                   *
 *********************************************************************
 */
-int read_k_file(name) char *name;
+int read_k_file(char *name)
 {
-    char k_file_name[2000];
+    char  k_file_name[2000];
     FILE *k_file;
-    int i, j, ix, nx, ok;
-    char buff[2000], mess[4000];
+    int   i, j, ix, nx, ok;
+    char  buff[2000], mess[4000];
 
     sprintf(k_file_name, "%sK", name);
     k_file = fopen(k_file_name, "r");
@@ -249,6 +280,7 @@ int read_k_file(name) char *name;
 
     chains =
         (chain_ptr)call_malloc((1 + n_chains) * sizeof(chain_rec), "allocating space for chains");
+    
     for (i = 1; i <= n_chains; i++) {
         chains[i].fields = NULL;
     }
@@ -256,6 +288,7 @@ int read_k_file(name) char *name;
     addrs = (addr_ptr)call_malloc((1 + n_addrs) * sizeof(addr_rec), "allocating space for addrs");
 
     procs = (proc_ptr)call_malloc((1 + n_procs) * sizeof(proc_rec), "allocating space for procs");
+    
     for (i = 0; i < n_procs; i++) {
         fscanf(k_file, "%d", &ix);
         fscanf(k_file,
@@ -424,10 +457,12 @@ generate_call_contexts()
 *  build a list of calling procs for each proc                      *
 *********************************************************************
 */
-void set_called_by() {
-    int i;
+void set_called_by(void) 
+{
+    int      i;
+    int      to_pid;
     call_ptr called, by;
-    int to_pid;
+    
 
     for (i = 1; i <= n_procs; i++) {
         called = procs[i].calls;
@@ -461,10 +496,9 @@ void set_called_by() {
 *  mark_sub_structs finds structures declared within other structs  *
 *********************************************************************
 */
-void mark_sub_structs(vars, n_vars, id, offset) int id, offset, n_vars;
-id_ptr vars;
+void mark_sub_structs(id_ptr vars, int n_vars, int id, int offset) 
 {
-    int i, j, off;
+    int   i, j, off;
     char *at, *dot;
 
     if (offset > n_vars) {
@@ -533,7 +567,8 @@ pr_structs()
 }
 */
 
-void close_gdefs() {
+void close_gdefs(void) 
+{
     int more, result, proc;
     call_ptr call;
     int var, chain;
@@ -686,7 +721,8 @@ void close_gdefs() {
 * structures declared within other structures                       *
 *********************************************************************
 */
-void scan_structs() {
+void scan_structs(void) 
+{
     int i;
     int proc;
     id_ptr locals;
@@ -715,7 +751,7 @@ void scan_structs() {
 *                                                                   *
 *********************************************************************
 */
-int read_link_file(name) char *name;
+int read_link_file(char *name) 
 {
     char l_file_name[2000];
     FILE *l_file;
@@ -942,8 +978,7 @@ int read_link_file(name) char *name;
     return 0;
 }
 
-void print_var_set(p, s) proc_ptr p;
-var_ptr s;
+void print_var_set(proc_ptr p, var_ptr s)
 {
     field_ptr at_field;
     int i;
@@ -1000,7 +1035,7 @@ var_ptr s;
     }
 }
 
-void print_set(s) set_ptr s;
+void print_set(set_ptr s)
 {
     while (s) {
         printf("%d ", s->id);
@@ -1008,7 +1043,7 @@ void print_set(s) set_ptr s;
     }
 }
 
-void print_proc_defs(nc, proc) int nc, proc;
+void print_proc_defs(int nc, int proc) 
 {
     int i = proc;
     int at;
@@ -1066,7 +1101,7 @@ void print_proc_defs(nc, proc) int nc, proc;
     }
 }
 
-void verify_input(l_opt) int l_opt;
+void verify_input(int l_opt) 
 {
     int nc, i, j, fid;
     char *line;
@@ -1246,7 +1281,7 @@ void verify_input(l_opt) int l_opt;
 * procs declared static could be a problem?????                     *
 *********************************************************************
 */
-int find_proc(name) char *name;
+int find_proc(char *name) 
 {
     int ix;
 
@@ -1263,7 +1298,7 @@ int find_proc(name) char *name;
 * Translate a file name to a file_id                                *
 *********************************************************************
 */
-int find_file(name) char *name;
+int find_file(char *name) 
 {
     int ix;
 
@@ -1284,8 +1319,7 @@ int find_file(name) char *name;
 *                                                                   *
 *********************************************************************
 */
-int find_var(pid, name) int pid;
-char *name;
+int find_var(int pid, char *name)
 {
     int n, ix;
     id_ptr vars;
@@ -1305,13 +1339,17 @@ char *name;
     return -1;
 }
 
-int make_criterion(file_name, line_number, var_spec, file, stmt, proc, var) char *file_name,
-    *var_spec;
-int line_number, *file, *stmt, *proc, *var;
+int make_criterion(char *file_name, 
+                   int   line_number, 
+                   char *var_spec, 
+                   int  *file, 
+                   int  *stmt, 
+                   int  *proc, 
+                   int  *var) 
 {
     int len;
-    char proc_name[1000], var_name[1000];
     int n;
+    char proc_name[1000], var_name[1000];
 
     len                = strlen(file_name);
     file_name[len - 1] = '\0';
@@ -1357,7 +1395,7 @@ int line_number, *file, *stmt, *proc, *var;
 *  If the line has no stmt (e.g., is blank) find a close stmt.      *
 *********************************************************************
 */
-int line_to_stmt(file, line) int file, line;
+int line_to_stmt(int file, int line) 
 {
     int i;
     int best_stmt, best_line;
@@ -1378,3 +1416,4 @@ int line_to_stmt(file, line) int file, line;
     }
     return best_stmt;
 }
+

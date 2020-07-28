@@ -54,7 +54,6 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <string.h>
 #include <sys/file.h>
 #include <sys/stat.h>
-#include <sys/time.h>
 #include <time.h>
 
 // static  char    sccsid[] = "@(#)u.c	1.12  7/26/96";
