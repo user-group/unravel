@@ -307,7 +307,8 @@ int current_id() {
     return max_local_id - 1;
 }
 
-int alloc_id() {
+int alloc_id(void) 
+{
     int id;
 
     if (scope_level == 1)
@@ -344,7 +345,8 @@ void make_decl(token_ptr token, unsigned int flag) {
 *                                                                   *
 *********************************************************************
 */
-void modify_type(token_ptr token, unsigned int flag, int style, token_ptr formals) {
+void modify_type(token_ptr token, unsigned int flag, int style, token_ptr formals) 
+{
     type_ptr new, old;
 
     new          = alloc_type();
@@ -360,9 +362,7 @@ void modify_type(token_ptr token, unsigned int flag, int style, token_ptr formal
         token->desc.type_desc = new;
 }
 
-type_ptr make_abstract_type(flag, style, formals) token_ptr formals;
-unsigned int flag;
-int style;
+type_ptr make_abstract_type(unsigned int flag, int style, token_ptr formals) 
 {
     type_ptr new;
 
@@ -389,7 +389,8 @@ void merge_abstract_type(type_ptr old, type_ptr new) {
 *                                                                   *
 *********************************************************************
 */
-void open_scope() {
+void open_scope(void) 
+{
     scope_level++;
     if (c_opt)
         printf("Open scope level %d\n", scope_level);
@@ -406,7 +407,8 @@ void open_scope() {
 *                                                                   *
 *********************************************************************
 */
-void close_scope(void) {
+void close_scope(void) 
+{
     type_ste_ptr types;
     var_ste_ptr vars;
     tag_ste_ptr tags;
@@ -452,8 +454,7 @@ void close_scope(void) {
 *                                                                   *
 *********************************************************************
 */
-tag_ste_ptr find_tag(tag, local_flag) char *tag;
-int *local_flag;
+tag_ste_ptr find_tag(char *tag, int *local_flag)
 {
     int level;
     tag_ste_ptr vars;
@@ -484,7 +485,7 @@ int *local_flag;
 *                                                                   *
 *********************************************************************
 */
-type_ste_ptr find_type(type_name) char *type_name;
+type_ste_ptr find_type(char * type_name)
 {
     int level;
     type_ste_ptr t;
@@ -621,8 +622,7 @@ struct_or_union_specifier
                         $1->desc.decl->member_ste = struct_decl($3);
                 }
 */
-var_ste_ptr struct_decl(type_desc, off) token_ptr type_desc;
-int *off;
+var_ste_ptr struct_decl(token_ptr type_desc, int *off) 
 {
     token_ptr d, vars;
     var_ste_ptr st = NULL, new_var;
@@ -724,8 +724,7 @@ int *off;
     return st;
 }
 
-void insert_ptr_var(scope, var) int scope;
-var_ste_ptr var;
+void insert_ptr_var(int scope, var_ste_ptr var) 
 {
     var->next               = symbol_table[scope].var;
     symbol_table[scope].var = var;
@@ -740,7 +739,8 @@ var_ste_ptr var;
 *********************************************************************
 */
 
-void insert_var_decl(token_ptr var) {
+void insert_var_decl(token_ptr var) 
+{
     var_ste_ptr new_var;
 
     new_var                       = alloc_var_ste();
@@ -759,10 +759,7 @@ void insert_var_decl(token_ptr var) {
             (declared as int)							*/
 }
 
-void insert_struct_members(base, members, st, off_set) char *base;
-var_ste_ptr members, *st;
-int *off_set;
-
+void insert_struct_members(char *base, var_ste_ptr members, var_ste_ptr *st, int *off_set) 
 {
     char name[3000];
     var_ste_ptr new_var, last;
@@ -797,8 +794,7 @@ int *off_set;
     }
 }
 
-void insert_members(base, members) char *base;
-var_ste_ptr members;
+void insert_members(char *base, var_ste_ptr members) 
 {
     char name[3000];
     var_ste_ptr new_var, last;
@@ -1009,8 +1005,7 @@ void decl(token_ptr type_desc, token_ptr var_list, int with_members) {
 *                                                                   *
 *********************************************************************
 */
-int is_type_name(t, local_flag) char *t;
-int *local_flag;
+int is_type_name(char *t, int *local_flag)
 {
     int level;
     type_ste_ptr types;
@@ -1049,9 +1044,7 @@ int *local_flag;
 *                                                                   *
 *********************************************************************
 */
-var_ste_ptr look_up_id(table, name, scope) char *name;
-int *scope;
-var_ste_ptr table;
+var_ste_ptr look_up_id(var_ste_ptr table, char *name, int *scope) 
 {
     int level;
     var_ste_ptr vars;
@@ -1088,11 +1081,21 @@ var_ste_ptr table;
 *                                                                   *
 *********************************************************************
 */
-void start_typedef(void) { in_typedef = True; }
+void start_typedef(void) 
+{ 
+    in_typedef = True; 
+}
 
-void end_typedef(void) { in_typedef = False; }
+void end_typedef(void) 
+{ 
+    in_typedef = False; 
+}
 
-int top_scope() { return scope_level == 1; }
+int top_scope(void) 
+{ 
+    return scope_level == 1; 
+}
+
 
 /*
 *********************************************************************
@@ -1101,8 +1104,7 @@ int top_scope() { return scope_level == 1; }
 *                                                                   *
 *********************************************************************
 */
-static void print_memb(prefix, v) var_ste_ptr v;
-char *prefix;
+static void print_memb(char *prefix, var_ste_ptr v) 
 {
     var_ste_ptr vars = v;
     char buff[2000];
@@ -1146,7 +1148,7 @@ char *prefix;
 *                                                                   *
 *********************************************************************
 */
-static void print_types(t) type_ste_ptr t;
+static void print_types(type_ste_ptr t) 
 {
     if (t->detail == STE_TYPEDEF) {
         printf("%s ", t->type_entry->token->text);
@@ -1166,7 +1168,8 @@ static void print_types(t) type_ste_ptr t;
 *                                                                   *
 *********************************************************************
 */
-void print_st() {
+void print_st(void) 
+{
     type_ste_ptr types;
     var_ste_ptr vars;
     tag_ste_ptr tags;
@@ -1272,7 +1275,7 @@ void print_st() {
     printf("\n");
 }
 
-int is_ptr_to_type_ptr(te) type_ste_ptr te;
+int is_ptr_to_type_ptr(type_ste_ptr te)
 {
     int n_ptr   = 0;
     type_ptr tp = NULL;
@@ -1295,8 +1298,7 @@ int is_ptr_to_type_ptr(te) type_ste_ptr te;
     return n_ptr;
 }
 
-int is_ptr_to_ptr(t, nx) token_ptr t;
-int *nx;
+int is_ptr_to_ptr(token_ptr t, int *nx) 
 {
     int n_ptr   = 0;
     type_ptr tp = NULL;
@@ -1321,7 +1323,7 @@ int *nx;
     return n_ptr;
 }
 
-static token_ptr get_base_type(t) token_ptr t;
+static token_ptr get_base_type(token_ptr t)
 {
     type_ste_ptr type_entry;
 
@@ -1335,7 +1337,7 @@ static token_ptr get_base_type(t) token_ptr t;
     return NULL;
 }
 
-token_ptr fake_var_decl(t) token_ptr t;
+token_ptr fake_var_decl(token_ptr t)
 {
     decl_ptr ty;
     token_ptr var_token;
