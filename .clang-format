@@ -5,3 +5,11 @@ AlignAfterOpenBracket: false
 ColumnLimit: 100
 BinPackArguments: false
 BinPackParameters: false
+AlwaysBreakAfterDefinitionReturnType: true
+BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterControlStatement: true
+
+#AfterControlStatement:
+#BraceWrappingAfterControlStatementStyle: Always
+

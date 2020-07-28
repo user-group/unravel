@@ -1,35 +1,33 @@
 /*
 
-This software was developed by employees of the National Institute 
-of Standards and Technology (NIST), an agency of the Federal 
-Government and is being made available as a public service. Pursuant 
-to title 17 United States Code Section 105, works of NIST employees 
-are not subject to copyright protection in the United States.  This 
-software may be subject to foreign copyright.  Permission in the 
-United States and in foreign countries, to the extent that NIST may 
-hold copyright, to use, copy, modify, create derivative works, and 
-distribute this software and its documentation without fee is hereby 
-granted on a non-exclusive basis, provided that this notice and 
-disclaimer of warranty appears in all copies. 
+This software was developed by employees of the National Institute
+of Standards and Technology (NIST), an agency of the Federal
+Government and is being made available as a public service. Pursuant
+to title 17 United States Code Section 105, works of NIST employees
+are not subject to copyright protection in the United States.  This
+software may be subject to foreign copyright.  Permission in the
+United States and in foreign countries, to the extent that NIST may
+hold copyright, to use, copy, modify, create derivative works, and
+distribute this software and its documentation without fee is hereby
+granted on a non-exclusive basis, provided that this notice and
+disclaimer of warranty appears in all copies.
 
-THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, 
-EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED 
-TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, 
-ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE 
-DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE 
-SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR 
-ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL 
-OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY 
-WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY, 
-CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY 
-PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS 
-SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE 
+THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND,
+EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED
+TO, ANY WARRANTY THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS,
+ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND FREEDOM FROM INFRINGEMENT, AND ANY WARRANTY THAT THE
+DOCUMENTATION WILL CONFORM TO THE SOFTWARE, OR ANY WARRANTY THAT THE
+SOFTWARE WILL BE ERROR FREE.  IN NO EVENT SHALL NIST BE LIABLE FOR
+ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, SPECIAL
+OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR IN ANY
+WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY
+PERSONS OR PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS
+SUSTAINED FROM, OR AROSE OUT OF THE RESULTS OF, OR USE OF, THE
 SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
-
-
 
 /*
 *******************************************************************
@@ -63,8 +61,6 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include <X11/Xaw/Viewport.h>
 #include <dirent.h>
 
-
-
 #define WAIT 500
 
 #include "config.h"
@@ -72,9 +68,7 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 /* For some reason, GCC -Wall gives a warning about snprintf() not being declared */
 extern int snprintf(char *buf, size_t size, const char *fmt, ...);
 
-
-
-/* 
+/*
 static  char    sccsid[] = "@(#)analyzer.c	1.5  8/16/95";
 */
 /*
@@ -99,14 +93,16 @@ Widget help_label;
 int unravel_win_id = 0;
 
 typedef struct name_struct name_rec, *name_ptr;
-struct name_struct {
+struct name_struct
+{
     char **use, **skip, **pick;
     struct dirent **files;
     Widget keep, ignore;
 };
 typedef struct nf_struct nf_rec, *nf_ptr;
 
-struct nf_struct {
+struct nf_struct
+{
     XtAppContext ac;
     name_ptr n;
     Widget s, r, h;
@@ -121,23 +117,31 @@ struct nf_struct {
     Pixel run_fg, run_bg, save_fg, save_bg;
 };
 
-void button_help(Widget w, char *mess, XEvent *e, Boolean *ok) {
+void
+button_help(Widget w, char *mess, XEvent *e, Boolean *ok)
+{
     XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL);
 }
 
-void set_button_help(Widget w, char *mess) {
+void
+set_button_help(Widget w, char *mess)
+{
     static char buff[] = "Description of object under mouse pointer is displayed here";
     XtAddEventHandler(w, EnterWindowMask, False, button_help, mess);
     XtAddEventHandler(w, LeaveWindowMask, False, button_help, buff);
 }
 
-int compare(struct dirent **a, struct dirent **b) {
+int
+compare(struct dirent **a, struct dirent **b)
+{
     if (strcmp((*a)->d_name, (*b)->d_name) > 0)
         return 1;
     return 0;
 }
 
-static int select_c_file(struct dirent *entry) {
+static int
+select_c_file(struct dirent *entry)
+{
     int len;
 
     if (!entry)
@@ -150,11 +154,14 @@ static int select_c_file(struct dirent *entry) {
     return 1;
 }
 
-int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*compare)()) {
+int
+myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*compare)())
+{
     DIR *dir;
     struct dirent *entry;
     typedef struct l_struct ll_node, *ll;
-    struct l_struct {
+    struct l_struct
+    {
         ll next;
         struct dirent *e;
     };
@@ -165,12 +172,15 @@ int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*comp
     ll nodes, node_list = NULL;
 
     dir = opendir(dir_name);
-    if (!dir) {
+    if (!dir)
+    {
         fprintf(stderr, "directory open failed for %s\n", dir_name);
         exit(1);
     }
-    for (entry = readdir(dir); entry != NULL; entry = readdir(dir)) {
-        if (select(entry)) {
+    for (entry = readdir(dir); entry != NULL; entry = readdir(dir))
+    {
+        if (select(entry))
+        {
             new_ll       = (ll)malloc(sizeof(ll_node));
             new_ll->next = node_list;
             node_list    = new_ll;
@@ -184,7 +194,8 @@ int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*comp
     }
     *list = (struct dirent **)malloc((n_match + 1) * sizeof(struct dirent *));
     nodes = node_list;
-    for (i = 0; i < n_match; i++) {
+    for (i = 0; i < n_match; i++)
+    {
         (*list)[i] = nodes->e;
         nodes      = nodes->next;
     }
@@ -192,7 +203,9 @@ int myscandir(char *dir_name, struct dirent ***list, int (*select)(), int (*comp
     return n_match;
 }
 
-int scan_dir(struct dirent ***f) {
+int
+scan_dir(struct dirent ***f)
+{
     struct dirent **files;
     int count;
     int alphasort();
@@ -203,7 +216,9 @@ int scan_dir(struct dirent ***f) {
     return count;
 }
 
-void count_lif(int n, char **f, int *n_ana, int *n_not, int *n_out) {
+void
+count_lif(int n, char **f, int *n_ana, int *n_not, int *n_out)
+{
     int nk = 0, k = 0, out = 0;
     struct stat status_c, status_lif, status_t;
     int c, lif, t;
@@ -211,7 +226,8 @@ void count_lif(int n, char **f, int *n_ana, int *n_not, int *n_out) {
 
     int s, i;
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++)
+    {
         c = stat(f[i], &status_c);
         s = strlen(f[i]);
         strcpy(buff, f[i]);
@@ -221,13 +237,15 @@ void count_lif(int n, char **f, int *n_ana, int *n_not, int *n_out) {
         strcpy(buff, f[i]);
         buff[s - 1] = 'T';
         t           = stat(buff, &status_t);
-        if ((lif == 0) && (t == 0)) {
+        if ((lif == 0) && (t == 0))
+        {
             if ((status_c.st_mtime > status_t.st_mtime) ||
                 (status_c.st_mtime > status_lif.st_mtime))
                 out++;
             else
                 k++;
-        } else
+        }
+        else
             nk++;
     }
 
@@ -236,7 +254,9 @@ void count_lif(int n, char **f, int *n_ana, int *n_not, int *n_out) {
     *n_out = out;
 }
 
-void count_system(int *n_prog, int *n_dup) {
+void
+count_system(int *n_prog, int *n_dup)
+{
     int n   = 0, k;
     int dup = 0;
     FILE *sys;
@@ -245,20 +265,30 @@ void count_system(int *n_prog, int *n_dup) {
 
     n   = 0;
     sys = fopen("SYSTEM", "r");
-    if (sys) {
-        while (fgets(buff, 2000, sys)) {
-            if (buff[0] == 'M') {
+    if (sys)
+    {
+        while (fgets(buff, 2000, sys))
+        {
+            if (buff[0] == 'M')
+            {
                 ambig_state = 0;
                 k           = sscanf(buff, "MAIN %s %d", name, &k);
                 if (k == 2)
                     n++;
-            } else if (buff[0] == 'A') {
+            }
+            else if (buff[0] == 'A')
+            {
                 ambig_state = 1;
-            } else if (buff[0] == 'F') {
+            }
+            else if (buff[0] == 'F')
+            {
                 ambig_state = 0;
-            } else if (buff[0] == 'L') {
+            }
+            else if (buff[0] == 'L')
+            {
                 ambig_state = 0;
-            } else if (ambig_state)
+            }
+            else if (ambig_state)
                 dup++;
         }
         fclose(sys);
@@ -268,7 +298,9 @@ void count_system(int *n_prog, int *n_dup) {
     *n_dup  = dup;
 }
 
-void notify_unravel(Widget w) {
+void
+notify_unravel(Widget w)
+{
     XClientMessageEvent e;
     Status status = 13;
 
@@ -278,14 +310,15 @@ void notify_unravel(Widget w) {
     e.type         = ClientMessage;
     e.format       = 8;
     e.message_type = (Atom)1;
-    if (unravel_win_id) {
+    if (unravel_win_id)
+    {
         status = XSendEvent(e.display, e.window, True, 0L, (XEvent *)(&e));
         XFlush(e.display);
     }
 }
 
-void do_final_analysis(nf, tt) nf_ptr nf;
-XtIntervalId *tt;
+void
+do_final_analysis(nf_ptr nf, XtIntervalId *tt)
 {
     char buff[2000];
 
@@ -309,8 +342,9 @@ XtIntervalId *tt;
     return;
 }
 
-
-void do_analysis(nf_ptr nf, XtIntervalId *tt) {
+void
+do_analysis(nf_ptr nf, XtIntervalId *tt)
+{
     char buff[4000], file[1000], mess[2000];
     int i, cpp_status, parse_status, status, c_status;
     int n;
@@ -322,7 +356,8 @@ void do_analysis(nf_ptr nf, XtIntervalId *tt) {
     time_t start, finish, elapsed;
     int rate;
 
-    if (nf->running == 0) {
+    if (nf->running == 0)
+    {
         XtVaSetValues(nf->s, XtNlabel, "Analysis stopped", NULL);
         XtVaSetValues(nf->r, XtNsensitive, True, NULL);
         return;
@@ -358,11 +393,14 @@ void do_analysis(nf_ptr nf, XtIntervalId *tt) {
         elapsed = 1;
     cpp_status   = stat("CPP.ERR", &cpp_stat);
     parse_status = stat("PARSE.ERR", &parse_stat);
-    if (/* cpp_stat.st_size || */ parse_stat.st_size) {
+    if (/* cpp_stat.st_size || */ parse_stat.st_size)
+    {
         /* compile error */
         sprintf(mess, "%s is not ANSI C (compile errors)", nf->n->use[i]);
         nf->errs++;
-    } else {
+    }
+    else
+    {
         /* no errors */
         snprintf(buff, 4000, "wc %s.c >>%s.T", file, file);
         system(buff);
@@ -385,7 +423,8 @@ void do_analysis(nf_ptr nf, XtIntervalId *tt) {
     system(buff);
     i++;
     nf->at = i;
-    if (i < n) {
+    if (i < n)
+    {
         XtAppAddTimeOut(nf->ac, WAIT, do_analysis, nf);
         if (nf->errs)
             sprintf(buff,
@@ -406,15 +445,15 @@ void do_analysis(nf_ptr nf, XtIntervalId *tt) {
     return;
 }
 
-void run_a(w, nf, c) Widget w;
-nf_ptr nf;
-XtPointer c;
+void
+run_a(Widget w, nf_ptr nf, XtPointer c)
 {
     char buff[2000];
     int i;
     int n;
 
-    if (nf->running) {
+    if (nf->running)
+    {
         nf->running = 0;
         XtVaSetValues(w, XtNlabel, (XtArgVal) "Analyze Selected Files", XtNsensitive, False, NULL);
         return;
@@ -426,7 +465,8 @@ XtPointer c;
     nf->at   = 0;
     nf->of   = n;
     nf->errs = 0;
-    if (n > 0) {
+    if (n > 0)
+    {
         XtVaSetValues(w, XtNlabel, (XtArgVal) "Stop Analysis", NULL);
         sprintf(buff, "Analyzing %s (%d of %d)", nf->n->use[i], i + 1, n);
         XtVaGetValues(nf->s, XtNforeground, &(nf->save_fg), XtNbackground, &(nf->save_bg), NULL);
@@ -442,9 +482,8 @@ XtPointer c;
     }
 }
 
-void push_help(w, u_data, w_data) Widget w;
-XtPointer u_data;
-XtPointer w_data;
+void
+push_help(Widget w, XtPointer u_data, XtPointer w_data)
 {
     char buff[2000];
 
@@ -456,24 +495,24 @@ XtPointer w_data;
     system(buff);
 }
 
-void done(w, u_data, w_data) Widget w;
-XtPointer u_data;
-XtPointer w_data;
+void
+done(Widget w, XtPointer u_data, XtPointer w_data)
 {
     notify_unravel(w);
     system("cat HISTORY-A >> HISTORY");
     exit(0);
 }
 
-void move_list(ix, from, to) char *from[], *to[];
-int ix;
+void
+move_list(int ix, char *from[], char *to[])
 {
     char *moving;
     int k;
 
     moving = from[ix];
     k      = ix;
-    while (from[k]) {
+    while (from[k])
+    {
         from[k] = from[k + 1];
         k++;
     }
@@ -494,9 +533,8 @@ plist (w,nf,list)
 }
 */
 
-void alist(w, names, list) Widget w;
-name_ptr names;
-XawListReturnStruct *list;
+void
+alist(Widget w, name_ptr names, XawListReturnStruct *list)
 {
 
     XawListUnhighlight(w);
@@ -541,27 +579,30 @@ count_lif(n,f,n_ana,n_not,n_out)
 }
 */
 
-void line_cat(line, file) char *line, *file;
+void
+line_cat(char *line, char *file)
 {
     int line_len, file_len;
     char buff[2000];
 
     line_len = strlen(line);
     file_len = strlen(file);
-    if (line_len + file_len > 60) {
+    if (line_len + file_len > 60)
+    {
         sprintf(buff, "echo %s >>HISTORY-A", line);
         system(buff);
         strcpy(line, file);
         strcat(line, " ");
-    } else {
+    }
+    else
+    {
         strcat(line, file);
         strcat(line, " ");
     }
 }
 
-void clear_files(w, names, w_data) Widget w;
-name_ptr names;
-XtPointer w_data;
+void
+clear_files(Widget w, name_ptr names, XtPointer w_data)
 {
     char buff[2000], file[2000], line[1000];
     int len, i, status, line_len;
@@ -573,10 +614,12 @@ XtPointer w_data;
         strcpy(line, "SYSTEM ");
     else
         line[0] = '\0';
-    for (i = 0; names->use[i]; i++) {
+    for (i = 0; names->use[i]; i++)
+    {
         strcpy(file, names->use[i]);
         len = strlen(file);
-        if (len > 2) {
+        if (len > 2)
+        {
             file[len - 1] = 'K';
             status        = unlink(file);
             if (!status)
@@ -616,9 +659,8 @@ XtPointer w_data;
     notify_unravel(w);
 }
 
-void analyze_skipped(w, names, list) Widget w;
-name_ptr names;
-XtPointer list;
+void
+analyze_skipped(Widget w, name_ptr names, XtPointer list)
 {
     struct stat status_c, status_lif, status_t;
     int c, lif, t;
@@ -626,7 +668,8 @@ XtPointer list;
     int n_skip = 0, n_use = 0;
     char file[2000], *src;
 
-    for (i = 0; names->files[i]; i++) {
+    for (i = 0; names->files[i]; i++)
+    {
         src = names->files[i]->d_name;
         strcpy(file, src);
         len           = strlen(src);
@@ -637,13 +680,15 @@ XtPointer list;
         lif = stat(file, &status_lif);
         c   = stat(src, &status_c);
         if (c == 0)
-            if ((lif == 0) && (t == 0)) {
+            if ((lif == 0) && (t == 0))
+            {
                 if ((status_c.st_mtime > status_t.st_mtime) ||
                     (status_c.st_mtime > status_lif.st_mtime))
                     names->use[n_use++] = src;
                 else
                     names->skip[n_skip++] = src;
-            } else
+            }
+            else
                 names->use[n_use++] = src;
         else
             names->skip[n_skip++] = src;
@@ -655,9 +700,8 @@ XtPointer list;
     XawListChange(names->ignore, names->skip, 0, 0, True);
 }
 
-void select_analyzed(w, names, w_data) Widget w;
-name_ptr names;
-XtPointer w_data;
+void
+select_analyzed(Widget w, name_ptr names, XtPointer w_data)
 {
     char **hold;
 
@@ -670,12 +714,12 @@ XtPointer w_data;
     XawListChange(names->ignore, names->skip, 0, 0, True);
 }
 
-void analyze_most(w, names, list) Widget w;
-name_ptr names;
-XtPointer list;
+void
+analyze_most(Widget w, name_ptr names, XtPointer list)
 {
     int i;
-    for (i = 0; names->files[i]; i++) {
+    for (i = 0; names->files[i]; i++)
+    {
         names->use[i] = names->files[i]->d_name;
     }
     names->use[i]  = NULL;
@@ -684,12 +728,12 @@ XtPointer list;
     XawListChange(names->ignore, names->skip, 0, 0, True);
 }
 
-void analyze_some(w, names, list) Widget w;
-name_ptr names;
-XtPointer list;
+void
+analyze_some(Widget w, name_ptr names, XtPointer list)
 {
     int i;
-    for (i = 0; names->files[i]; i++) {
+    for (i = 0; names->files[i]; i++)
+    {
         names->skip[i] = names->files[i]->d_name;
     }
     names->skip[i] = NULL;
@@ -698,9 +742,8 @@ XtPointer list;
     XawListChange(names->ignore, names->skip, 0, 0, True);
 }
 
-void ilist(w, names, list) Widget w;
-name_ptr names;
-XawListReturnStruct *list;
+void
+ilist(Widget w, name_ptr names, XawListReturnStruct *list)
 {
 
     XawListUnhighlight(w);
@@ -709,7 +752,8 @@ XawListReturnStruct *list;
     XawListChange(names->ignore, names->skip, 0, 0, True);
 }
 
-void adjust_lists(frame, left, right) Widget frame, right, left;
+void
+adjust_lists(Widget frame, Widget left, Widget right)
 {
     Dimension frame_w, w, left_bw, right_bw, left_w, right_w;
     int default_dist;
@@ -732,7 +776,8 @@ void adjust_lists(frame, left, right) Widget frame, right, left;
     XtManageChild(right);
 }
 
-void rj_button(goal, left, w) Widget goal, w, left;
+void
+rj_button(Widget goal, Widget left, Widget w)
 {
     Dimension bw, goal_w, button_w, left_w, left_bw;
     int dd, hd;
@@ -755,7 +800,8 @@ void rj_button(goal, left, w) Widget goal, w, left;
     XtManageChild(w);
 }
 
-void strech(goal, w) Widget goal, w;
+void
+strech(Widget goal, Widget w)
 {
     Dimension width, bw;
     Position x;
@@ -768,7 +814,8 @@ void strech(goal, w) Widget goal, w;
     XtManageChild(w);
 }
 
-void align(label1, text1, label2, text2) Widget label1, text1, label2, text2;
+void
+align(Widget label1, Widget text1, Widget label2, Widget text2)
 {
     Dimension w1, w2;
     int dd, d;
@@ -780,10 +827,13 @@ void align(label1, text1, label2, text2) Widget label1, text1, label2, text2;
     XtVaGetValues(label2, XtNwidth, &w2, NULL);
     if (w1 == w2)
         return;
-    if (w1 > w2) {
+    if (w1 > w2)
+    {
         w = text2;
         d = dd + (w1 - w2);
-    } else {
+    }
+    else
+    {
         w = text1;
         d = dd + (w2 - w1);
     }
@@ -792,8 +842,8 @@ void align(label1, text1, label2, text2) Widget label1, text1, label2, text2;
     XtManageChild(w);
 }
 
-Widget make_list_box(parent, prefix, title) char *prefix, *title;
-Widget parent;
+Widget
+make_list_box(Widget parent, char *prefix, char *title)
 {
     Widget frame, label, port, list;
     char name[2000];
@@ -857,8 +907,8 @@ Widget parent;
     return frame;
 }
 
-void make_windows(top, ac) Widget top;
-XtAppContext ac;
+void
+make_windows(Widget top, XtAppContext ac)
 {
     Widget help, quit;
     Widget selected, not_selected;
@@ -1213,7 +1263,8 @@ XtAppContext ac;
 
     XtAddCallback(XtNameToWidget(selected, "*selectList"), XtNcallback, alist, &names);
     n_files = scan_dir(&files);
-    for (i = 0; files[i]; i++) {
+    for (i = 0; files[i]; i++)
+    {
         file_names[i] = files[i]->d_name;
         pick_names[i] = files[i]->d_name;
     }
@@ -1317,11 +1368,10 @@ char *fall[] = {
     "*help.accelerators:  \
 			<KeyPress>h: set() highlight() notify() unset()\\n\
 			<KeyPress>?: set() highlight() notify() unset()",
-    NULL
-};
+    NULL};
 
-
-int main(int np, char **p) 
+int
+main(int np, char **p)
 {
     XtAppContext ac;
     Widget top;
@@ -1343,4 +1393,3 @@ int main(int np, char **p)
     XtAppMainLoop(ac);
     return 0;
 }
-
