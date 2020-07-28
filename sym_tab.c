@@ -35,7 +35,9 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "lif.h"
 #include "sym_tab.h"
 
-//static char sccsid[]   = "@(#)sym_tab.c	1.4  4/26/95";
+/*
+static char sccsid[]   = "@(#)sym_tab.c	1.4  4/26/95";
+*/
 
 static int scope_level = 1;
 static symbol_table_entries symbol_table[MAX_NEST];
@@ -46,7 +48,7 @@ static int in_typedef    = 0;
 static symbol_table_entries closed_symbol_tables[MAX_ST];
 static int n_st = 0;
 
-void declared(var) char *var;
+void declared(char *var)
 {
     if (scope_level > 1)
         return;
@@ -54,7 +56,7 @@ void declared(var) char *var;
         fprintf(h_file, "\t%s\n", var);
 }
 
-int is_var_ptr_mod(t) token_ptr t;
+int is_var_ptr_mod(token_ptr t) 
 {
     type_ptr mod;
 
@@ -69,7 +71,7 @@ int is_var_ptr_mod(t) token_ptr t;
     return False;
 }
 
-int is_type_ptr(t) type_ste_ptr t;
+int is_type_ptr(type_ste_ptr t) 
 {
     if (!t)
         return False;
@@ -83,7 +85,7 @@ int is_type_ptr(t) type_ste_ptr t;
     return False;
 }
 
-int is_var_ptr(var) var_ste_ptr var;
+int is_var_ptr(var_ste_ptr var) 
 {
     /* is var declared pointer					*/
     if (is_var_ptr_mod(var->token))
@@ -97,7 +99,7 @@ int is_var_ptr(var) var_ste_ptr var;
     return False;
 }
 
-var_ste_ptr get_var_members(var) var_ste_ptr var;
+var_ste_ptr get_var_members(var_ste_ptr var) 
 {
     type_ste_ptr t;
 
@@ -135,8 +137,7 @@ struct hh {			 STE for variable
 };
 */
 
-void is_decl_array_or_pointer(t, is_array, is_pointer) type_ste_ptr t;
-int *is_array, *is_pointer;
+void is_decl_array_or_pointer(type_ste_ptr t, int *is_array, int *is_pointer) 
 {
     type_ptr details;
 
