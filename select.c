@@ -270,21 +270,19 @@ scan_system(void)
     *************/
 }
 
-void button_help(Widget w, char *mess, XEvent *e, Boolean *ok) 
+void button_help(Widget w, char *mess, XEvent *e, Boolean *ok)
 {
     XtVaSetValues(help_label, XtNlabel, (XtArgVal)mess, NULL);
 }
 
-void set_button_help(w, mess) Widget w;
-char *mess;
+void set_button_help(Widget w, char *mess)
 {
     static char buff[] = "Description of object under mouse pointer is displayed here";
     XtAddEventHandler(w, EnterWindowMask, False, button_help, mess);
     XtAddEventHandler(w, LeaveWindowMask, False, button_help, buff);
 }
 
-void do_slice(id, tt) id_ptr id;
-XtIntervalId *tt;
+void do_slice(id_ptr id, XtIntervalId *tt)
 {
     char buff[2000];
     int n, at, shifting;
@@ -324,8 +322,7 @@ XtIntervalId *tt;
         exit(0);
 }
 
-void do_link(id, tt) id_ptr id;
-XtIntervalId *tt;
+void do_link(id_ptr id, XtIntervalId *tt)
 {
     char buff[2000];
 
@@ -354,7 +351,7 @@ XtIntervalId *tt;
     return;
 }
 
-void strech_to(frame, w, goal) Widget goal, w, frame;
+void strech_to(Widget frame, Widget w, Widget goal)
 {
     Dimension width, width_goal, width_w, bw_w, bw;
     Position x;
@@ -371,7 +368,7 @@ void strech_to(frame, w, goal) Widget goal, w, frame;
     XtManageChild(w);
 }
 
-void strech(goal, w) Widget goal, w;
+void strech(Widget goal, Widget w)
 {
     Dimension width, bw;
     Position x;
@@ -384,9 +381,7 @@ void strech(goal, w) Widget goal, w;
     XtManageChild(w);
 }
 
-void call_slice(w, id, list) Widget w;
-id_ptr id;
-XawListReturnStruct *list;
+void call_slice(Widget w, id_ptr id, XawListReturnStruct *list)
 {
 
     XtVaSetValues(id->status, XtNlabel, "Linking . . .", NULL);
@@ -397,16 +392,12 @@ XawListReturnStruct *list;
     do_link(id, NULL);
 }
 
-void push_quit(w, u_data, w_data) Widget w;
-XtPointer u_data;
-XtPointer w_data;
+void push_quit(Widget w, XtPointer u_data, XtPointer w_data)
 {
     exit(0);
 }
 
-void push_help(w, u_data, w_data) Widget w;
-XtPointer u_data;
-XtPointer w_data;
+void push_help(Widget w, XtPointer u_data, XtPointer w_data)
 {
     char buff[2000];
 
@@ -415,7 +406,7 @@ XtPointer w_data;
     system(buff);
 }
 
-void v_wrap(p, lw) Widget p, lw;
+void v_wrap(Widget p, Widget lw)
 {
     Dimension hp, hl;
 
@@ -430,9 +421,7 @@ void v_wrap(p, lw) Widget p, lw;
     XtManageChild(lw);
 }
 
-Widget make_list_box(Widget parent, help, status, prefix, title, id) char *prefix, *title;
-Widget parent, help, status;
-id_ptr id;
+Widget make_list_box(Widget parent, Widget help, Widget status, char *prefix, char *title, id_ptr id)
 {
     Widget frame, label, port, list;
     char name[2000];
