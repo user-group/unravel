@@ -93,7 +93,13 @@ To run the install script, type:
 
 (not yet tested on Ubuntu). This copies the unravel program file and man page to the install subdirectories.
 
-4. Help
+4. Running unravel
+
+To run unravel, type:
+
+```./unravel```
+
+5. Help
 
 For more information and very very limited help contact:
 Dr. James R. Lyle at NIST email: jlyle <_at_> nist <_dot_> gov 
