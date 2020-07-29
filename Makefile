@@ -10,7 +10,7 @@ LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm
 #LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm -ldl
 
 #LDFLAGS = -L$(WINHOME)/lib
-CFLAGS = -g -ansi -Wall -Wunused-variable -Wno-pointer-to-int-cast \
+CFLAGS = -g -ansi -pedantic -Wall -Wunused-variable -Wno-pointer-to-int-cast \
 -Wno-int-conversion -Wno-incompatible-pointer-types #-I$(WINHOME)/include
 
 CC = gcc
