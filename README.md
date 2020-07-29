@@ -41,6 +41,7 @@ The echo command should allow the -n option (to indicate no newline). The origin
 
 
 3. Running make on Unravel
+
 Before making unravel, the following should be done:
 The original source code for version 2.2 is available here: 
 
@@ -57,6 +58,7 @@ Decide on a home for installing unravel
 
 
 3.1 C Compiler
+
 The C compiler is specified in two places, the Makefile and the file config.h.
 In the makefile, look for the compiler definition line: 
 
@@ -66,6 +68,7 @@ By default, CC is set to gcc.
 
 
 3.2. Install Directory
+
 Once the make finishes, the unravel files cannot be moved since the location (directory) where the unravel source code is located is compiled into the unravel programs so that they can find certain files (e.g., icons and help files). However, the main control program can be installed anywhere in the file directory tree. The install directory is selected by setting the INSTALL_DIR macro in the makefile. To set the INSTALL_DIR macro, edit the makefile and find the line: 
 
 ```INSTALL_DIR = .``` 
@@ -89,5 +92,6 @@ To run the install script, type:
 (not yet tested on Ubuntu). This copies the unravel program file and man page to the install subdirectories.
 
 4. Help
+
 For more information and very very limited help contact:
 Dr. James R. Lyle at NIST email: jlyle <_at_> nist <_dot_> gov 
