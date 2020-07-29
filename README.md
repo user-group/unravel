@@ -57,7 +57,7 @@ Decide on a C compiler for installing unravel
 Decide on a home for installing unravel
 
 
-3.1 C Compiler
+3.1. C Compiler
 
 The C compiler is specified in two places, the Makefile and the file config.h.
 In the makefile, look for the compiler definition line: 
