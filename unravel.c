@@ -818,7 +818,7 @@ char *fall[] = {
     "*quit.label: Exit Unravel",
     "*analysis.label: Run Analyzer",
     "*slice.label: Run Slicer",
-    "*title: Unravel Version 2.2+ Main Control Panel",
+    "*title: Unravel Version 2.3 Main Control Panel",
     "*geometry: +10+10",
     "*quit.accelerators: #override\\n \
 			<KeyPress>q: set() highlight() notify()",
@@ -882,7 +882,7 @@ main(int np, char **p)
             exit(1);
         }
     }
-    
+
     sys_ok = system("echo \" \" >HISTORY");
     if (sys_ok != 0)
     {
@@ -892,8 +892,8 @@ main(int np, char **p)
         if (cmd[0] != 'y')
             exit(1);
     }
-    
-    char buff[2000];    
+
+    char buff[2000];
     char *cwd = getcwd(buff, 2000);
     fprintf(stderr, "creating cmd...[%s]\n", cwd);
 
