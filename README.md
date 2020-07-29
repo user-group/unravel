@@ -74,19 +74,20 @@ Replace the dot with the selected install directory name. For example, to instal
 
 ```INSTALL_DIR = /usr/local```
 
-This puts the main control program (called unravel) in the directory /usr/local/bin and adds an unravel man page to /usr/local/man/man1. Note that the bin and man/man1 are added automatically to the
-INSTALL_DIR directory name.
+This puts the main control program (called unravel) in the directory /usr/local/bin and adds an unravel man page to /usr/local/man/man1. Note that the bin and man/man1 are added automatically to the INSTALL_DIR directory name.
 
 3.3. Running make
-Type: 
 
 ```make```
 
-This should compile each unravel source program. Depending on the compiler used and how it is installed, there may be lots of warning messages (especially if using an ANSI C compiler).
-If everything has compiled correctly, unravel can be tried out on the simple programs in the directory examples. The file flavors.c has several obvious slices and makes a good trial run.
-To run the install script, type: make install (not yet tested on Ubuntu)
-This copies the unravel program file and man page to the install subdirectories.
+This should compile each unravel source program. Depending on the compiler used and how it is installed, there may be lots of warning messages (especially if using an ANSI C compiler). If everything has compiled correctly, unravel can be tried out on the simple programs in the directory examples. The file flavors.c has several obvious slices and makes a good trial run.
+
+To run the install script, type: 
+
+```make install``` 
+
+(not yet tested on Ubuntu). This copies the unravel program file and man page to the install subdirectories.
 
 4. Help
 For more information and very very limited help contact:
-Dr. James R. Lyle at NIST email: jlyle@nist.gov phone: (301) 975-3270 fax: (301) 926-3696
+Dr. James R. Lyle at NIST email: jlyle <_at_> nist <_dot_> gov 
