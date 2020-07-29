@@ -42,7 +42,10 @@ The echo command should allow the -n option (to indicate no newline). The origin
 
 3. Running make on Unravel
 Before making unravel, the following should be done:
-The original source code for version 2.2 is available here: ftp from hissa.ncsl.nist.gov
+The original source code for version 2.2 is available here: 
+
+```https://www.nist.gov/services-resources/software/unravel```
+
 That version was adapted to get it to run on Linux Ubuntu. To compile the latter:
 
 * download the source code
@@ -57,7 +60,7 @@ Decide on a home for installing unravel
 The C compiler is specified in two places, the Makefile and the file config.h.
 In the makefile, look for the compiler definition line: 
 
-```CC = "gcc"```
+```CC = gcc```
 
 By default, CC is set to gcc.
 
