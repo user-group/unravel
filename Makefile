@@ -9,10 +9,11 @@ LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm
 # line below for LDLIBS
 #LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm -ldl
 
-LDFLAGS = -L$(WINHOME)/lib
-CFLAGS = -g -ansi -Wall -Wunused-variable -Wno-pointer-to-int-cast -Wno-int-conversion -Wno-incompatible-pointer-types -I$(WINHOME)/include
+#LDFLAGS = -L$(WINHOME)/lib
+CFLAGS = -g -ansi -Wall -Wunused-variable -Wno-pointer-to-int-cast \
+-Wno-int-conversion -Wno-incompatible-pointer-types #-I$(WINHOME)/include
 
-CC = gcc 
+CC = gcc
 I_PROGS = unravel select analyzer helpu
 S_PROGS = slice_driver auto-slice pss-driver call-tree
 PROGS = $(I_PROGS) $(S_PROGS) parser summary tsummary map u slink\
@@ -31,8 +32,11 @@ path.out :
 config.h : path.out
 #	echo -n "# define HOME \"" >config.h
 	cat path.out |sed 's/^/# define HOME \"/' | sed -e 's/$$/\"/' >config.h
-	echo "# define  CC \"gcc\"" >>config.h
-	echo "# include \"fix.h\""  >>config.h
+	echo "#define  CC \"gcc\"" >>config.h
+	echo "/* fix.h is needed by all files that also include config.h */">>config.h
+	echo "#include \"fix.h\""  >>config.h
+	echo "/* caddr_t is not available, so replace with void * for now.*/" >>config.h
+	echo "#define caddr_t void *" >>config.h
 #	find_cc >>config.h
 vprep : config.h visit-prep
 	sed s=HOME=`grep HOME config.h | sed 's/^.*E "/"/' | tr -d \"`= <visit-prep >vprep
