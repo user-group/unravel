@@ -2,7 +2,7 @@
 
 Unravel is a prototype program slicer for ANSI C developed at the National Institute of Standards and Technology (NIST). Unravel is usually easy to install but, there are some rough edges that can bite. This file identifies the supporting software that you need, gives some hints for finding it on your system or the Internet, and gives instructions for running make.
 
-The unravel project page can be found here [https://www.nist.gov/itl/ssd/unravel-project]
+The unravel project page can be found here https://www.nist.gov/itl/ssd/unravel-project
 
 2. Unravel Requirements
 
