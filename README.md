@@ -1,17 +1,44 @@
 1. Introduction 
 
-Unravel is a prototype program slicer for ANSI C developed at the National Institute of Stan- dards and Technology (NIST). Unravel is usually easy to install but, there are some rough edges that can bite. This file identifies the supporting software that you need, gives some hints for finding it on your system or the Internet, and gives instructions for running make.
+Unravel is a prototype program slicer for ANSI C developed at the National Institute of Standards and Technology (NIST). Unravel is usually easy to install but, there are some rough edges that can bite. This file identifies the supporting software that you need, gives some hints for finding it on your system or the Internet, and gives instructions for running make.
 
 2. Unravel Requirements
 
-Unravel is written for the UNIX (or POSIX) environment. Unravel needs to be able to run several common UNIX commands, including: csh, sed, echo, date, yacc, and lex. The echo command should allow the -n option (to indicate no newline). The original unravel development was under SunOs 4.1 but, we have compiled under Solaris, ULTRIX, SGI/IRIX and DEC OSF/1. The unravel interface was developed under X Window System X11R5 using the Xt toolkit and the MIT Athena widgets. Unravel should compile and run under X11R6; it also compiles and runs under X11R4. Unravel needs a C preprocessor (that is ANSI C complient if unravel is to be used on ANSI C source code) from a C compiler to invoke when unravel is looking at source code. Unravel compiles under either a K&R C compiler or an ANSI C compiler. The gcc compiler is ANSI complient, produced by the Free Software Foundation (the GNU project), and can be obtained over the WWW from 
+Unravel was originally written for the UNIX (or POSIX) environment. Unravel assumes the following programs are available:
 
-in subdirectory pub/gnu/.
+* csh (C Shell)
+* date
+* echo
+* lex
+* sed
+* yacc
+* a C compiler; at the moment, gcc is assumed.
+
+The following C libraries should be available:
+
+* Xaw; install on Ubuntu with: 
+
+```sudo apt-get install libxaw7-dev```
+
+* Xmu
+
+* Xt
+
+* Xext
+
+* X11
+
+The echo command should allow the -n option (to indicate no newline). The original unravel development was under SunOs 4.1 but, we have compiled under Solaris, ULTRIX, SGI/IRIX and DEC OSF/1, and Linux Ubuntu. The unravel interface was developed under X Window System X11R5 using the Xt toolkit and the MIT Athena widgets. Unravel should compile and run under X11R6; it also compiles and runs under X11R4. Unravel needs a C preprocessor (that is ANSI C compliant if unravel is to be used on ANSI C source code) from a C compiler to invoke when unravel is looking at source code. Unravel compiles under either a K&R C compiler or an ANSI C compiler. The gcc compiler is ANSI compliant, produced by the Free Software Foundation (the GNU project).
 
 
 3. Running make on Unravel
 Before making unravel, the following should be done:
-Obtain unravel source via ftp from hissa.ncsl.nist.gov
+The original source code for version 2.2 is available here: ftp from hissa.ncsl.nist.gov
+That version was adapted to get it to run on Linux Ubuntu. To compile the latter:
+
+* download the source code
+* run make
+
 uncompress and un-tar the source code somewhere on your system Locate the X Window System tree with includes and libs
 Decide on a C compiler for installing unravel
 Decide on a home for installing unravel
