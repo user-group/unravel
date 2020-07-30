@@ -157,4 +157,5 @@ main(int np, char **p)
             tree_out(1, callers, procs[proc].calls);
         }
     }
+    return 0;
 }
