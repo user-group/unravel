@@ -41,7 +41,7 @@ config.h : path.out
 vprep : config.h visit-prep
 	sed s=HOME=`grep HOME config.h | sed 's/^.*E "/"/' | tr -d \"`= <visit-prep >vprep
 	chmod +x vprep
-MultiSlice.o u.o: MultiSliceP.h MultiSlice.h
+multislice.o u.o: multislicep.h multislice.h
 $(I_OBJS): config.h fix.h
 $(S_OBJS) $(SLICE_OBJS): sets.h slice.h
 $(PARSE_OBJS) slink.o pss.o slice-load.o: lif.h ansi_parse.h

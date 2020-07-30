@@ -29,7 +29,7 @@
 
  */
 
-#include "MultiSlice.h"
+#include "multislice.h"
 #include "config.h"
 #include "sets.h"
 #include "slice.h"

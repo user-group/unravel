@@ -29,7 +29,7 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 
 */
 
-#include "MultiSlice.h"
+#include "multislice.h"
 #include "sets.h"
 #include "slice.h"
 #include <X11/Intrinsic.h>
