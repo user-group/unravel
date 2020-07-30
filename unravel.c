@@ -857,9 +857,10 @@ main(int np, char **p)
     XtAppContext ac;
     Widget top;
     int i;
-
+    char buff[2000];
     char icon_at[2000], cmd[2000];
     int sys_ok;
+    char *cwd;
 
     sprintf(icon_at, "*iconPixmap: %s/unravel.icon", HOME);
     fall[0] = icon_at;
@@ -893,8 +894,8 @@ main(int np, char **p)
             exit(1);
     }
 
-    char buff[2000];
-    char *cwd = getcwd(buff, 2000);
+
+    cwd = getcwd(buff, 2000);
     fprintf(stderr, "creating cmd...[%s]\n", cwd);
 
     sprintf(cmd, "echo -n UNRAVEL \" %s \" >> HISTORY ; date >>HISTORY", cwd);
