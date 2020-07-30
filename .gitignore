@@ -37,12 +37,15 @@ HOW_TO.pdf
 ./.git/hooks/pre-applypatch.sample
 ./.git/hooks/post-update.sample
 ./.git/hooks/prepare-commit-msg.sample
-./parser
-./vprep
+parser
+vprep
 *.LIF
 *.T
 *.V
 *.Y
+*.H
+*.K
+*.LINK
 *.ERR
 *.LOG
 CPP.ERR2

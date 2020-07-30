@@ -55,8 +55,8 @@ $(S_PROGS) : $(SLICE_OBJS)
 	$(CC) $(CFLAGS) $@.o $(SLICE_OBJS) -o $@
 $(I_PROGS) :
 	$(CC) $(CFLAGS) $@.o $(LDFLAGS) $(LDLIBS) -o $@
-u : u.o $(SLICE_OBJS) MultiSlice.o history.o
-	$(CC) $(CFLAGS) u.o MultiSlice.o history.o $(SLICE_OBJS) $(LDFLAGS) $(LDLIBS) -o $@
+u : u.o $(SLICE_OBJS) multislice.o history.o
+	$(CC) $(CFLAGS) u.o multislice.o history.o $(SLICE_OBJS) $(LDFLAGS) $(LDLIBS) -o $@
 unravel : unravel.o
 select : select.o
 analyzer : analyzer.o
