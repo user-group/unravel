@@ -66,7 +66,7 @@ SOFTWARE OR SERVICES PROVIDED HEREUNDER.
 #include "config.h"
 
 /* For some reason, GCC -Wall gives a warning about snprintf() not being declared */
-extern int snprintf(char *buf, size_t size, const char *fmt, ...);
+///extern int snprintf(char *buf, size_t size, const char *fmt, ...);
 
 /*
 static  char    sccsid[] = "@(#)analyzer.c	1.5  8/16/95";
