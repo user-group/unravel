@@ -9,9 +9,9 @@ LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm
 # line below for LDLIBS
 #LDLIBS = -lXaw -lXmu -lXt -lXext -lX11 -lm -ldl
 
-#LDFLAGS = -L$(WINHOME)/lib
-CFLAGS = -g -ansi -pedantic -Wall -Wunused-variable -Wno-pointer-to-int-cast \
--Wno-int-conversion -Wno-incompatible-pointer-types #-I$(WINHOME)/include
+LDFLAGS = -L/opt/X11/lib -L$(WINHOME)/lib 
+CFLAGS = -g  -Wall -Wunused-variable -Wno-pointer-to-int-cast \
+-Wno-int-conversion -Wno-incompatible-pointer-types -I /opt/X11/include #-I$(WINHOME)/include
 
 CC = gcc
 I_PROGS = unravel select analyzer helpu
